@@ -1,0 +1,11 @@
+.vs/
+[Bb]in/
+[Bb]uild/
+[Bb]inary/
+[Dd]ebug*/
+[Rr]elease*/
+ipch/
+*.sdf
+*.opensdf
+[Ii]mid/
+*.log
