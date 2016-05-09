@@ -27,6 +27,7 @@
 //
 // OpenGL and GLEW
 //
+#include "gl\glew.h"
 
 //
 // Core
