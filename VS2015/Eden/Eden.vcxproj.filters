@@ -4,6 +4,12 @@
     <Filter Include="Core">
       <UniqueIdentifier>{1aa98213-3ef6-4273-af20-1700154c0ce5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{f61c0344-b1f5-4817-a4d8-8e54d9e4fcf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ecs">
+      <UniqueIdentifier>{4cb28fbb-712d-4b5c-8ee8-45a3266dc648}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -28,6 +34,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Eden\Precompiled.h" />
+    <ClInclude Include="..\..\Eden\Logging\Log.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">

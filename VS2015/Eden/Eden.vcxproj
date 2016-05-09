@@ -148,6 +148,7 @@
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
+    <ClInclude Include="..\..\Eden\Logging\Log.h" />
     <ClInclude Include="..\..\Eden\Precompiled.h" />
   </ItemGroup>
   <ItemGroup>

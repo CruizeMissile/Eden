@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cassert>
+#include <stdio.h>
 #include <bitset>
 #include <memory>
 #include <iostream>
@@ -30,7 +31,6 @@
 //
 // Core
 //
-
 #include "Core\Platform.h"
 #include "Core\Types.h"
 #include "Core\Debug.h"

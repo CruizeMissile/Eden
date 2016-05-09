@@ -8,9 +8,8 @@ namespace edn
 	//
 	class NonCopyable
 	{
-	protected:
-		NonCopyable();
-	private:
+	public:
+		NonCopyable() { }
 		NonCopyable(const NonCopyable&) = delete;
 		NonCopyable& operator=(const NonCopyable&) = delete;
 	};
@@ -19,7 +18,7 @@ namespace edn
 	// Singleton
 	//
 	template<typename Type>
-	class Singleton : private NonCopyable
+	class Singleton : public NonCopyable
 	{
 	public:
 		static Type & Instance()
