@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <type_traits>
+#include <typeindex>
 #include <string>
 #include <sstream>
 #include <vector>

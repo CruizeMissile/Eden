@@ -25,6 +25,8 @@
 #define KIN_ElemCount( ARRAY ) \
   sizeof( ARRAY ) / sizeof( ARRAY[0] )
 
+#define TYPE( _ ) typeid(_)
+
 // ----------------------------------------------------------------------------
 namespace edn
 {
