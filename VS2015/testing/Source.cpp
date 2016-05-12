@@ -1,10 +1,11 @@
 #include "Game\Window.h"
 
-#undef main;5
+#undef main;
+using namespace edn;
 
 int main()
 {
-	edn::Window window;
+	Window & window = Window::Instance();
 	window.Initialize();
 	window.SetClearColor(0x282828);
 
