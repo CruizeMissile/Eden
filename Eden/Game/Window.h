@@ -18,14 +18,25 @@ namespace edn
 		EDN_WINDOW_CENTER_CURSOR = 1 << 6,
 	};
 
+	struct WindowConfiguration
+	{
+		String title;
+		u32 width, height;
+		u32 x, y;
+		u32 flags;
+	};
+
 	class Window : public Singleton<Window>
 	{
 	public:
+		// @Note: If I want to pass in configuration to the window I sould mek a structure that holds all of the information
+		// and then pass it to an overloaded initialize function. The Non default constructor will never be called as this is
+		// a Singleton and will not be able to be called.
 		Window();
-		Window(String title, IRect resultion, IPoint position, u32 flags);
 		~Window();
 
 		bool Initialize();
+		bool Initialize(WindowConfiguration & config);
 		void Cleanup();
 
 		void SetClearColor(f32 r, f32 g, f32 b);
@@ -49,6 +60,8 @@ namespace edn
 
 		inline SDL_Window * GetWindowPtr()    { return m_windowHandle; }
 		inline SDL_GLContext & GetGLContext() { return m_glContext; }
+
+		void SetTitle(String & title);
 
 	private:
 		SDL_Window * m_windowHandle;

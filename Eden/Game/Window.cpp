@@ -3,23 +3,17 @@
 
 namespace edn
 {
+	static bool configuration_passed = false;
+	static WindowConfig default_configuration = {
+		"Eden Engine",
+		1280, 720,
+		0, 0,
+		0
+	};
+
 	Window::Window()
 		: m_windowFlags(0)
 	{
-		m_title = "Eden Engine";
-		m_resolution={ 1270, 720 };
-		m_position={ 0, 0 };
-		m_center={ m_resolution.width / 2, m_resolution.height / 2 };
-		m_windowFlags |= EDN_WINDOW_VSYNC;
-	}
-
-	Window::Window(String title, IRect resultion, IPoint position, u32 flags)
-		: m_windowFlags(flags)
-		, m_title(title)
-		, m_resolution(m_resolution)
-		, m_position(position)
-	{
-		m_center={ m_resolution.width / 2, m_resolution.height / 2 };
 	}
 
 	Window::~Window()
@@ -35,8 +29,23 @@ namespace edn
 		SDL_Quit();
 	}
 
+	bool Window::Initialize(WindowConfig & config)
+	{
+		m_title = config.title;
+		m_resolution = { config.width, config.height };
+		m_position = { config.x, config.y };
+		m_center = { config.width / 2, config.height / 2 };
+		m_windowFlags = config.flags;
+		configuration_passed = true;
+		return Initialize();
+	}
+
 	bool Window::Initialize()
 	{
+		// Checking to see if we have ever passed a configuration to the window
+		if (!configuration_passed)
+			Initialize(default_configuration);
+
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		{
@@ -86,6 +95,12 @@ namespace edn
 		f32 g = ((hexcode >>  8) & 0xFF) / 255.0f;
 		f32 b = ((hexcode >>  0) & 0xFF) / 255.0f;
 		SetClearColor(r, g, b);
+	}
+
+	void Window::SetTitle(String & title)
+	{
+		m_title = title;
+		SDL_SetWindowTitle(m_windowHandle, m_title.c_str());
 	}
 
 	void Window::Clear()
