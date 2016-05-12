@@ -44,7 +44,7 @@ namespace edn
 		container.swap(Type());
 	}
 
-	String GetTextFileContent(String filename)
+	static String GetTextFileContent(String filename)
 	{
 		std::ifstream file(filename, std::ios::in | std::ios::binary);
 		String content;

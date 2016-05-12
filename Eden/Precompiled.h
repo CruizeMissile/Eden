@@ -28,7 +28,7 @@
 //
 // OpenGL and GLEW
 //
-#include "gl\glew.h"
+#include <gl\glew.h>
 
 //
 // Core
@@ -40,6 +40,11 @@
 #include "Core\Utility.h"
 #include "Core\OS.h"
 #include "Core\ScopeGuard.h"
+
+//
+// Logging
+//
+#include "Logging\Log.h"
 
 
 #endif

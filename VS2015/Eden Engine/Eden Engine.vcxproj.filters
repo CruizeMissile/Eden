@@ -7,9 +7,6 @@
     <Filter Include="Logger">
       <UniqueIdentifier>{f61c0344-b1f5-4817-a4d8-8e54d9e4fcf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ecs">
-      <UniqueIdentifier>{4cb28fbb-712d-4b5c-8ee8-45a3266dc648}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{b1ba9b03-a621-4faa-965b-01cea45c3960}</UniqueIdentifier>
     </Filter>
@@ -43,31 +40,13 @@
     <ClInclude Include="..\..\Eden\Math\Vector.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Ecs\World.h">
-      <Filter>Ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Ecs\Entity.h">
-      <Filter>Ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Ecs\EntityManager.h">
-      <Filter>Ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Ecs\Component.h">
-      <Filter>Ecs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Ecs\ComponentPool.h">
-      <Filter>Ecs</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\Eden\Game\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Eden\Precompiled.cpp" />
-    <ClCompile Include="..\..\Eden\Ecs\EntityManager.cpp">
-      <Filter>Ecs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Ecs\World.cpp" />
-    <ClCompile Include="..\..\Eden\Ecs\Enitty.cpp" />
+    <ClCompile Include="..\..\Eden\Game\Window.cpp" />
   </ItemGroup>
 </Project>

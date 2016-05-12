@@ -97,7 +97,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;OpenGL32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -113,7 +113,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;OpenGL32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -133,7 +133,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;OpenGL32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -153,7 +153,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;OpenGL32.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -165,20 +165,14 @@
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
-    <ClInclude Include="..\..\Eden\Ecs\Component.h" />
-    <ClInclude Include="..\..\Eden\Ecs\ComponentPool.h" />
-    <ClInclude Include="..\..\Eden\Ecs\Entity.h" />
-    <ClInclude Include="..\..\Eden\Ecs\EntityManager.h" />
-    <ClInclude Include="..\..\Eden\Ecs\World.h" />
+    <ClInclude Include="..\..\Eden\Game\Window.h" />
     <ClInclude Include="..\..\Eden\Logging\Log.h" />
     <ClInclude Include="..\..\Eden\Math\Vector.h" />
     <ClInclude Include="..\..\Eden\Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
-    <ClCompile Include="..\..\Eden\Ecs\Enitty.cpp" />
-    <ClCompile Include="..\..\Eden\Ecs\EntityManager.cpp" />
-    <ClCompile Include="..\..\Eden\Ecs\World.cpp" />
+    <ClCompile Include="..\..\Eden\Game\Window.cpp" />
     <ClCompile Include="..\..\Eden\Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Precompiled.h</PrecompiledHeaderFile>

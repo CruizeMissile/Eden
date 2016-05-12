@@ -1,6 +1,8 @@
 #ifndef H_CORE_COMMON_H
 #define H_CORE_COMMON_H
 
+#include "Types.h"
+
 namespace edn
 {
 	//
@@ -29,6 +31,19 @@ namespace edn
 	protected:
 		explicit Singleton<Type>() {}
 	};
+
+	struct IRect
+	{
+		u32 width;
+		u32 height;
+	};
+
+	struct IPoint
+	{
+		u32 x;
+		u32 y;
+	};
+
 }
 
 #endif
