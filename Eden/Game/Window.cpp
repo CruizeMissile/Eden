@@ -1,10 +1,11 @@
 #include "Precompiled.h"
 #include "Window.h"
+#include "Input.h"
 
 namespace edn
 {
 	static bool configuration_passed = false;
-	static WindowConfig default_configuration = {
+	static WindowConfiguration default_configuration = {
 		"Eden Engine",
 		1280, 720,
 		0, 0,
@@ -12,7 +13,7 @@ namespace edn
 	};
 
 	Window::Window()
-		: m_windowFlags(0)
+		: m_flags(0)
 	{
 	}
 
@@ -23,20 +24,15 @@ namespace edn
 
 	void Window::Cleanup()
 	{
-		m_windowFlags &= ~EDN_WINDOW_RUNNING;
+		m_flags &= ~EDN_WINDOW_RUNNING;
 		SDL_GL_DeleteContext(m_glContext);
 		SDL_DestroyWindow(m_windowHandle);
 		SDL_Quit();
 	}
 
-	bool Window::Initialize(WindowConfig & config)
+	bool Window::Initialize(WindowConfiguration & config)
 	{
-		m_title = config.title;
-		m_resolution = { config.width, config.height };
-		m_position = { config.x, config.y };
-		m_center = { config.width / 2, config.height / 2 };
-		m_windowFlags = config.flags;
-		configuration_passed = true;
+		setConfig(config);
 		return Initialize();
 	}
 
@@ -44,7 +40,7 @@ namespace edn
 	{
 		// Checking to see if we have ever passed a configuration to the window
 		if (!configuration_passed)
-			Initialize(default_configuration);
+			setConfig(default_configuration);
 
 		// Initialize SDL
 		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -56,8 +52,8 @@ namespace edn
 			m_title.c_str(),
 			m_position.x <= 0 ? SDL_WINDOWPOS_CENTERED : m_position.x,
 			m_position.y <= 0 ? SDL_WINDOWPOS_CENTERED : m_position.y,
-			m_resolution.width,
-			m_resolution.height,
+			m_size.width,
+			m_size.height,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN
 		);
 
@@ -80,7 +76,7 @@ namespace edn
 		glewExperimental = GL_TRUE;
 		glewInit();
 
-		m_windowFlags |= EDN_WINDOW_RUNNING;
+		m_flags |= EDN_WINDOW_RUNNING;
 		return true;
 	}
 
@@ -110,6 +106,14 @@ namespace edn
 
 	void Window::Update()
 	{
+		Input & input = Input::Instance();
+		if (input.KeySinglePress(KeyCode::KEY_ESC))
+			m_flags &= ~EDN_WINDOW_RUNNING;
+		if (input.KeySinglePress(KeyCode::KEY_RETURN))
+			m_flags ^= EDN_WINDOW_FULLSCREEN;
+		if (input.KeySinglePress(KeyCode::KEY_FORWARD_SLASH))
+			m_flags ^= EDN_WINDOW_BOARDERLESS;
+
 		// Update fullscreen
 		if (IsFullscreen() != (SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP))
 		{
@@ -131,6 +135,25 @@ namespace edn
 		// Update Vsync
 		if (IsVsync() != (SDL_GL_GetSwapInterval()))
 			SDL_GL_SetSwapInterval(IsVsync());
+
+		// Update visable cursor
+		if (IsHiddenCursor() != SDL_ShowCursor(SDL_QUERY) == 0)
+		{
+			if (IsHiddenCursor())
+				SDL_ShowCursor(SDL_DISABLE);
+			else
+				SDL_ShowCursor(SDL_ENABLE);
+		}
+
+		// @Note: This should be in poll event under mouse movement. Store the delta of the mouse and
+		// then set it back to the center of the screen.
+
+		// Update cursor position if centering the cursor is enabled
+		//if (IsCenterCursor())
+		//{
+		//	SDL_WarpMouseInWindow(m_windowHandle, m_center.x, m_center.y);
+		//}
+		input.Update();
 	}
 
 	void Window::PollEvents()
@@ -146,13 +169,12 @@ namespace edn
 			}
 			break;
 
-			case SDL_KEYDOWN:
-				if (e.key.keysym.sym == SDLK_ESCAPE)
-					m_windowFlags &= ~EDN_WINDOW_RUNNING;
-				else if (e.key.keysym.sym == SDLK_RETURN)
-					m_windowFlags ^= EDN_WINDOW_FULLSCREEN;
-				break;
+				//if (e.key.keysym.sym == SDLK_ESCAPE)
+				//	m_flags &= ~EDN_WINDOW_RUNNING;
+				//else if (e.key.keysym.sym == SDLK_RETURN)
+				//	m_flags ^= EDN_WINDOW_FULLSCREEN;
 
+			case SDL_KEYDOWN:
 			case SDL_KEYUP:
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_MOUSEBUTTONUP:
@@ -163,6 +185,8 @@ namespace edn
 			case SDL_CONTROLLERBUTTONDOWN:
 			case SDL_CONTROLLERBUTTONUP:
 			case SDL_CONTROLLERAXISMOTION:
+				Input::Instance().SDLEventHandle(e);
+				break;
 			case SDL_TEXTINPUT:
 				break;
 			
@@ -197,5 +221,15 @@ namespace edn
 	void Window::SwapBuffers()
 	{
 		SDL_GL_SwapWindow(m_windowHandle);
+	}
+
+	void Window::setConfig(WindowConfiguration & config)
+	{
+		m_title = config.title;
+		m_size = { config.width, config.height };
+		m_position = { config.x, config.y };
+		m_center = { config.width / 2, config.height / 2 };
+		m_flags = config.flags;
+		configuration_passed = true;
 	}
 }

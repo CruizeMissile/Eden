@@ -46,6 +46,9 @@
     <ClInclude Include="..\..\Eden\Game\Window.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Game\Input.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Precompiled.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Game\Input.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
