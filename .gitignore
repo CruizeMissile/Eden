@@ -4,8 +4,10 @@
 [Bb]inary/
 [Dd]ebug*/
 [Rr]elease*/
+[Ii]mid/
+/Include/
 ipch/
 *.sdf
 *.opensdf
-[Ii]mid/
 *.log
+*.user
