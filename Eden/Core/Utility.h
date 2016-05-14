@@ -22,7 +22,7 @@
 #define EDN_NAME_GENERATOR( ) EDN_NAME_GENERATOR_INTERNAL( __COUNTER__ )
 
 // Convenient macro for getting the size in elements of a stack array.
-#define KIN_ElemCount( ARRAY ) \
+#define EDN_ElemCount( ARRAY ) \
   sizeof( ARRAY ) / sizeof( ARRAY[0] )
 
 #define TYPE( _ ) typeid(_)

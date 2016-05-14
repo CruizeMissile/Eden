@@ -1,3 +1,4 @@
+#include "Precompiled.h"
 #include "OS.h"
 #include "Platform.h"
 
@@ -83,5 +84,33 @@ namespace edn
 		{
 			return EDN_PATH_DELIMITER;
 		}
+
+		bool IsFile(String & file)
+		{
+		#if defined(EDN_WINDOWS)
+			WIN32_FIND_DATA FindFileData;
+			HANDLE handle = FindFirstFile(file.c_str(), &FindFileData);
+			int found = handle != INVALID_HANDLE_VALUE;
+			return found ? true : false;
+		#elif defined(EDN_MACOS)
+			#error Implement on mac
+		#elif defined(EDN_LINUX)
+			#error Implement on Linux
+		#endif
+		}
+
+		String MakePath(String * list)
+		{
+			String result = "";
+			u64 count = EDN_ElemCount(list);
+			for (u32 i = 0; i < count; ++i)
+			{
+				result += list[i] + PathDelimeter();
+			}
+			result.pop_back();
+
+			return Path(result);
+		}
+
 	}
 }

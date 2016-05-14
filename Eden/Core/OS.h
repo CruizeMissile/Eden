@@ -24,6 +24,20 @@ namespace edn
 
 		// Returns the platform path delemeter character.
 		const char PathDelimeter();
+
+		bool IsFile(String & file);
+
+		template<typename Type>
+		Type MakePath(Type t)
+		{
+			return Type(t);
+		}
+
+		template<typename Type, typename... Args>
+		Type MakePath(Type t, Args... args)
+		{
+			return Type(t + PathDelimeter + MakePath(args));
+		}
 	}
 }
 
