@@ -3,7 +3,7 @@
 
 namespace edn
 {
-	#define PI 3.14159265358979323846
+	#define PI 3.14159265358979323846f
 
 	inline float ToRadian(float degrees)
 	{

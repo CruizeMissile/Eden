@@ -112,7 +112,7 @@ namespace edn
 	{
 		float length = sqrt(x * x + y * y + z * z + w * w);
 
-		assert(length != 0.0f, "Zero length quaternion cannot be normalized.");
+		ASSERT(length != 0.0f, "Zero length quaternion cannot be normalized.");
 
 		x /= length;
 		y /= length;
@@ -124,7 +124,7 @@ namespace edn
 	{
 		float length = sqrt(x * x + y * y + z * z + w * w);
 		
-		assert(length != 0.0f, "Zero length quaternion cannot be normalized.");
+		ASSERT(length != 0.0f, "Zero length quaternion cannot be normalized.");
 
 		return quat(x / length, y / length, z / length, w / length);
 	}

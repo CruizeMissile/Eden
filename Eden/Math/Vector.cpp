@@ -120,13 +120,13 @@ namespace edn
 
 	float vec2::operator[](unsigned int index) const
 	{
-		assert(index >= 0 && index < 2, "'index' must be in the range of [0, 1].");
+		ASSERT(index >= 0 && index < 2, "'index' must be in the range of [0, 1].");
 		return *(&x + index);
 	}
 
 	float &vec2::operator[](unsigned int index)
 	{
-		assert(index >= 0 && index < 2, "'index' must be in the range of [0, 1].");
+		ASSERT(index >= 0 && index < 2, "'index' must be in the range of [0, 1].");
 		return *(&x + index);
 	}
 
@@ -144,7 +144,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		this->x *= invLength;
 		this->y *= invLength;
@@ -154,7 +154,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		return vec2(x * invLength, y * invLength);
 	}
@@ -287,13 +287,13 @@ namespace edn
 
 	float vec3::operator[](unsigned int index) const
 	{
-		assert(index >= 0 && index < 3, "'index' must be in the range of [0, 2].");
+		ASSERT(index >= 0 && index < 3, "'index' must be in the range of [0, 2].");
 		return *(&x + index);
 	}
 
 	float &vec3::operator[](unsigned int index)
 	{
-		assert(index >= 0 && index < 3, "'index' must be in the range of [0, 2].");
+		ASSERT(index >= 0 && index < 3, "'index' must be in the range of [0, 2].");
 		return *(&x + index);
 	}
 
@@ -311,7 +311,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		this->x *= invLength;
 		this->y *= invLength;
@@ -322,7 +322,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		return vec3(x * invLength, y * invLength, z * invLength);
 	}
@@ -472,13 +472,13 @@ namespace edn
 
 	float vec4::operator[](unsigned int index) const
 	{
-		assert(index >= 0 && index < 4, "'index' must be in the range of [0, 3].");
+		ASSERT(index >= 0 && index < 4, "'index' must be in the range of [0, 3].");
 		return *(&x + index);
 	}
 
 	float &vec4::operator[](unsigned int index)
 	{
-		assert(index >= 0 && index < 4, "'index' must be in the range of [0, 3].");
+		ASSERT(index >= 0 && index < 4, "'index' must be in the range of [0, 3].");
 		return *(&x + index);
 	}
 
@@ -496,7 +496,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		this->x *= invLength;
 		this->y *= invLength;
@@ -508,7 +508,7 @@ namespace edn
 	{
 		float invLength = 1.0f / this->Length();
 
-		assert(!std::isinf(invLength), "Zero length vector cannot be normalized.");
+		ASSERT(!std::isinf(invLength), "Zero length vector cannot be normalized.");
 
 		return vec4(x * invLength, y * invLength, z * invLength, w * invLength);
 	}

@@ -199,13 +199,13 @@ namespace edn
 
 	float mat3::operator[](unsigned int index) const
 	{
-		assert(index >= 0 && index < 9, "'index' must be in the range of [0, 8].");
+		ASSERT(index >= 0 && index < 9, "'index' must be in the range of [0, 8].");
 		return data[index];
 	}
 
 	float &mat3::operator[](unsigned int index)
 	{
-		assert(index >= 0 && index < 9, "'index' must be in the range of [0, 8].");
+		ASSERT(index >= 0 && index < 9, "'index' must be in the range of [0, 8].");
 		return data[index];
 	}
 
@@ -751,13 +751,13 @@ namespace edn
 
 	float mat4::operator[](unsigned int index) const
 	{
-		assert(index >= 0 && index < 16, "'index' must be in the range of [0, 15].");
+		ASSERT(index >= 0 && index < 16, "'index' must be in the range of [0, 15].");
 		return data[index];
 	}
 
 	float &mat4::operator[](unsigned int index)
 	{
-		assert(index >= 0 && index < 16, "'index' must be in the range of [0, 15].");
+		ASSERT(index >= 0 && index < 16, "'index' must be in the range of [0, 15].");
 		return data[index];
 	}
 
