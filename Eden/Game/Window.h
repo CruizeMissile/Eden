@@ -45,14 +45,14 @@ namespace edn
 		void PollEvents();
 		void SwapBuffers();
 
-		inline bool IsRunning()      { return (m_flags & EDN_WINDOW_RUNNING) == 0;       }
-		inline bool IsPaused()       { return (m_flags & EDN_WINDOW_PAUSED) == 0;        }
-		inline bool IsFullscreen()   { return (m_flags & EDN_WINDOW_FULLSCREEN) == 0;    }
-		inline bool IsBoarderless()  { return (m_flags & EDN_WINDOW_BOARDERLESS) == 0;   }
-		inline bool IsVsync()        { return (m_flags & EDN_WINDOW_FULLSCREEN) == 0;    }
-		inline bool IsHiddenCursor() { return (m_flags & EDN_WINDOW_HIDE_CURSOR) == 0;   }
-		inline bool IsCenterCursor() { return (m_flags & EDN_WINDOW_CENTER_CURSOR) == 0; }
-		inline bool IsTrapCursor()   { return (m_flags & EDN_WINDOW_TRAP_CURSOR) == 0;   }
+		inline bool IsRunning()      { return (m_flags & EDN_WINDOW_RUNNING) != 0;       }
+		inline bool IsPaused()       { return (m_flags & EDN_WINDOW_PAUSED) != 0;        }
+		inline bool IsFullscreen()   { return (m_flags & EDN_WINDOW_FULLSCREEN) != 0;    }
+		inline bool IsBoarderless()  { return (m_flags & EDN_WINDOW_BOARDERLESS) != 0;   }
+		inline bool IsVsync()        { return (m_flags & EDN_WINDOW_FULLSCREEN) != 0;    }
+		inline bool IsHiddenCursor() { return (m_flags & EDN_WINDOW_HIDE_CURSOR) != 0;   }
+		inline bool IsCenterCursor() { return (m_flags & EDN_WINDOW_CENTER_CURSOR) != 0; }
+		inline bool IsTrapCursor()   { return (m_flags & EDN_WINDOW_TRAP_CURSOR) != 0;   }
 
 		inline String & GetTitle() { return m_title; }
 		inline u32 Width()         { return m_size.width; }
@@ -75,7 +75,7 @@ namespace edn
 		IRect m_size;
 		IPoint m_position;
 		IPoint m_center;
-		
+
 		u32 m_flags;
 	};
 }

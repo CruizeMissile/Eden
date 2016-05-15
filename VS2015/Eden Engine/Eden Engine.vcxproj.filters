@@ -13,6 +13,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{4915b16d-97b3-41dc-b920-5839c3a6a7e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ecs">
+      <UniqueIdentifier>{0bc5ac68-bb3f-446c-8fde-05ebf87d2466}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -49,6 +52,15 @@
     <ClInclude Include="..\..\Eden\Game\Input.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\AssetManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\AssetPool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\TestAsset.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -60,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Game\Input.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Core\AssetManager.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 #include "Game\Window.h"
 
+#include "Core\AssetManager.h"
+
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work. 
 // Need to make it so that is not the case.
 
@@ -9,6 +11,34 @@
 
 #undef main;
 using namespace edn;
+
+class TestAsset : public Asset
+{
+public:
+	TestAsset()
+	{
+		m_subDir = "Testing";
+	}
+
+	String Text() { return m_text; }
+
+	virtual void loadFromFile(String filename) override
+	{
+		m_text = GetTextFileContent(filename);
+	}
+
+	virtual void loadFromCashe(String filename) override
+	{
+
+	}
+
+	virtual void writeCacheFile(String filename) override
+	{
+
+	}
+private:
+	String m_text;
+};
 
 int main()
 {
@@ -22,6 +52,16 @@ int main()
 	Window & window = Window::Instance();
 	window.Initialize(window_config);
 	window.SetClearColor(0x282828);
+
+	AssetManager::SetAssetPath(os::MakePath(os::ExecDir(), "Assets"));
+	AssetManager::SetCachePath(os::MakePath(os::ExecDir(), "Cached"));
+
+	AssetManager::Register<TestAsset>();
+	
+	String filename = "testing.txt";
+	TestAsset * asset = AssetManager::Load<TestAsset>(filename);
+
+	std::cout << asset->Text() << std::endl;
 
 	while (window.IsRunning())
 	{

@@ -584,6 +584,8 @@ namespace edn
 			return SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START;
 		case ControllerButton::CONTROLLER_BUTTON_BACK:
 			return SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_BACK;
+		default:
+			return SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A;
 		}
 	}
 
@@ -603,6 +605,8 @@ namespace edn
 			return SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 		case ControllerAxis::CONTROLLER_AXIS_RIGHTTRIGGER:
 			return SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+		default:
+			return SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX;
 		}
 	}
 }

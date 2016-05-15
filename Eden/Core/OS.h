@@ -3,6 +3,19 @@
 
 #include "Types.h"
 
+namespace std
+{
+	static string to_string(const string& other)
+	{
+		return other;
+	}
+
+	static string to_string(string&& other)
+	{
+		return other;
+	}
+}
+
 namespace edn
 {
 	namespace os
@@ -28,19 +41,19 @@ namespace edn
 		bool IsFile(String & file);
 
 		template<typename Type>
-		Type _INTERNAL_MakePath(Type t)
+		inline String _INTERNAL_MakePath(Type t)
 		{
-			return Type(t);
+			return std::to_string(t);
+		}
+		
+		template<typename Type, typename... Args>
+		inline String _INTERNAL_MakePath(Type t, Args... args)
+		{
+			return std::to_string(t) + PathDelimeter() + _INTERNAL_MakePath(args...);
 		}
 
 		template<typename Type, typename... Args>
-		Type _INTERNAL_MakePath(Type t, Args... args)
-		{
-			return Type(t + PathDelimeter() + MakePath(args...));
-		}
-
-		template<typename Type, typename... Args>
-		Type MakePath(Type t, Args... args)
+		inline String MakePath(Type t, Args... args)
 		{
 			return Path(_INTERNAL_MakePath(t, args...));
 		}
