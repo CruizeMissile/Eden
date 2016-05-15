@@ -22,7 +22,7 @@
     <ProjectGuid>{C82D5F72-6CFE-4C8E-A34B-AEB0981CA925}</ProjectGuid>
     <RootNamespace>Eden</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>Eden Engine</ProjectName>
+    <ProjectName>Eden</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -201,7 +201,6 @@
     <ClInclude Include="..\..\Eden\Core\OS.h" />
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
-    <ClInclude Include="..\..\Eden\Core\TestAsset.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
     <ClInclude Include="..\..\Eden\Game\Input.h" />
@@ -210,7 +209,6 @@
     <ClInclude Include="..\..\Eden\Math\Math.h" />
     <ClInclude Include="..\..\Eden\Math\Matrix.h" />
     <ClInclude Include="..\..\Eden\Math\Quaternion.h" />
-    <ClInclude Include="..\..\Eden\Math\Ray.h" />
     <ClInclude Include="..\..\Eden\Math\Vector.h" />
     <ClInclude Include="..\..\Eden\Precompiled.h" />
   </ItemGroup>
