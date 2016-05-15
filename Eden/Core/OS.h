@@ -40,6 +40,7 @@ namespace edn
 
 		bool IsFile(String & file);
 
+		// This is where I found some example http://stackoverflow.com/a/16338804 
 		template<typename Type>
 		inline String _INTERNAL_MakePath(Type t)
 		{

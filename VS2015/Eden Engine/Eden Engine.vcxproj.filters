@@ -7,14 +7,11 @@
     <Filter Include="Logger">
       <UniqueIdentifier>{f61c0344-b1f5-4817-a4d8-8e54d9e4fcf0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{b1ba9b03-a621-4faa-965b-01cea45c3960}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{4915b16d-97b3-41dc-b920-5839c3a6a7e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ecs">
-      <UniqueIdentifier>{0bc5ac68-bb3f-446c-8fde-05ebf87d2466}</UniqueIdentifier>
+    <Filter Include="Math">
+      <UniqueIdentifier>{05919c56-a05a-4134-b03b-95e63a14b010}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,9 +40,6 @@
     <ClInclude Include="..\..\Eden\Logging\Log.h">
       <Filter>Logger</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Math\Vector.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Eden\Game\Window.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -61,6 +55,18 @@
     <ClInclude Include="..\..\Eden\Core\TestAsset.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Math\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Math\Vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Math\Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -75,6 +81,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Math\Matrix.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Math\Quaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Math\Vector.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

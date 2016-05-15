@@ -207,6 +207,9 @@
     <ClInclude Include="..\..\Eden\Game\Input.h" />
     <ClInclude Include="..\..\Eden\Game\Window.h" />
     <ClInclude Include="..\..\Eden\Logging\Log.h" />
+    <ClInclude Include="..\..\Eden\Math\Math.h" />
+    <ClInclude Include="..\..\Eden\Math\Matrix.h" />
+    <ClInclude Include="..\..\Eden\Math\Quaternion.h" />
     <ClInclude Include="..\..\Eden\Math\Vector.h" />
     <ClInclude Include="..\..\Eden\Precompiled.h" />
   </ItemGroup>
@@ -215,6 +218,9 @@
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Game\Input.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp" />
+    <ClCompile Include="..\..\Eden\Math\Matrix.cpp" />
+    <ClCompile Include="..\..\Eden\Math\Quaternion.cpp" />
+    <ClCompile Include="..\..\Eden\Math\Vector.cpp" />
     <ClCompile Include="..\..\Eden\Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Precompiled.h</PrecompiledHeaderFile>

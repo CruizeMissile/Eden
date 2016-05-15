@@ -1,4 +1,5 @@
 #include "Game\Window.h"
+#include "Math\Vector.h"
 
 #include "Core\AssetManager.h"
 
