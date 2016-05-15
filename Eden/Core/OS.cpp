@@ -97,20 +97,7 @@ namespace edn
 		#elif defined(EDN_LINUX)
 			#error Implement on Linux
 		#endif
-		}
-
-		String MakePath(String * list)
-		{
-			String result = "";
-			u64 count = EDN_ElemCount(list);
-			for (u32 i = 0; i < count; ++i)
-			{
-				result += list[i] + PathDelimeter();
-			}
-			result.pop_back();
-
-			return Path(result);
-		}
+		}	
 
 	}
 }

@@ -115,7 +115,7 @@ namespace edn
 			m_flags ^= EDN_WINDOW_BOARDERLESS;
 
 		// Update fullscreen
-		if (IsFullscreen() != (SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP))
+		if (IsFullscreen() != ((SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP) == 0))
 		{
 			if (IsFullscreen())
 				SDL_SetWindowFullscreen(m_windowHandle, SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -124,7 +124,7 @@ namespace edn
 		}
 
 		// Updateing boarderless
-		if (IsBoarderless() != (SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_BORDERLESS))
+		if (IsBoarderless() != ((SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_BORDERLESS) == 0))
 		{
 			if (IsBoarderless())
 				SDL_SetWindowBordered(m_windowHandle, SDL_FALSE);
@@ -133,11 +133,11 @@ namespace edn
 		}
 
 		// Update Vsync
-		if (IsVsync() != (SDL_GL_GetSwapInterval()))
+		if (IsVsync() != ((SDL_GL_GetSwapInterval()) == 0))
 			SDL_GL_SetSwapInterval(IsVsync());
 
 		// Update visable cursor
-		if (IsHiddenCursor() != SDL_ShowCursor(SDL_QUERY) == 0)
+		if (IsHiddenCursor() != (SDL_ShowCursor(SDL_QUERY) == 0))
 		{
 			if (IsHiddenCursor())
 				SDL_ShowCursor(SDL_DISABLE);

@@ -28,15 +28,21 @@ namespace edn
 		bool IsFile(String & file);
 
 		template<typename Type>
-		Type MakePath(Type t)
+		Type _INTERNAL_MakePath(Type t)
 		{
 			return Type(t);
 		}
 
 		template<typename Type, typename... Args>
+		Type _INTERNAL_MakePath(Type t, Args... args)
+		{
+			return Type(t + PathDelimeter() + MakePath(args...));
+		}
+
+		template<typename Type, typename... Args>
 		Type MakePath(Type t, Args... args)
 		{
-			return Type(t + PathDelimeter + MakePath(args));
+			return Path(_INTERNAL_MakePath(t, args...));
 		}
 	}
 }
