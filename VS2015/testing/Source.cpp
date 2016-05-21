@@ -1,5 +1,7 @@
-#include "Game\Window.h"
-#include "Math\Vector.h"
+#include "Game/Window.h"
+#include "Math/Vector.h"
+#include "Graphics/Mesh.h"
+
 
 #include "Core\AssetManager.h"
 
@@ -41,6 +43,7 @@ private:
 	String m_text;
 };
 
+
 int main()
 {
 	WindowConfiguration window_config={
@@ -50,19 +53,25 @@ int main()
 		EDN_WINDOW_VSYNC | EDN_WINDOW_HIDE_CURSOR
 	};
 
+	std::cout << sizeof(SDL_Scancode) << std::endl;
+
 	Window & window = Window::Instance();
-	window.Initialize(window_config);
+	window.Initialize();
 	window.SetClearColor(0x282828);
 
 	AssetManager::SetAssetPath(os::MakePath(os::ExecDir(), "Assets"));
 	AssetManager::SetCachePath(os::MakePath(os::ExecDir(), "Cached"));
 
 	AssetManager::Register<TestAsset>();
-	
-	String filename = "testing.txt";
-	TestAsset * asset = AssetManager::Load<TestAsset>(filename);
+	AssetManager::Register<Mesh>();
 
-	std::cout << asset->Text() << std::endl;
+	String filename = "testing.txt";
+	//TestAsset * asset = AssetManager::Load<TestAsset>(filename);
+
+	filename = "BigBoy.obj";
+	Mesh * mesh = AssetManager::Load<Mesh>(filename);
+
+	//std::cout << asset->Text() << std::endl;
 
 	while (window.IsRunning())
 	{

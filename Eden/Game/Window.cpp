@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 #include "Window.h"
 #include "Input.h"
+#include "SDL2/SDL.h"
 
 namespace edn
 {
@@ -106,13 +107,13 @@ namespace edn
 
 	void Window::Update()
 	{
-		Input & input = Input::Instance();
-		if (input.KeySinglePress(KeyCode::KEY_ESC))
-			m_flags &= ~EDN_WINDOW_RUNNING;
-		if (input.KeySinglePress(KeyCode::KEY_RETURN))
-			m_flags ^= EDN_WINDOW_FULLSCREEN;
-		if (input.KeySinglePress(KeyCode::KEY_FORWARD_SLASH))
-			m_flags ^= EDN_WINDOW_BOARDERLESS;
+		//Input & input = Input::Instance();
+		//if (input.KeySinglePress(KeyCode::KEY_ESC))
+		//	m_flags &= ~EDN_WINDOW_RUNNING;
+		//if (input.KeySinglePress(KeyCode::KEY_RETURN))
+		//	m_flags ^= EDN_WINDOW_FULLSCREEN;
+		//if (input.KeySinglePress(KeyCode::KEY_FORWARD_SLASH))
+		//	m_flags ^= EDN_WINDOW_BOARDERLESS;
 
 		// Update fullscreen
 		if (IsFullscreen() != ((SDL_GetWindowFlags(m_windowHandle) & SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP) != 0))
@@ -153,7 +154,7 @@ namespace edn
 		//{
 		//	SDL_WarpMouseInWindow(m_windowHandle, m_center.x, m_center.y);
 		//}
-		input.Update();
+		//input.Update();
 	}
 
 	void Window::PollEvents()
@@ -185,7 +186,7 @@ namespace edn
 			case SDL_CONTROLLERBUTTONDOWN:
 			case SDL_CONTROLLERBUTTONUP:
 			case SDL_CONTROLLERAXISMOTION:
-				Input::Instance().SDLEventHandle(e);
+				//Input::Instance().SDLEventHandle(e);
 				break;
 			case SDL_TEXTINPUT:
 				break;

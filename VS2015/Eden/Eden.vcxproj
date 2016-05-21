@@ -205,7 +205,9 @@
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
     <ClInclude Include="..\..\Eden\Game\Input.h" />
     <ClInclude Include="..\..\Eden\Game\Window.h" />
+    <ClInclude Include="..\..\Eden\Graphics\VertexAttribute.h" />
     <ClInclude Include="..\..\Eden\Graphics\Buffer.h" />
+    <ClInclude Include="..\..\Eden\Graphics\Mesh.h" />
     <ClInclude Include="..\..\Eden\Logging\Log.h" />
     <ClInclude Include="..\..\Eden\Math\Math.h" />
     <ClInclude Include="..\..\Eden\Math\Matrix.h" />
@@ -218,6 +220,9 @@
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Game\Input.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp" />
+    <ClCompile Include="..\..\Eden\Graphics\Buffer.cpp" />
+    <ClCompile Include="..\..\Eden\Graphics\VertexAttribute.cpp" />
+    <ClCompile Include="..\..\Eden\Graphics\Mesh.cpp" />
     <ClCompile Include="..\..\Eden\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Eden\Math\Quaternion.cpp" />
     <ClCompile Include="..\..\Eden\Math\Vector.cpp" />
