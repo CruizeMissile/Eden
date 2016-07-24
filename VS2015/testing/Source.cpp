@@ -1,18 +1,19 @@
 #include "Game/Window.h"
 #include "Math/Vector.h"
 #include "Graphics/Mesh.h"
+#include "Core/Common.h"
 
 
 #include "Core\AssetManager.h"
 
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work. 
-// Need to make it so that is not the case.
+// @Todo: Need to make it so that is not the case.
 
 // @Note: Have to figure out how to deal with sdl defining the "main" macro. Find a solution for this
 // instead of making sure that the user has to undef main every time. Could place the undef in the window
 // class for now if I cant find a fix for it.
 
-#undef main;
+#undef main
 using namespace edn;
 
 class TestAsset : public Asset
@@ -43,10 +44,9 @@ private:
 	String m_text;
 };
 
-
-int main()
+int engine()
 {
-	WindowConfiguration window_config={
+	WindowConfiguration window_config = {
 		"Title",
 		600, 400,
 		200, 200,
@@ -66,6 +66,7 @@ int main()
 	AssetManager::Register<Mesh>();
 
 	String filename = "testing.txt";
+
 	//TestAsset * asset = AssetManager::Load<TestAsset>(filename);
 
 	filename = "BigBoy.obj";
@@ -83,4 +84,9 @@ int main()
 	}
 	window.Cleanup();
 	return 0;
+}
+
+int main()
+{
+	return engine();
 }

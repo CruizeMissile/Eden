@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\UnitTests\Entity\Entity.UnitTests.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UnitTests\UnitTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{050d0655-7fe4-4a54-91f5-b22d6b3d0332}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\UnitTests\UnitTest.h" />
+  </ItemGroup>
+</Project>

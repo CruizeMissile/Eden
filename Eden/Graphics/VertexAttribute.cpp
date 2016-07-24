@@ -9,7 +9,7 @@ using namespace std;
 
 namespace edn
 {
-	int GetVertexAttributeTypeSize(VertexAttributeTypes d)
+	u32 GetVertexAttributeTypeSize(VertexAttributeTypes d)
 	{
 		switch (d)
 		{
@@ -34,7 +34,7 @@ namespace edn
 		return 0;
 	}
 
-	int GetVertexAttributeTypeRows(VertexAttributeTypes d)
+	u32 GetVertexAttributeTypeRows(VertexAttributeTypes d)
 	{
 		switch (d)
 		{
@@ -76,7 +76,7 @@ namespace edn
 		return GL_INVALID_ENUM;
 	}
 
-	int GetVertexAttributeTypeOffset(VertexAttributeTypes d)
+	u32 GetVertexAttributeTypeOffset(VertexAttributeTypes d)
 	{
 		switch (d)
 		{
@@ -102,6 +102,8 @@ namespace edn
 		case VertexAttributeTypes::UInt4:
 		case VertexAttributeTypes::UInt4x4:
 			return sizeof(u32) * 4;
+		default:
+			return 0;
 		}
 	}
 
@@ -175,10 +177,10 @@ namespace edn
 		// Set the vertex array state.
 		Buffer* currentBuffer = nullptr;
 
-		int currentLocation = 0;
-		int currentOffset = 0;
+		u32 currentLocation = 0;
+		usize currentOffset = 0;
 
-		for (int i = 0; i < count; ++i)
+		for (u32 i = 0; i < count; ++i)
 		{
 			VAttribute& attribute = attributes[i];
 
@@ -192,7 +194,7 @@ namespace edn
 			}
 
 			// Setup vertex attributes for each used vertex location.
-			for (int l = 0; l < GetVertexAttributeTypeRows(attribute.type); ++l)
+			for (u32 l = 0; l < GetVertexAttributeTypeRows(attribute.type); ++l)
 			{
 				// Enable vertex attribute.
 				glEnableVertexAttribArray(currentLocation);
@@ -204,7 +206,7 @@ namespace edn
 					GetVertexAttributeTypeEnum(attribute.type),
 					GL_FALSE,
 					attribute.buffer->ElementSize(),
-					(GLvoid*)currentOffset
+					(void*)currentOffset
 					);
 
 				// Make vertex location instanced.

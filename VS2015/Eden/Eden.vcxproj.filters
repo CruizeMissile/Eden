@@ -16,6 +16,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{77ddd31d-3783-471d-8fe1-843cc3ed040a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{525f5b67-80c6-415c-bb88-daf669165756}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -75,6 +78,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Eden\Graphics\VertexAttribute.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\Shareable.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\TypeMap.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\Unique.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Entity\Guid.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Entity\Component.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Entity\ComponentBase.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Entity\Database.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\Assert.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -74,7 +74,7 @@
     <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(EDEN_ENGINE_PATH)Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -82,7 +82,7 @@
     <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(EDEN_ENGINE_PATH)Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden\;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden\;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -142,7 +142,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden\;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -171,7 +171,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden\;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Resources\3rd Party\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -194,6 +194,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Eden\Core\Assert.h" />
     <ClInclude Include="..\..\Eden\Core\AssetManager.h" />
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
@@ -201,8 +202,15 @@
     <ClInclude Include="..\..\Eden\Core\OS.h" />
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
+    <ClInclude Include="..\..\Eden\Core\Shareable.h" />
+    <ClInclude Include="..\..\Eden\Core\TypeMap.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
+    <ClInclude Include="..\..\Eden\Core\Unique.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
+    <ClInclude Include="..\..\Eden\Entity\Component.h" />
+    <ClInclude Include="..\..\Eden\Entity\ComponentBase.h" />
+    <ClInclude Include="..\..\Eden\Entity\Database.h" />
+    <ClInclude Include="..\..\Eden\Entity\Guid.h" />
     <ClInclude Include="..\..\Eden\Game\Input.h" />
     <ClInclude Include="..\..\Eden\Game\Window.h" />
     <ClInclude Include="..\..\Eden\Graphics\VertexAttribute.h" />
