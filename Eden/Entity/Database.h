@@ -201,7 +201,7 @@ namespace edn
 
 	u32 Database::getEntityCount()
 	{
-		return entities.size();
+		return static_cast<u32>(entities.size());
 	}
 
 	// -----------------------------------------------------------------------------------------------
@@ -238,7 +238,7 @@ namespace edn
 
 	u32 Entity::getComponentCount()
 	{
-		return components.size();
+		return static_cast<u32>(components.size());
 	}
 
 	std::vector<ComponentBase*> & Entity::getComponents()

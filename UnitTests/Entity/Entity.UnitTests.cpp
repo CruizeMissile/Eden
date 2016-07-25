@@ -14,6 +14,8 @@ public:
 	{
 		return x == x && y == y && z == z;
 	}
+	
+	String toString() { return "Position"; }
 
 	float x, y, z;
 };
@@ -25,6 +27,7 @@ public:
 		: name(name) { }
 
 	bool operator==(const Name& other) { return name == other.name; }
+	String toString() { return "Name"; }
 	std::string name;
 };
 

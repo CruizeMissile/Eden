@@ -31,6 +31,8 @@ namespace edn
 		{
 			return get_guid<Type>();
 		}
+
+		virtual String toString() = 0;
 	};
 	
 	template<typename Type>
