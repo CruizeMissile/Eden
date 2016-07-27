@@ -229,7 +229,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
-    <ClCompile Include="..\..\Eden\Core\Murmur.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Game\Input.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp" />
