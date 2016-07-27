@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Assert.h"
+#include "Core/Debug.h"
 #include "Core/Common.h"
 #include "Core/Shareable.h"
 #include "Entity/Component.h"

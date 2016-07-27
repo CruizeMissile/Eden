@@ -1,6 +1,6 @@
 #pragma once
-#include "Core/Assert.h"
-#include "Core/TypeName.h"
+#include "Core/Debug.h"
+#include "Core/TypeInfo.h"
 #include "Entity/Component.h"
 #include "Entity/Database.h"
 

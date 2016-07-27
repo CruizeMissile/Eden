@@ -100,9 +100,6 @@
     <ClInclude Include="..\..\Eden\Entity\Database.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Core\Assert.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Eden\Entity\System.h">
       <Filter>Entity</Filter>
     </ClInclude>

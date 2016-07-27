@@ -194,7 +194,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Eden\Core\Assert.h" />
     <ClInclude Include="..\..\Eden\Core\AssetManager.h" />
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />

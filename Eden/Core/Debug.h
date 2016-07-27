@@ -19,13 +19,13 @@
 	__pragma( message(__FILE__ "(" EDN_STRINGIZE(__LINE__) ") : TODO [ " MESSAGE " ]" ))
 
 #define ASSERT(condition, message) \
-    do { \
-        if (! (condition)) { \
-            std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
-            std::exit(EXIT_FAILURE); \
-        } \
-    } while (false)
+	do { \
+		if (! (condition)) { \
+			std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
+					  << " line " << __LINE__ << ": " << message << std::endl; \
+			std::exit(EXIT_FAILURE); \
+		} \
+	} while (false)
 
 #else
 
