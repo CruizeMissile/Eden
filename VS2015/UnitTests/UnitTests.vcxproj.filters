@@ -5,10 +5,16 @@
       <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UnitTests\UnitTest.cpp" />
+    <ClCompile Include="..\..\UnitTests\Core\TypeInfo.UnitTests.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Entity">
       <UniqueIdentifier>{050d0655-7fe4-4a54-91f5-b22d6b3d0332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{5d387e9a-4aac-4021-a6dd-dbd02d42ce3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

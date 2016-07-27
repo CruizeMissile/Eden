@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\UnitTests\Core\TypeInfo.UnitTests.cpp" />
     <ClCompile Include="..\..\UnitTests\Entity\Entity.UnitTests.cpp" />
     <ClCompile Include="..\..\UnitTests\UnitTest.cpp" />
   </ItemGroup>
