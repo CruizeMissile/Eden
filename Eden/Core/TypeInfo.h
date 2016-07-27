@@ -15,6 +15,6 @@ struct TypeInfo
 	template<> const char * TypeInfo<_>::name = #_
 
 #define _INTERNAL_EDN_REGISTER_TYPE_HASH( _ ) \
-	template<> u32 TypeInfo<_>::hash = std::hash<const char*>{}(EDN_STRINGIZE(_));
+	template<> u32 TypeInfo<_>::hash = static_cast<u32>(std::hash<const char*>{}(EDN_STRINGIZE(_)));
 
 #define EDN_REGISTER_TYPE(_) _INTERNAL_EDN_REGISTER_TYPE_NAME(_); _INTERNAL_EDN_REGISTER_TYPE_HASH(_)
