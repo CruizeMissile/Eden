@@ -2,7 +2,7 @@
 #define H_GAME_WINDOW_H
 
 #include "Precompiled.h"
-#include "SDL2\SDL.h"
+#include "SDL2/SDL.h"
 
 namespace edn
 {

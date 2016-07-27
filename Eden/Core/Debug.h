@@ -3,6 +3,7 @@
 
 #include "Platform.h"
 #include "Utility.h"
+#include <iostream>
 
 #if defined(EDN_DEBUG)
 
@@ -37,4 +38,4 @@
 
 #endif
 
-#endif
+#endif // end #if defined(EDN_DEBUG)

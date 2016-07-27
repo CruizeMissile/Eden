@@ -3,47 +3,51 @@
 
 //
 // Windows and standard library includes
-// 
+//
+#include <algorithm>
+#include <atomic>
+#include <bitset>
+#include <cassert>
 #include <cstdio>
 #include <cstring>
-#include <cassert>
-#include <stdio.h>
-#include <bitset>
-#include <memory>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <sstream>
+#include <stdio.h>
+#include <string>
+#include <thread>
 #include <type_traits>
 #include <typeindex>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <map>
 #include <unordered_map>
-#include <algorithm>
-#include <thread>
-#include <mutex>
-#include <atomic>
+#include <vector>
 
 //
 // OpenGL and GLEW
 //
-#include <gl\glew.h>
+#include <gl/glew.h>
 
 //
 // Core
 //
-#include "Core\Platform.h"
-#include "Core\Types.h"
-#include "Core\Debug.h"
-#include "Core\Common.h"
-#include "Core\Utility.h"
-#include "Core\OS.h"
-#include "Core\ScopeGuard.h"
+#include "Core/Common.h"
+#include "Core/Debug.h"
+#include "Core/MacroHelpers.h"
+#include "Core/OS.h"
+#include "Core/Platform.h"
+#include "Core/ScopeGuard.h"
+#include "Core/Shareable.h"
+#include "Core/TypeInfo.h"
+#include "Core/Types.h"
+#include "Core/Utility.h"
+
 
 //
 // Logging
 //
-#include "Logging\Log.h"
+#include "Logging/Log.h"
 
 
 #endif
