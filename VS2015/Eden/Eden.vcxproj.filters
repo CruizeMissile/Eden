@@ -106,7 +106,16 @@
     <ClInclude Include="..\..\Eden\Entity\System.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Core\TypeName.h">
+    <ClInclude Include="..\..\Eden\Entity\TypeID.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\MacroHelpers.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\Murmur.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\TypeInfo.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Graphics\Buffer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Core\Murmur.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

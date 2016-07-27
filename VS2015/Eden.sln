@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eden", "Eden\Eden.vcxproj", "{C82D5F72-6CFE-4C8E-A34B-AEB0981CA925}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{8E96F4A6-5B3E-4B99-AC0E-39257E69CE11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C82D5F72-6CFE-4C8E-A34B-AEB0981CA925} = {C82D5F72-6CFE-4C8E-A34B-AEB0981CA925}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

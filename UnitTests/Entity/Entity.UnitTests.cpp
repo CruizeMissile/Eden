@@ -1,5 +1,6 @@
 #include "UnitTest.h"
 #include "Entity/Database.h"
+#include "Core/TypeInfo.h"
 #include <string>
 
 using namespace edn;
@@ -19,6 +20,7 @@ public:
 
 	float x, y, z;
 };
+EDN_REGISTER_TYPE(Position);
 
 class Name : public Component<Name>
 {
@@ -30,6 +32,7 @@ public:
 	String toString() { return "Name"; }
 	std::string name;
 };
+EDN_REGISTER_TYPE(Name);
 
 TEST_CASE("Entity Component System", "[Entity]")
 {

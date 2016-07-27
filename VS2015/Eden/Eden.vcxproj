@@ -199,12 +199,13 @@
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
     <ClInclude Include="..\..\Eden\Core\Debug.h" />
+    <ClInclude Include="..\..\Eden\Core\MacroHelpers.h" />
     <ClInclude Include="..\..\Eden\Core\OS.h" />
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Shareable.h" />
+    <ClInclude Include="..\..\Eden\Core\TypeInfo.h" />
     <ClInclude Include="..\..\Eden\Core\TypeMap.h" />
-    <ClInclude Include="..\..\Eden\Core\TypeName.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
     <ClInclude Include="..\..\Eden\Core\Unique.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\..\Eden\Entity\Database.h" />
     <ClInclude Include="..\..\Eden\Entity\Guid.h" />
     <ClInclude Include="..\..\Eden\Entity\System.h" />
+    <ClInclude Include="..\..\Eden\Entity\TypeID.h" />
     <ClInclude Include="..\..\Eden\Game\Input.h" />
     <ClInclude Include="..\..\Eden\Game\Window.h" />
     <ClInclude Include="..\..\Eden\Graphics\VertexAttribute.h" />
@@ -227,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
+    <ClCompile Include="..\..\Eden\Core\Murmur.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Game\Input.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp" />
