@@ -1,3 +1,4 @@
+#include "Precompiled.h"
 /*
 Code taken and tweeked from (http://www.zedwood.com/article/cpp-md5-function)
 
@@ -341,8 +342,8 @@ std::string MD5::hexdigest() const
 		return "";
 
 	char buf[33];
-	for (int i = 0; i<16; i++)
-		sprintf(buf + i * 2, "%02x", digest[i]);
+	//for (int i = 0; i<16; i++)
+		//sprintf(buf + i * 2, "%02x", digest[i]);
 	buf[32] = 0;
 
 	return std::string(buf);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Types.h"
+#include "Entity/Guid.h"
 #include "Entity/ComponentBase.h"
 
 #include <memory>
@@ -8,33 +9,35 @@
 
 namespace edn
 {
+	class Entity;
+
 	template<typename Type>
 	class Component : public ComponentBase
 	{
-		typedef std::vector<Type*> ComponentList;
-		static ComponentList Container;
 	public:
-		Component()
-		{
-			type_id = get_guid<Type>();
-			Container.push_back(static_cast<Type*>(this));
-		}
+		Component() = default;
+		~Component() = default;
 
-		~Component()
-		{
-			auto it = std::find(Container.begin(), Container.end(), this);
-			if (it != Container.end())
-				Container.erase(it);
-		}
-
-		static Guid getType()
-		{
-			return get_guid<Type>();
-		}
+		static Guid getType();
 
 		virtual String toString() = 0;
+
+	private:
+		static Guid type_id;
 	};
 	
 	template<typename Type>
-	std::vector<Type*> Component<Type>::Container;
+	Guid Component<Type>::type_id = get_guid<Type>();
+
+	template<typename Type>
+	Guid Component<Type>::getType()
+	{
+		return type_id;
+	}
+
+	template<typename Type>
+	inline String Component<Type>::toString()
+	{
+		return "Component";
+	}
 }

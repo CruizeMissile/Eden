@@ -9,7 +9,7 @@ class Position : public Component<Position>
 {
 public:
 	Position(float x, float y, float z)
-		: x(x) , y(y), z(z) { }
+		: x(x), y(y), z(z) { }
 
 	bool operator==(const Position& other)
 	{

@@ -3,7 +3,6 @@
 #include "Core/TypeInfo.h"
 
 class TestCase;
-
 EDN_REGISTER_TYPE(TestCase);
 
 

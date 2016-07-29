@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <map>
 
 namespace edn
 {
@@ -22,9 +23,21 @@ namespace edn
 	{
 		friend class Database;
 		friend std::_Ref_count_obj<Entity>;
-		typedef std::vector<ComponentBase*> ComponentList;
-		ComponentList components;
-		Entity() = default;
+
+		// Tuple is used to store the type information with the base pointer
+		typedef std::pair<Guid, ComponentBase*> ComponentTuple;
+		typedef std::vector<ComponentTuple> ComponentList;
+
+		// Function is a struct to pass into std::lower_bound easier also here to keep only
+		// in Entity and database
+		struct ComponentComparitor 
+		{
+			bool operator() (const ComponentTuple & lhs, const ComponentTuple & rhs)
+			{
+				return lhs.first < rhs.first;
+			}
+		};
+
 	public:
 		~Entity();
 
@@ -41,7 +54,10 @@ namespace edn
 		bool has();
 
 		u32 getComponentCount();
-		std::vector<ComponentBase*> & getComponents();
+		Entity::ComponentList & getComponents();
+	private:
+		Entity() = default;
+		ComponentList components;
 	};
 
 	// -----------------------------------------------------------------------------------------------
@@ -50,7 +66,12 @@ namespace edn
 	class Database : public Singleton<Database>
 	{
 		typedef std::vector<Entity*> EntityList;
+
+		// A way to index a type and get all of the entities that are associated with it.
+		typedef std::map<Guid, EntityList> ComponentTypeIndex;
+
 		EntityList entities;
+		ComponentTypeIndex componentIndex;
 
 	public:
 		Database();
@@ -66,7 +87,7 @@ namespace edn
 
 		template<typename Type>
 		bool removeComponent(Entity * e);
-		bool removeComponent(Entity * e, ComponentBase * c);
+		bool removeComponent(Entity * e, Guid type, ComponentBase * c);
 
 		void cleanEntity(Entity * e);
 
@@ -79,19 +100,6 @@ namespace edn
 		// Entity list information
 		u32 getEntityCount();
 	};
-
-	// -----------------------------------------------------------------------------------------------
-	//
-
-	bool component_lower_bounds(const ComponentBase * c, const Guid & id)
-	{
-		return c->type_id < id;
-	}
-
-	bool component_find(const Guid & id, const ComponentBase * c)
-	{
-		return c->type_id == id;
-	}
 
 	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
@@ -116,14 +124,22 @@ namespace edn
 
 	void Database::destroy(Entity * e)
 	{
-		// Finding the entity
-		auto it = std::lower_bound(entities.begin(), entities.end(), e);
-
-		// Getting the components and removing them
+		// Getting the components and removing them and also removing the entity from the type index
 		auto & components = e->components;
-		for (auto c : components)
-			delete c;
+		while(!components.empty())
+		{
+			// Getting the component at the end of the list
+			auto c = std::next(components.end(), -1);
+			auto type = c->first;
 
+			// Have the type just have to remove the entity from the indexmap
+			auto & index_list = componentIndex[type];
+			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), e);
+			removeComponent(e, type, c->second);
+		}
+
+		// Finding the entity in the entity list
+		auto it = std::lower_bound(entities.begin(), entities.end(), e);
 		entities.erase(it);
 	}
 
@@ -131,14 +147,25 @@ namespace edn
 	Type * Database::addComponent(Entity * e, Args&&... args)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
-		ASSERT(!hasComponent<Type>(e), "Entity already has Component Type");
-
-		auto component = new Type(std::forward<Args>(args)...);
-
 		auto & components = e->components;
-		auto position = std::lower_bound(components.begin(), components.end(), component);
-		components.insert(position, component);
-		return component;
+
+		// Have to lower bounds once to check to see where it will be inserted. Can also check to
+		// see if it is already in the entity. If it is then we can assert
+		auto position = std::lower_bound(components.begin(), components.end(), 
+			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
+
+		ASSERT(position == components.end(), "Entity already has component type");
+
+		auto type = get_guid<Type>();
+		auto tuple = Entity::ComponentTuple(type, new Type(std::forward<Args>(args)...));
+		components.insert(position, tuple);
+
+		// Update the component type index to have this entity
+		auto & index_list = componentIndex[type];
+		auto entity_positin = std::lower_bound(index_list.begin(), index_list.end(), e);
+		index_list.insert(entity_positin, e);
+
+		return static_cast<Type*>(tuple.second);
 	}
 
 	template<typename Type>
@@ -146,57 +173,77 @@ namespace edn
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
 		auto & components = e->components;
-		
-		Guid id = get_guid<Type>();
-		auto it = std::find_if(components.begin(), components.end(),
-			[&id](ComponentBase* cb)->bool {return cb->type_id == id; });
 
+		auto type = get_guid<Type>();
+		auto tuple = Entity::ComponentTuple(type, nullptr);
+		
+		// Getting the component from the entity list
+		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
 		if (it == components.end())
 			return false;
-		
-		delete *it;
+
+		// Removing entity from component type index
+		auto & index_list = componentIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), e);
+		index_list.erase(entity_position);
+
+		// Deleting the component and removing it from the entity list
+		delete it->second;
 		components.erase(it);
 		return true;
 	}
 
-	bool Database::removeComponent(Entity * e, ComponentBase * c)
+	bool Database::removeComponent(Entity * e, Guid type, ComponentBase * c)
 	{
 		auto & components = e->components;
-		auto it = std::find(components.begin(), components.end(), c);
 
+		auto tuple = Entity::ComponentTuple(type, c);
+
+		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
 		if (it == components.end())
 			return false;
 
+		// Removing entity from component type index
+		auto & index_list = componentIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), e);
+		index_list.erase(entity_position);
+
+		// Deleting the component and removing from entity list.
+		delete it->second;
 		components.erase(it);
-		delete *it;
 		return true;
 	}
 
 	void Database::cleanEntity(Entity * e)
 	{
-		while (e->components.size() > 0)
-			removeComponent(e, e->components[0]);
+		auto components = e->components;
+		while (!components.empty())
+		{
+			auto c = std::next(components.end(), -1);
+			removeComponent(e, c->first, c->second);
+		}
 	}
 
 	template<typename Type>
 	Type * Database::getComponent(Entity * e)
 	{
 		auto & components = e->components;
-		auto position = std::lower_bound(components.begin(), components.end(), get_guid<Type>(), component_lower_bounds);
 
-		if (position == components.end())
+		auto tuple = Entity::ComponentTuple(get_guid<Type>(), nullptr);
+		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
+
+		if (it == components.end())
 			return nullptr;
 
-		return static_cast<Type*>(*position);
+		return static_cast<Type*>(it->second);
 	}
 
 	template<typename Type>
 	bool Database::hasComponent(Entity * e)
 	{
 		auto & components = e->components;
-		auto position = std::lower_bound(components.begin(), components.end(), get_guid<Type>(), component_lower_bounds);
-
-		return position != components.end();
+		return std::binary_search(components.begin(), components.end(), 
+			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
 	}
 
 	u32 Database::getEntityCount()
@@ -205,7 +252,7 @@ namespace edn
 	}
 
 	// -----------------------------------------------------------------------------------------------
-	// Database Implementation
+	// Entity Implementation
 
 	Entity::~Entity()
 	{
@@ -241,7 +288,7 @@ namespace edn
 		return static_cast<u32>(components.size());
 	}
 
-	std::vector<ComponentBase*> & Entity::getComponents()
+	Entity::ComponentList & Entity::getComponents()
 	{
 		return components;
 	}

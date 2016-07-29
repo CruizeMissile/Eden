@@ -199,6 +199,7 @@
     <ClInclude Include="..\..\Eden\Core\Common.h" />
     <ClInclude Include="..\..\Eden\Core\Debug.h" />
     <ClInclude Include="..\..\Eden\Core\MacroHelpers.h" />
+    <ClInclude Include="..\..\Eden\Core\MD5.h" />
     <ClInclude Include="..\..\Eden\Core\OS.h" />
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
@@ -228,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
+    <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Game\Input.cpp" />
     <ClCompile Include="..\..\Eden\Game\Window.cpp" />

@@ -112,6 +112,9 @@
     <ClInclude Include="..\..\Eden\Core\TypeInfo.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\MD5.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -144,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Graphics\Buffer.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Core\MD5.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
