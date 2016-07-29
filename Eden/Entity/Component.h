@@ -28,7 +28,8 @@ namespace edn
 
 		virtual String toString() = 0;
 
-		const Entity & Owner;
+		// The owner will never be null to it can be a reference
+		const Entity & owner;
 	private:
 		static Guid type_id;
 	};
@@ -44,7 +45,7 @@ namespace edn
 
 	template<typename Type>
 	Component<Type>::Component(const Entity & e)
-		: Owner(e)
+		: owner(e)
 	{
 	}
 
