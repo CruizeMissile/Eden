@@ -115,7 +115,7 @@ MD5::MD5()
 MD5::MD5(const std::string &text)
 {
 	init();
-	update(text.c_str(), text.length());
+	update(text.c_str(), (u32)text.length());
 	finalize();
 }
 
@@ -342,8 +342,8 @@ std::string MD5::hexdigest() const
 		return "";
 
 	char buf[33];
-	//for (int i = 0; i<16; i++)
-		//sprintf(buf + i * 2, "%02x", digest[i]);
+	for (int i = 0; i<16; i++)
+		sprintf_s(buf + i * 2, 33, "%02x", digest[i]);
 	buf[32] = 0;
 
 	return std::string(buf);

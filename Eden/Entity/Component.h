@@ -15,13 +15,14 @@ namespace edn
 	class Component : public ComponentBase
 	{
 	public:
-		Component() = default;
+		Component(const Entity & e);
 		~Component() = default;
 
 		static Guid getType();
 
 		virtual String toString() = 0;
 
+		const Entity & Owner;
 	private:
 		static Guid type_id;
 	};
@@ -33,6 +34,12 @@ namespace edn
 	Guid Component<Type>::getType()
 	{
 		return type_id;
+	}
+
+	template<typename Type>
+	Component<Type>::Component(const Entity & e)
+		: Owner(e)
+	{
 	}
 
 	template<typename Type>

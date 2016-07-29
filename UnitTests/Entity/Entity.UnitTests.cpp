@@ -8,8 +8,8 @@ using namespace edn;
 class Position : public Component<Position>
 {
 public:
-	Position(float x, float y, float z)
-		: x(x), y(y), z(z) { }
+	Position(Entity & owner, float x, float y, float z)
+		: Component(owner), x(x), y(y), z(z) { }
 
 	bool operator==(const Position& other)
 	{
@@ -25,8 +25,8 @@ EDN_REGISTER_TYPE(Position);
 class Name : public Component<Name>
 {
 public:
-	Name(std::string name)
-		: name(name) { }
+	Name(Entity & owner, std::string name)
+		: Component(owner), name(name) { }
 
 	bool operator==(const Name& other) { return name == other.name; }
 	String toString() { return "Name"; }

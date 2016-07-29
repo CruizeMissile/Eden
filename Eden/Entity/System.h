@@ -8,85 +8,83 @@
 
 namespace edn
 {
-	s32 hash_string(String str)
-	{
-		s32 hash = 0;
-		s32 offset = 'a' - 1;
-		for (String::const_iterator it = str.begin(); it != str.end(); ++it)
-		{
-			hash = hash << 1 | (*it - offset);
-		}
-		return hash;
-	}
-
+	
 	class SystemBase
 	{
 	public:
 		virtual ~SystemBase() { }
-		Guid type_id;
 	};
 
 	template<typename Type>
 	class System : public SystemBase
 	{
-		static std::unordered_map<u32, SystemBase*> RegisterSystem;
 	public:
-		System()
-		{
-			u32 hash = hash_string(EDN_TYPENAME(Type));
-			ASSERT(RegisterSystem.find(hash) == RegisterSystem.end(), "System already exists");
-
-			RegisterSystem[hash] = this;
-		}
-		
-		~System()
-		{
-			u32 hash = hash_string(toString());
-			auto it = RegisterSystem.find(hash);
-			ASSERT(it != RegisterSystem.end(), "System does not exists");
-			RegisterSystem.erase(it);
-		}
+		System() { }
+		~System() { }
 
 		virtual void process() = 0;
 		virtual String toString() = 0;
 	};
-	template<typename Type>
-	std::unordered_map<u32, SystemBase*> System<Type>::RegisterSystem;
 
 	// -----------------------------------------------------------------------------------------------
 	// System Manager
 
-	class SystemManager : public Singleton<SystemManager>
+	class SystemManager : public Singleton<SystemManager> 
 	{
+		typedef std::pair<Guid, SystemBase*> SystemTuple;
+		typedef std::vector<SystemTuple> SystemList;
+		SystemList systems;
+
+		struct SystemComparitor
+		{
+			bool operator() (const SystemTuple & lhs, const SystemTuple & rhs)
+			{
+				return lhs.first < rhs.first;
+			}
+		};
+
 	public:
 		SystemManager() { }
-		~SystemManager() { Unregister(); }
+		~SystemManager() { }
 
 		template<typename Type>
-		void Register()
-		{
-			static_assert(std::is_base_of<SystemBase, Type>::value), "Type is not of system");
-			auto system = new Type();
-			u32 hash = hash_string(system.toString());
-			ASSERT(it != systems.find(hash) == systems.end());
-			systems[hash] = system;
-		}
+		Type * create();
 
-		template<typename Type, typename... Args>
-		void Register()
-		{
-			auto ptr[] = 
-			{
-				Register<Type>(),
-				Register<Args>()...
-			};
-		}
+		template<typename Type>
+		void destroy(SystemBase * s);
 
-		void Unregister()
-		{
-			systems.clear();
-		}
-
-		std::unordered_map<u32, SystemBase*> systems;
+		void destroy(SystemBase * s, Guid type);
 	};
+
+	template<typename Type>
+	Type * SystemManager::create()
+	{
+		static_assert(std::is_base_of<SystemBase, Type>::value, "Type is not base of System");
+		
+		auto type = get_guid<Type>();
+		auto it = std::lower_bound(systems.begin(), systems.end(), SystemTuple(type, nullptr), SystemComparitor());
+		
+		ASSERT(it == systems.end());
+		
+		auto system = new Type();
+		systems.insert(it, SystemTuple(type, system);
+		return system;
+	}
+
+	template<typename Type>
+	void SystemManager::destroy(SystemBase * s)
+	{
+		destroy(s, get_guid<Type>());
+		
+	}
+
+	void SystemManager::destroy(SystemBase * s, Guid type)
+	{
+		auto it = std::lower_bound(systems.begin(), systems.end(), SystemTuple(type, s), SystemComparitor());
+
+		ASSERT(it != systems.end(), "System was not found");
+
+		delete it->second;
+		systems.erase(it);
+	}
 }

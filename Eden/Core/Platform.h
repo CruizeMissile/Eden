@@ -64,47 +64,47 @@
 // Enviroment Bit Size
 
 #if defined(EDN_COMPILER_MSVC)
-    #if defined(_WIN64)
-        #define EDN_64_BIT
-    #else
-        #define EDN_32_BIT
-    #endif
+	#if defined(_WIN64)
+		#define EDN_64_BIT
+	#else
+		#define EDN_32_BIT
+	#endif
 	// @Note: Figure out bit size for the other platforms.
 #endif
 
 #if defined(EDN_COMPILER_GNUC_GCC)
 	#if defined(__x86_64__) || defined(__ppc64__)
-        #define EDN_64_BIT
-    #else
-        #define EDN_32_BIT
-    #endif
+		#define EDN_64_BIT
+	#else
+		#define EDN_32_BIT
+	#endif
 #endif
 
 // ----------------------------------------------------------------------------
 // Static VS. Dynalic Linking
 
 #if !defined(EDN_STATIC)
-    #if defined(EDN_WINDOWS)
-        #if defined(EDN_NON_CLIENT_BUILD)
-            #if !defined(EDN_API)
-            #define EDN_API __declspec(dllexport)
-            #endif
-        #else
-            #if !defined(EDN_API)
-            #define EDN_API __declspec(dllimport)
-            #endif
-        #endif
-    #else
-        #if __GNUC__ >= 4
-	    // GCC 4 has unique keywords for showing/hiding symbols.
-	    // The same keyword is used for both import and export
-	    #define EDN_API __attribute__ ((__visibility__("default")))
+	#if defined(EDN_WINDOWS)
+		#if defined(EDN_NON_CLIENT_BUILD)
+			#if !defined(EDN_API)
+			#define EDN_API __declspec(dllexport)
+			#endif
+		#else
+			#if !defined(EDN_API)
+			#define EDN_API __declspec(dllimport)
+			#endif
+		#endif
+	#else
+		#if __GNUC__ >= 4
+		// GCC 4 has unique keywords for showing/hiding symbols.
+		// The same keyword is used for both import and export
+		#define EDN_API __attribute__ ((__visibility__("default")))
 		#else
 			#define EDN_API
 		#endif
-    #endif
+	#endif
 #else
-    #define EDN_API
+	#define EDN_API
 #endif
 
 // ----------------------------------------------------------------------------

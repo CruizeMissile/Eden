@@ -23,6 +23,7 @@ namespace edn
 	{
 		friend class Database;
 		friend std::_Ref_count_obj<Entity>;
+	public:
 
 		// Tuple is used to store the type information with the base pointer
 		typedef std::pair<Guid, ComponentBase*> ComponentTuple;
@@ -38,7 +39,6 @@ namespace edn
 			}
 		};
 
-	public:
 		~Entity();
 
 		template<typename Type, typename... Args>
@@ -99,7 +99,15 @@ namespace edn
 		
 		// Entity list information
 		u32 getEntityCount();
+		EntityList & getEntities();
+		
+		template<typename Type>
+		EntityList & getEntities();
 	};
+
+	// -----------------------------------------------------------------------------------------------
+	// Query
+
 
 	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
@@ -111,7 +119,7 @@ namespace edn
 
 	Database::~Database()
 	{
-
+		componentIndex.clear();
 	}
 
 	Entity::Ptr Database::create()
@@ -157,7 +165,7 @@ namespace edn
 		ASSERT(position == components.end(), "Entity already has component type");
 
 		auto type = get_guid<Type>();
-		auto tuple = Entity::ComponentTuple(type, new Type(std::forward<Args>(args)...));
+		auto tuple = Entity::ComponentTuple(type, new Type(*e, std::forward<Args>(args)...));
 		components.insert(position, tuple);
 
 		// Update the component type index to have this entity
@@ -249,6 +257,20 @@ namespace edn
 	u32 Database::getEntityCount()
 	{
 		return static_cast<u32>(entities.size());
+	}
+
+	Database::EntityList & Database::getEntities()
+	{
+		return entities;
+	}
+
+	template<typename Type>
+	Database::EntityList & Database::getEntities()
+	{
+		auto type = get_guid<type>();
+		auto it = componentIndex.find(type);
+		ASSERT(it != componentIndex.end(), "There are entities with that type");
+		return it->second;
 	}
 
 	// -----------------------------------------------------------------------------------------------
