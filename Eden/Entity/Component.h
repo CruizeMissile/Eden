@@ -2,7 +2,6 @@
 
 #include "Core/Types.h"
 #include "Entity/Guid.h"
-#include "Entity/ComponentBase.h"
 
 #include <memory>
 #include <vector>

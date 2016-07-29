@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\UnitTests\Core\TypeInfo.UnitTests.cpp" />
-    <ClCompile Include="..\..\UnitTests\Entity\Entity.UnitTests.cpp" />
-    <ClCompile Include="..\..\UnitTests\UnitTest.cpp" />
+    <ClCompile Include="..\..\Tests\Core\TypeInfo.UnitTests.cpp" />
+    <ClCompile Include="..\..\Tests\Entity\Entity.UnitTests.cpp" />
+    <ClCompile Include="..\..\Tests\UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\UnitTests\UnitTest.h" />
+    <ClInclude Include="..\..\Tests\UnitTest.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8E96F4A6-5B3E-4B99-AC0E-39257E69CE11}</ProjectGuid>
@@ -97,7 +97,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\UnitTests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -105,7 +105,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\UnitTests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,7 +115,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\UnitTests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,7 +129,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\UnitTests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
