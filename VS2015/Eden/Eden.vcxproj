@@ -210,11 +210,9 @@
     <ClInclude Include="..\..\Eden\Core\Unique.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
     <ClInclude Include="..\..\Eden\Entity\Component.h" />
-    <ClInclude Include="..\..\Eden\Entity\ComponentBase.h" />
     <ClInclude Include="..\..\Eden\Entity\Database.h" />
     <ClInclude Include="..\..\Eden\Entity\Guid.h" />
     <ClInclude Include="..\..\Eden\Entity\System.h" />
-    <ClInclude Include="..\..\Eden\Entity\TypeID.h" />
     <ClInclude Include="..\..\Eden\Game\Input.h" />
     <ClInclude Include="..\..\Eden\Game\Window.h" />
     <ClInclude Include="..\..\Eden\Graphics\VertexAttribute.h" />

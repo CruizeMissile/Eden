@@ -11,6 +11,13 @@ namespace edn
 {
 	class Entity;
 
+	class ComponentBase
+	{
+	public:
+		ComponentBase() { }
+		virtual ~ComponentBase() { }
+	};
+
 	template<typename Type>
 	class Component : public ComponentBase
 	{
