@@ -28,6 +28,7 @@ namespace edn
 		// Tuple is used to store the type information with the base pointer
 		typedef std::pair<Guid, ComponentBase*> ComponentTuple;
 		typedef std::vector<ComponentTuple> ComponentList;
+		typedef std::vector<Guid> TagList;
 
 		// Function is a struct to pass into std::lower_bound easier also here to keep only
 		// in Entity and database
@@ -53,11 +54,21 @@ namespace edn
 		template<typename Type>
 		bool has();
 
+		template<typename Type>
+		void addTag();
+
+		template<typename Type>
+		void removeTag();
+
+		template<typename Type>
+		bool hasTag();
+
 		u32 getComponentCount();
 		Entity::ComponentList & getComponents();
 	private:
 		Entity() = default;
 		ComponentList components;
+		TagList tags;
 	};
 
 	// -----------------------------------------------------------------------------------------------
@@ -68,10 +79,11 @@ namespace edn
 		typedef std::vector<Entity*> EntityList;
 
 		// A way to index a type and get all of the entities that are associated with it.
-		typedef std::map<Guid, EntityList> ComponentTypeIndex;
+		typedef std::map<Guid, EntityList> TypeIndex;
 
 		EntityList entities;
-		ComponentTypeIndex componentIndex;
+		TypeIndex componentIndex;
+		TypeIndex tagIndex;
 
 	public:
 		Database();
@@ -97,6 +109,17 @@ namespace edn
 		template<typename Type>
 		bool hasComponent(Entity & e);
 		
+		// Tag addition removal getting and checking
+		template<typename Type>
+		void addTag(Entity & e);
+
+		template<typename Type>
+		void removeTag(Entity & e);
+		void removeTag(Entity & e, Guid type);
+
+		template<typename Type>
+		bool hasTag(Entity & e);
+		
 		// Entity list information
 		u32 getEntityCount();
 		EntityList & getEntities();
@@ -104,10 +127,6 @@ namespace edn
 		template<typename Type>
 		EntityList & getEntities();
 	};
-
-	// -----------------------------------------------------------------------------------------------
-	// Query
-
 
 	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
@@ -120,6 +139,7 @@ namespace edn
 	Database::~Database()
 	{
 		componentIndex.clear();
+		tagIndex.clear();
 	}
 
 	Entity::Ptr Database::create()
@@ -144,6 +164,19 @@ namespace edn
 			auto & index_list = componentIndex[type];
 			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 			removeComponent(e, type, c->second);
+		}
+
+		auto & tags = e.tags;
+		while (!tags.empty())
+		{
+			// Getting the tag at the end of the list
+			auto t = std::next(tags.end() - 1);
+			auto type = *t;
+
+			// Have the type just have to remove it from the tag index map
+			auto & index_list = tagIndex[type];
+			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+			removeTag(e, type);
 		}
 
 		// Finding the entity in the entity list
@@ -254,6 +287,69 @@ namespace edn
 			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
 	}
 
+	template<typename Type>
+	void Database::addTag(Entity & e)
+	{
+		auto & tags = e.tags;
+
+		auto type = ComponentTag<Type>::type;
+		auto position = std::lower_bound(tags.begin(), tags.end(), type);
+
+		if (position != tags.end())
+			return;
+
+		tags.insert(position, type);
+
+		auto & index_list = tagIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+		index_list.insert(entity_position, &e);
+	}
+
+	template<typename Type>
+	void Database::removeTag(Entity & e)
+	{
+		auto & tags = e.tag;
+
+		auto type = ComponentTag<Type>::type;
+		
+		// Getting the component from the entity list
+		auto it = std::lower_bound(components.begin(), components.end(), type);
+		if (it == tags.end())
+			return;
+
+		// Removing entity from component type index
+		auto & index_list = componentIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+		index_list.erase(entity_position);
+
+		// Deleting the component and removing it from the entity list
+		tags.erase(it);
+	}
+
+	void Database::removeTag(Entity & e, Guid type)
+	{
+		auto & tags = e.tags;
+
+		auto it = std::lower_bound(tags.begin(), tags.end(), type);
+		if (it == tags.end())
+			return;
+
+		// Removing entity from component type index
+		auto & index_list = componentIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+		index_list.erase(entity_position);
+
+		// Eemoving from entity list.
+		tags.erase(it);
+	}
+
+	template<typename Type>
+	bool Database::hasTag(Entity & e)
+	{
+		auto & tags = e.tags;
+		return std::binary_search(tags.begin(), tags.end(), ComponentTag<Type>::type);
+	}
+
 	u32 Database::getEntityCount()
 	{
 		return static_cast<u32>(entities.size());
@@ -303,6 +399,24 @@ namespace edn
 	bool Entity::has()
 	{
 		return Database::Instance().hasComponent<Type>(*this);
+	}
+
+	template<typename Type>
+	void Entity::addTag()
+	{
+		Database::Instance().addTag<Type>(*this);
+	}
+
+	template<typename Type>
+	void Entity::removeTag()
+	{
+		Database::Instance().removeTag<Type>(*this);
+	}
+
+	template<typename Type>
+	bool Entity::hasTag()
+	{
+		return Database::Instance().hasTag<Type>(*this);
 	}
 
 	u32 Entity::getComponentCount()

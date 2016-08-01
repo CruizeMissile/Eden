@@ -52,6 +52,11 @@ TEST_CASE("Entity Component System", "[Entity]")
 		CHECK(position->getType() != name->getType());
 	}
 
+	SECTION("Adding and removing tags")
+	{
+		EDN_TODO("Create a way to create a tag to use it");
+	}
+
 	SECTION("Entity leaving scope")
 	{
 		u32 pre_scope_size = db.getEntityCount();

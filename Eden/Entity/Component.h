@@ -54,4 +54,49 @@ namespace edn
 	{
 		return "Component";
 	}
+
+	// -----------------------------------------------------------------------------------------------
+	// Component Tag
+
+	class ComponentTagType
+	{
+	public:
+		template<typename Type>
+		static Guid get_type();
+
+	private:
+		static Guid & inst_guid();
+		static Guid next_guid();
+	};
+
+	template<typename Type>
+	inline Guid ComponentTagType::get_type()
+	{
+		static guid = next_guid();
+		return guid;
+	}
+
+	inline Guid & ComponentTagType::inst_guid()
+	{
+		static Guid guid = 0;
+		return guid;
+	}
+
+	inline Guid ComponentTagType::next_guid()
+	{
+		Guid next = ++inst_guid();
+		if (next == std::numeric_limits<Guid>::max())
+			throw std::out_of_range("Component Guid hit max u32");
+		return next;
+	}
+
+	template<typename Type>
+	class ComponentTag
+	{
+	public:
+		static Guid type;
+	};
+
+	template<typename Type>
+	Guid ComponentTag<Type>::type = ComponentTagType::get_type<Type>();
 }
