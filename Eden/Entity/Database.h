@@ -318,7 +318,7 @@ namespace edn
 			return;
 
 		// Removing entity from component type index
-		auto & index_list = componentIndex[type];
+		auto & index_list = tagIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -335,7 +335,7 @@ namespace edn
 			return;
 
 		// Removing entity from component type index
-		auto & index_list = componentIndex[type];
+		auto & index_list = tagIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -364,7 +364,7 @@ namespace edn
 	Database::EntityList & Database::getEntities()
 	{
 		auto type = get_guid<type>();
-		auto it = componentIndex.find(type);
+		auto it = tagIndex.find(type);
 		ASSERT(it != componentIndex.end(), "There are entities with that type");
 		return it->second;
 	}
