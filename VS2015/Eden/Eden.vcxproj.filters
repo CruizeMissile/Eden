@@ -112,6 +112,9 @@
     <ClInclude Include="Query.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Entity\Query.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">

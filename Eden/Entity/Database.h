@@ -89,6 +89,20 @@ namespace edn
 		TypeIndex tagIndex;
 
 	public:
+		struct entity_iterator : std::iterator<std::forward_iterator_tag, EntityList>
+		{
+			typedef EntityList::iterator iterator;
+			entity_iterator(iterator iter);
+			entity_iterator(entity_iterator & other);
+			entity_iterator & operator++();
+			entity_iterator operator++(int);
+			bool operator==(entity_iterator other) const;
+			bool operator!=(entity_iterator other) const;
+			Entity* operator*()const;
+			iterator inner;
+		};
+
+	public:
 		Database();
 		~Database();
 
@@ -133,6 +147,46 @@ namespace edn
 		template<typename Type>
 		EntityList & getEntities();
 	};
+
+	// -----------------------------------------------------------------------------------------------
+	// entity_iterator
+
+	Database::entity_iterator::entity_iterator(Database::EntityList::iterator iter)
+	: inner(iter)
+	{
+	}
+
+	Database::entity_iterator::entity_iterator(Database::entity_iterator & other)
+	: inner(other.inner)
+	{
+	}
+
+	Database::entity_iterator & Database::entity_iterator::operator++()
+	{
+		inner++;
+		return *this;
+	}
+
+	Database::entity_iterator Database::entity_iterator::operator++(int value)
+	{
+		inner += value;
+		return *this;
+	}
+
+	bool Database::entity_iterator::operator==(Database::entity_iterator other) const
+	{
+		return inner == other.inner;
+	}
+
+	bool Database::entity_iterator::operator!=(Database::entity_iterator other) const
+	{
+		return inner != other.inner;
+	}
+
+	Entity* Database::entity_iterator::operator*() const
+	{
+		return *inner;
+	}
 
 	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
