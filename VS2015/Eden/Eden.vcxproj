@@ -70,20 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\imid\$(Configuration)_$(PlatformTarget)\</IntDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +107,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,7 +132,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -161,7 +161,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,7 +190,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
