@@ -43,25 +43,28 @@ namespace edn
 		~Entity();
 
 		template<typename Type, typename... Args>
-		Type* add(Args&&... args);
+		Type & add(Args&&... args);
 
 		template<typename Type>
 		void remove();
 
 		template<typename Type>
-		Type* get();
+		Type & get();
+
+		template<typename Type>
+		Type * tryGet();
 
 		template<typename Type>
 		bool has();
 
 		template<typename Type>
-		void addTag();
+		void addTag(ComponentTag<Type> t);
 
 		template<typename Type>
-		void removeTag();
+		void removeTag(ComponentTag<Type> t);
 
 		template<typename Type>
-		bool hasTag();
+		bool hasTag(ComponentTag<Type> t);
 
 		u32 getComponentCount();
 		Entity::ComponentList & getComponents();
@@ -95,7 +98,7 @@ namespace edn
 
 		// Component creation, deletion, getting and checking
 		template<typename Type, typename... Args>
-		Type * addComponent(Entity & e, Args&&... args);
+		Type & addComponent(Entity & e, Args&&... args);
 
 		template<typename Type>
 		bool removeComponent(Entity & e);
@@ -104,21 +107,24 @@ namespace edn
 		void cleanEntity(Entity & e);
 
 		template<typename Type>
-		Type * getComponent(Entity & e);
+		Type & getComponent(Entity & e);
+
+		template<typename Type>
+		Type * tryGetComponent(Entity & e);
 
 		template<typename Type>
 		bool hasComponent(Entity & e);
 		
 		// Tag addition removal getting and checking
 		template<typename Type>
-		void addTag(Entity & e);
+		void addTag(Entity & e, ComponentTag<Type> t);
 
 		template<typename Type>
-		void removeTag(Entity & e);
+		void removeTag(Entity & e, ComponentTag<Type> t);
 		void removeTag(Entity & e, Guid type);
 
 		template<typename Type>
-		bool hasTag(Entity & e);
+		bool hasTag(Entity & e, ComponentTag<Type> t);
 		
 		// Entity list information
 		u32 getEntityCount();
@@ -161,8 +167,6 @@ namespace edn
 			auto type = c->first;
 
 			// Have the type just have to remove the entity from the indexmap
-			auto & index_list = componentIndex[type];
-			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 			removeComponent(e, type, c->second);
 		}
 
@@ -170,13 +174,10 @@ namespace edn
 		while (!tags.empty())
 		{
 			// Getting the tag at the end of the list
-			auto t = std::next(tags.end() - 1);
-			auto type = *t;
+			auto t = std::next(tags.end(), - 1);
 
 			// Have the type just have to remove it from the tag index map
-			auto & index_list = tagIndex[type];
-			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
-			removeTag(e, type);
+			removeTag(e, *t);
 		}
 
 		// Finding the entity in the entity list
@@ -185,7 +186,7 @@ namespace edn
 	}
 
 	template<typename Type, typename... Args>
-	Type * Database::addComponent(Entity & e, Args&&... args)
+	Type & Database::addComponent(Entity & e, Args&&... args)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
 		auto & components = e.components;
@@ -206,7 +207,7 @@ namespace edn
 		auto entity_positin = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.insert(entity_positin, &e);
 
-		return static_cast<Type*>(tuple.second);
+		return *static_cast<Type*>(tuple.second);
 	}
 
 	template<typename Type>
@@ -257,16 +258,32 @@ namespace edn
 
 	void Database::cleanEntity(Entity & e)
 	{
-		auto components = e.components;
+		auto & components = e.components;
 		while (!components.empty())
 		{
 			auto c = std::next(components.end(), -1);
 			removeComponent(e, c->first, c->second);
 		}
+
+		auto & tags = e.tags;
+		while (!tags.empty())
+		{
+			auto t = std::next(tags.end(), -1);
+			removeTag(e, *t);
+		}
 	}
 
 	template<typename Type>
-	Type * Database::getComponent(Entity & e)
+	Type & Database::getComponent(Entity & e)
+	{
+		auto result = tryGetComponent<Type>(e);
+		ASSERT(result != nullptr, 
+			"Component does not exist in entity. Cannot return reference to a nullptr. Try using tryGet()");
+		return *result;
+	}
+
+	template<typename Type>
+	Type * Database::tryGetComponent(Entity & e)
 	{
 		auto & components = e.components;
 
@@ -287,12 +304,14 @@ namespace edn
 			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
 	}
 
+	// Tags -----
+	
 	template<typename Type>
-	void Database::addTag(Entity & e)
+	void Database::addTag(Entity & e, ComponentTag<Type> t)
 	{
 		auto & tags = e.tags;
 
-		auto type = ComponentTag<Type>::type;
+		auto type = t.type;
 		auto position = std::lower_bound(tags.begin(), tags.end(), type);
 
 		if (position != tags.end())
@@ -306,14 +325,13 @@ namespace edn
 	}
 
 	template<typename Type>
-	void Database::removeTag(Entity & e)
+	void Database::removeTag(Entity & e, ComponentTag<Type> t)
 	{
-		auto & tags = e.tag;
-
-		auto type = ComponentTag<Type>::type;
+		auto & tags = e.tags;
+		auto type = t.type;
 		
 		// Getting the component from the entity list
-		auto it = std::lower_bound(components.begin(), components.end(), type);
+		auto it = std::lower_bound(tags.begin(), tags.end(), type);
 		if (it == tags.end())
 			return;
 
@@ -344,10 +362,10 @@ namespace edn
 	}
 
 	template<typename Type>
-	bool Database::hasTag(Entity & e)
+	bool Database::hasTag(Entity & e, ComponentTag<Type> t)
 	{
 		auto & tags = e.tags;
-		return std::binary_search(tags.begin(), tags.end(), ComponentTag<Type>::type);
+		return std::binary_search(tags.begin(), tags.end(), t.type);
 	}
 
 	u32 Database::getEntityCount()
@@ -378,7 +396,7 @@ namespace edn
 	}
 
 	template<typename Type, typename... Args>
-	Type* Entity::add(Args&&... args)
+	Type & Entity::add(Args&&... args)
 	{
 		return Database::Instance().addComponent<Type>(*this, std::forward<Args>(args)...);
 	}
@@ -390,9 +408,15 @@ namespace edn
 	}
 
 	template<typename Type>
-	Type* Entity::get()
+	Type & Entity::get()
 	{
 		return Database::Instance().getComponent<Type>(*this);
+	}
+
+	template<typename Type>
+	Type * Entity::tryGet()
+	{
+		return Database::Instance().tryGetComponent<Type>(*this);
 	}
 
 	template<typename Type>
@@ -402,21 +426,21 @@ namespace edn
 	}
 
 	template<typename Type>
-	void Entity::addTag()
+	void Entity::addTag(ComponentTag<Type> t)
 	{
-		Database::Instance().addTag<Type>(*this);
+		Database::Instance().addTag<Type>(*this, t);
 	}
 
 	template<typename Type>
-	void Entity::removeTag()
+	void Entity::removeTag(ComponentTag<Type> t)
 	{
-		Database::Instance().removeTag<Type>(*this);
+		Database::Instance().removeTag<Type>(*this, t);
 	}
 
 	template<typename Type>
-	bool Entity::hasTag()
+	bool Entity::hasTag(ComponentTag<Type> t)
 	{
-		return Database::Instance().hasTag<Type>(*this);
+		return Database::Instance().hasTag<Type>(*this, t);
 	}
 
 	u32 Entity::getComponentCount()

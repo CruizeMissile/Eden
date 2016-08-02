@@ -2,7 +2,7 @@
 #include "Math/Vector.h"
 #include "Graphics/Mesh.h"
 #include "Core/Common.h"
-
+#include "Entity/Component.h"
 
 #include "Core\AssetManager.h"
 
@@ -15,6 +15,7 @@
 
 #undef main
 using namespace edn;
+using namespace std;
 
 class TestAsset : public Asset
 {
@@ -86,7 +87,14 @@ int engine()
 	return 0;
 }
 
+int testing()
+{
+	system("pause");
+	return 0;
+}
+
 int main()
 {
 	return engine();
+	//return testing();
 }

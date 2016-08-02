@@ -5,6 +5,7 @@
 
 using namespace edn;
 
+CREATE_TAG(PositionChanged);
 class Position : public Component<Position>
 {
 public:
@@ -22,6 +23,7 @@ public:
 };
 EDN_REGISTER_TYPE(Position);
 
+CREATE_TAG(NameChanged);
 class Name : public Component<Name>
 {
 public:
@@ -34,7 +36,7 @@ public:
 };
 EDN_REGISTER_TYPE(Name);
 
-TEST_CASE("Entity Component System", "[Entity]")
+TEST_CASE("Entities Interaction with database", "[Entity]")
 {
 	auto & db = Database::Instance();
 	auto entity = db.create();
@@ -49,12 +51,26 @@ TEST_CASE("Entity Component System", "[Entity]")
 		auto position = entity->get<Position>();
 		auto name = entity->get<Name>();
 
-		CHECK(position->getType() != name->getType());
+		CHECK(position.getType() != name.getType());
+	}
+
+	SECTION("Getting Components")
+	{
+		entity->add<Name>("EDEN");
+		auto name = entity->get<Name>();
+		CHECK(name.name == "EDEN");
 	}
 
 	SECTION("Adding and removing tags")
 	{
-		EDN_TODO("Create a way to create a tag to use it");
+		entity->addTag(PositionChanged());
+		entity->addTag(NameChanged());
+
+		CHECK(entity->hasTag(PositionChanged()));
+		CHECK(entity->hasTag(NameChanged()));
+
+		entity->removeTag(NameChanged());
+		CHECK(!entity->hasTag(NameChanged()));
 	}
 
 	SECTION("Entity leaving scope")

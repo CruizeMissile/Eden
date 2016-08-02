@@ -72,7 +72,7 @@ namespace edn
 	template<typename Type>
 	inline Guid ComponentTagType::get_type()
 	{
-		static guid = next_guid();
+		static Guid guid = next_guid();
 		return guid;
 	}
 
@@ -99,4 +99,8 @@ namespace edn
 
 	template<typename Type>
 	Guid ComponentTag<Type>::type = ComponentTagType::get_type<Type>();
+
+#define CREATE_TAG(tag_name) \
+	struct EDN_PASTE(tag_name, TagName) : public ComponentTag<EDN_PASTE(tag_name, TagName)> {}; \
+	typedef EDN_PASTE(tag_name, TagName) tag_name
 }
