@@ -225,7 +225,6 @@
     <ClInclude Include="..\..\Eden\Math\Quaternion.h" />
     <ClInclude Include="..\..\Eden\Math\Vector.h" />
     <ClInclude Include="..\..\Eden\Precompiled.h" />
-    <ClInclude Include="Query.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />

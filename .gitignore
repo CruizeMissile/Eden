@@ -5,10 +5,11 @@
 [Dd]ebug*/
 [Rr]elease*/
 [Ii]mid/
+/[Oo]bj/
 /Include/
-ipch/
+/ipch/
 *.sdf
 *.opensdf
 *.log
 *.user
-VS2015/Eden.VC.opendb
+*.opendb

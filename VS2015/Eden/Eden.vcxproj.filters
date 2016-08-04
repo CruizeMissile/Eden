@@ -109,9 +109,6 @@
     <ClInclude Include="..\..\Eden\Core\MD5.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Query.h">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Eden\Entity\Query.h">
       <Filter>Entity</Filter>
     </ClInclude>
