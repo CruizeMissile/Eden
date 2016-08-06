@@ -13,3 +13,4 @@
 *.log
 *.user
 *.opendb
+*.ipch

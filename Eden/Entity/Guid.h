@@ -23,6 +23,6 @@ namespace edn
 	inline Guid get_guid()
 	{
 		static Guid guid = next_guid();
-		return guid;
+ 		return guid;
 	}
 }

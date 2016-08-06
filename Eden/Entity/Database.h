@@ -45,6 +45,9 @@ namespace edn
 		template<typename Type, typename... Args>
 		Type & add(Args&&... args);
 
+		template<typename Type, typename... Args>
+		Type & replace(Args&&... args);
+
 		template<typename Type>
 		void remove();
 
@@ -113,6 +116,9 @@ namespace edn
 		// Component creation, deletion, getting and checking
 		template<typename Type, typename... Args>
 		Type & addComponent(Entity & e, Args&&... args);
+		
+		template<typename Type, typename... Args>
+		Type & replaceComponent(Entity & e, Args&&... args);
 
 		template<typename Type>
 		bool removeComponent(Entity & e);
@@ -147,6 +153,28 @@ namespace edn
 		template<typename Type>
 		EntityList & getEntities();
 	};
+
+	namespace detail
+	{
+		template<typename Type>
+		Type* _safe_cast(ComponentBase * c)
+		{
+			return static_cast<Type*>(c);
+		}
+		
+		template<typename Type, typename Type2>
+		Type* _safe_cast(ComponentBase * c)
+		{
+			return dynamic_cast<Type*>(c);
+		}
+
+		template<typename Type>
+		Type* safe_cast(ComponentBase * c)
+		{
+			static_assert(std::is_base_of<ComponentBase, Type>::value, "Not base of componentbase.");
+			return _safe_cast<Type, Type::Template>(c);
+		}
+	}
 
 	// -----------------------------------------------------------------------------------------------
 	// entity_iterator
@@ -243,24 +271,54 @@ namespace edn
 	Type & Database::addComponent(Entity & e, Args&&... args)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
+		ASSERT(!hasComponent<Type::Template>(e), "Entity already has component type");
+
 		auto & components = e.components;
 
 		// Have to lower bounds once to check to see where it will be inserted. Can also check to
 		// see if it is already in the entity. If it is then we can assert
 		auto position = std::lower_bound(components.begin(), components.end(), 
-			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
+			Entity::ComponentTuple(Type::GetType(), nullptr), Entity::ComponentComparitor());
 
-		ASSERT(position == components.end(), "Entity already has component type");
-
-		auto type = get_guid<Type>();
+		auto type = Type::GetType();
 		auto tuple = Entity::ComponentTuple(type, new Type(e, std::forward<Args>(args)...));
 		components.insert(position, tuple);
 
 		// Update the component type index to have this entity
 		auto & index_list = componentIndex[type];
-		auto entity_positin = std::lower_bound(index_list.begin(), index_list.end(), &e);
-		index_list.insert(entity_positin, &e);
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+		index_list.insert(entity_position, &e);
 
+		return *static_cast<Type*>(tuple.second);
+	}
+	
+	template<typename Type, typename... Args>
+	Type & Database::replaceComponent(Entity & e, Args&&... args)
+	{
+		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of component");
+		auto & components = e.components;
+
+		auto position = std::lower_bound(components.begin(), components.end(),
+			Entity::ComponentTuple(Type::GetType(), nullptr), Entity::ComponentComparitor());
+
+		auto type = Type::GetType();
+		auto tuple = Entity::ComponentTuple(type, new Type(e, std::forward<Args>(args)...));
+
+		// Checking to see if we are creating a new entity or replacing
+		if (hasComponent<Type>(e)) // Replacing component
+		{
+			auto old = position->second;
+			position->second = tuple.second;
+			delete old;
+		}
+		else // add new component
+		{
+			components.insert(position, tuple);
+			// Update the component type index to have this entity
+			auto & index_list = componentIndex[type];
+			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
+			index_list.insert(entity_position, &e);
+		}
 		return *static_cast<Type*>(tuple.second);
 	}
 
@@ -270,7 +328,7 @@ namespace edn
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
 		auto & components = e.components;
 
-		auto type = get_guid<Type>();
+		auto type = Type::GetType();
 		auto tuple = Entity::ComponentTuple(type, nullptr);
 		
 		// Getting the component from the entity list
@@ -341,21 +399,19 @@ namespace edn
 	{
 		auto & components = e.components;
 
-		auto tuple = Entity::ComponentTuple(get_guid<Type>(), nullptr);
+		auto tuple = Entity::ComponentTuple(Type::GetType(), nullptr);
 		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
 
 		if (it == components.end())
 			return nullptr;
 
-		return static_cast<Type*>(it->second);
+		return detail::safe_cast<Type>(it->second);
 	}
 
 	template<typename Type>
 	bool Database::hasComponent(Entity & e)
 	{
-		auto & components = e.components;
-		return std::binary_search(components.begin(), components.end(), 
-			Entity::ComponentTuple(get_guid<Type>(), nullptr), Entity::ComponentComparitor());
+		return tryGetComponent<Type>(e) != nullptr;
 	}
 
 	// Tags -----
@@ -435,11 +491,13 @@ namespace edn
 	template<typename Type>
 	Database::EntityList & Database::getEntities()
 	{
-		auto type = get_guid<type>();
+		auto type = Type::GetType();
 		auto it = tagIndex.find(type);
 		ASSERT(it != componentIndex.end(), "There are entities with that type");
 		return it->second;
 	}
+
+	
 
 	// -----------------------------------------------------------------------------------------------
 	// Entity Implementation
@@ -453,6 +511,12 @@ namespace edn
 	Type & Entity::add(Args&&... args)
 	{
 		return Database::Instance().addComponent<Type>(*this, std::forward<Args>(args)...);
+	}
+
+	template<typename Type, typename... Args>
+	Type & Entity::replace(Args&&... args)
+	{
+		return Database::Instance().replaceComponent<Type>(*this, std::forward<Args>(args)...);
 	}
 
 	template<typename Type>

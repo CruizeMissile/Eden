@@ -21,10 +21,12 @@ namespace edn
 	class Component : public ComponentBase
 	{
 	public:
+		typedef Type Template;
+
 		Component(const Entity & e);
 		~Component() = default;
 
-		static Guid getType();
+		static Guid GetType();
 
 		virtual String toString() = 0;
 
@@ -38,7 +40,7 @@ namespace edn
 	Guid Component<Type>::type_id = get_guid<Type>();
 
 	template<typename Type>
-	Guid Component<Type>::getType()
+	Guid Component<Type>::GetType()
 	{
 		return type_id;
 	}

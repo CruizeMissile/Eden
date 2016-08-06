@@ -36,6 +36,27 @@ public:
 };
 EDN_REGISTER_TYPE(Name);
 
+class Base : public Component<Base>
+{
+public:
+	Base(Entity & owner) : Component(owner) { }
+	String toString() { return "Base"; }
+};
+
+class Alpha : public Base
+{
+public:
+	Alpha(Entity & owner) : Base(owner) { }
+	String toString() { return "Alpha"; }
+};
+
+class Beta : public Base
+{
+public:
+	Beta(Entity & owner) : Base(owner) { }
+	String toString() { return "Beta"; }
+};
+
 TEST_CASE("Entities Interaction with database", "[Entity]")
 {
 	auto & db = Database::Instance();
@@ -51,7 +72,7 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 		auto position = entity->get<Position>();
 		auto name = entity->get<Name>();
 
-		CHECK(position.getType() != name.getType());
+		CHECK(position.GetType() != name.GetType());
 	}
 
 	SECTION("Getting Components")
@@ -87,5 +108,20 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 		u32 post_scope_size = db.getEntityCount();
 		CHECK(pre_scope_size != inside_scope_size);
 		CHECK(pre_scope_size == post_scope_size);
+	}
+
+	SECTION("Component inheritance")
+	{
+		entity->add<Alpha>();
+
+		CHECK(entity->has<Base>());
+		CHECK(entity->has<Alpha>());
+		CHECK(!entity->has<Beta>());
+
+		entity->replace<Beta>();
+
+		CHECK(entity->has<Base>());
+		CHECK(entity->has<Beta>());
+		CHECK(!entity->has<Alpha>());
 	}
 }
