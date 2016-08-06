@@ -156,23 +156,23 @@ namespace edn
 
 	namespace detail
 	{
-		template<typename Type>
-		Type* _safe_cast(ComponentBase * c)
+		template<class Ty1, class Ty2>
+		struct _safe_cast
 		{
-			return static_cast<Type*>(c);
-		}
-		
-		template<typename Type, typename Type2>
-		Type* _safe_cast(ComponentBase * c)
+			Ty1* operator()(ComponentBase* c) { return dynamic_cast<Ty1*>(c); }
+		};
+
+		template<class Ty1>
+		struct _safe_cast<Ty1, Ty1>
 		{
-			return dynamic_cast<Type*>(c);
-		}
+			Ty1* operator()(ComponentBase* c) { return static_cast<Ty1*>(c); }
+		};
 
 		template<typename Type>
 		Type* safe_cast(ComponentBase * c)
 		{
 			static_assert(std::is_base_of<ComponentBase, Type>::value, "Not base of componentbase.");
-			return _safe_cast<Type, Type::Template>(c);
+			return _safe_cast<Type, Type::Template>()(c);
 		}
 	}
 
