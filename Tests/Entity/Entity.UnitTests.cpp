@@ -5,6 +5,8 @@
 
 using namespace edn;
 
+// ------------------------------------------------------------------------------------------------
+
 CREATE_TAG(PositionChanged);
 class Position : public Component<Position>
 {
@@ -23,6 +25,8 @@ public:
 };
 EDN_REGISTER_TYPE(Position);
 
+// ------------------------------------------------------------------------------------------------
+
 CREATE_TAG(NameChanged);
 class Name : public Component<Name>
 {
@@ -36,12 +40,16 @@ public:
 };
 EDN_REGISTER_TYPE(Name);
 
+// ------------------------------------------------------------------------------------------------
+
 class Base : public Component<Base>
 {
 public:
 	Base(Entity & owner) : Component(owner) { }
 	String toString() { return "Base"; }
 };
+
+// ------------------------------------------------------------------------------------------------
 
 class Alpha : public Base
 {
@@ -56,6 +64,8 @@ public:
 	Beta(Entity & owner) : Base(owner) { }
 	String toString() { return "Beta"; }
 };
+
+// ------------------------------------------------------------------------------------------------
 
 TEST_CASE("Entities Interaction with database", "[Entity]")
 {
@@ -113,15 +123,28 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 	SECTION("Component inheritance")
 	{
 		entity->add<Alpha>();
-
 		CHECK(entity->has<Base>());
 		CHECK(entity->has<Alpha>());
 		CHECK(!entity->has<Beta>());
 
+		// Testing replace function
 		entity->replace<Beta>();
-
 		CHECK(entity->has<Base>());
 		CHECK(entity->has<Beta>());
 		CHECK(!entity->has<Alpha>());
+
+		// Testing remove
+		entity->remove<Beta>();
+		CHECK(!entity->has<Base>());
+		CHECK(!entity->has<Alpha>());
+		CHECK(!entity->has<Beta>());
+
+		// Testing removing something that does not exist
+		// This should not affect the entity
+		entity->add<Alpha>();
+		entity->remove<Beta>();
+		CHECK(entity->has<Base>());
+		CHECK(entity->has<Alpha>());
+		CHECK(!entity->has<Beta>());
 	}
 }

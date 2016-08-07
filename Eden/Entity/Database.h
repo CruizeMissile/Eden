@@ -305,7 +305,7 @@ namespace edn
 		auto tuple = Entity::ComponentTuple(type, new Type(e, std::forward<Args>(args)...));
 
 		// Checking to see if we are creating a new entity or replacing
-		if (hasComponent<Type>(e)) // Replacing component
+		if (hasComponent<Type::Template>(e)) // Replacing component
 		{
 			auto old = position->second;
 			position->second = tuple.second;
@@ -334,6 +334,10 @@ namespace edn
 		// Getting the component from the entity list
 		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
 		if (it == components.end())
+			return false;
+
+		// Checking to see if it is the same type
+		if (!detail::safe_cast<Type>(it->second))
 			return false;
 
 		// Removing entity from component type index

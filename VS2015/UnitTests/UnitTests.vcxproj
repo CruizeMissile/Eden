@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Tests\Core\TypeInfo.UnitTests.cpp" />
     <ClCompile Include="..\..\Tests\Entity\Entity.UnitTests.cpp" />
+    <ClCompile Include="..\..\Tests\Entity\Query.UnitTests.cpp" />
     <ClCompile Include="..\..\Tests\UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
