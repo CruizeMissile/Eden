@@ -5,6 +5,7 @@
 #include "Core/Shareable.h"
 #include "Entity/Component.h"
 #include "Entity/Guid.h"
+#include "Entity/Query.h"
 
 #include <algorithm>
 #include <memory>
@@ -153,6 +154,8 @@ namespace edn
 		template<typename Type>
 		EntityList & getEntities();
 	};
+
+	// -----------------------------------------------------------------------------------------------
 
 	namespace detail
 	{
@@ -501,8 +504,6 @@ namespace edn
 		return it->second;
 	}
 
-	
-
 	// -----------------------------------------------------------------------------------------------
 	// Entity Implementation
 
@@ -573,5 +574,126 @@ namespace edn
 	Entity::ComponentList & Entity::getComponents()
 	{
 		return components;
+	}
+	
+	// -----------------------------------------------------------------------------------------------
+	// Query
+
+	namespace Query
+	{
+		template<class Query>
+		struct BaseQuery;
+
+		template<class LeftQuery, class RightQuery>
+		struct IntersectionQuery;
+
+		template<class LeftQuery, class RightQuery>
+		struct DifferenceQuery;
+
+		template<class LeftQuery, class RightQuery>
+		struct UnionQuery;
+
+		template<class LeftQuery, class RightQuery>
+		struct ExclusiveQuery;
+
+		template<class LeftQuery>
+		struct BaseQuery
+		{
+			template<class RightQuery>
+			IntersectionQuery<LeftQuery, RightQuery>& operator&&(RightQuery& rhs)
+			{
+				return IntersectionQuery<LeftQuery, RightQuery>(*this, rhs);
+			}
+
+			template<class RightQuery>
+			DifferenceQuery<LeftQuery, RightQuery>& operator!(RightQuery& rhs)
+			{
+				return DifferenceQuery<LeftQuery, RightQuery>(*this, rhs);
+			}
+
+			template<class RightQuery>
+			UnionQuery<LeftQuery, RightQuery>& operator||(RightQuery& rhs)
+			{
+				return UnionQuery<LeftQuery, RightQuery>(*this, rhs);
+			}
+
+			template<class RightQuery>
+			ExclusiveQuery<LeftQuery, RightQuery>& operator^(RightQuery& rhs)
+			{
+				return ExclusiveQuery<LeftQuery, RightQuery>(*this, rhs);
+			}
+		};
+
+		template<class LeftQuery, class RightQuery>
+		struct IntersectionQuery : public BaseQuery<IntersectionQuery<LeftQuery, RightQuery>>
+		{
+			IntersectionQuery(LeftQuery lhs, RightQuery rhs)
+				: left(lhs)
+				, right(rhs)
+			{
+			}
+
+			RangeOperation<LeftQuery, RightQuery, Intersection> makeRange()
+			{
+				return make_intersection_range(left, right);
+			}
+
+			LeftQuery left;
+			RightQuery right;
+		};
+
+		template<class LeftQuery, class RightQuery>
+		struct DifferenceQuery : public BaseQuery<DifferenceQuery<LeftQuery, RightQuery>>
+		{
+			DifferenceQuery(LeftQuery lhs, RightQuery rhs)
+				: left(lhs)
+				, right(rhs)
+			{
+			}
+
+			RangeOperation<LeftQuery, RightQuery, Difference> makeRange()
+			{
+				return make_difference_range(left, right);
+			}
+
+			LeftQuery left;
+			RightQuery right;
+		};
+
+		template<class LeftQuery, class RightQuery>
+		struct UnionQuery : public BaseQuery<UnionQuery<LeftQuery, RightQuery>>
+		{
+			UnionQuery(LeftQuery lhs, RightQuery rhs)
+				: left(lhs)
+				, right(rhs)
+			{
+			}
+
+			RangeOperation<LeftQuery, RightQuery, Union> makeRange()
+			{
+				return make_union_range(left, right);
+			}
+
+			LeftQuery left;
+			RightQuery right;
+		};
+
+		template<class LeftQuery, class RightQuery>
+		struct ExclusiveQuery : public BaseQuery<ExclusiveQuery<LeftQuery, RightQuery>>
+		{
+			ExclusiveQuery(LeftQuery lhs, RightQuery rhs)
+				: left(lhs)
+				, right(rhs)
+			{
+			}
+
+			RangeOperation<LeftQuery, RightQuery, Exclusive> makeRange()
+			{
+				return make_exclusive_range(left, right);
+			}
+
+			LeftQuery left;
+			RightQuery right;
+		};
 	}
 }

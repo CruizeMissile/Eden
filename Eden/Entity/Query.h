@@ -5,7 +5,7 @@ namespace edn
 {
 	namespace Query
 	{
-		struct BaseOperator {};
+		struct base_operator {};
 
 		template<typename Iterator1, typename Iterator2, typename Operation>
 		class range_operation_const_iterator : public std::iterator<std::forward_iterator_tag, typename Iterator1::value_type>
@@ -16,7 +16,7 @@ namespace edn
 
 			inline range_operation_const_iterator(Iterator1& one, Iterator2& two)
 			{
-				static_assert(std::is_base_of<BaseOperator, Operation>::value, "Not a valid operation");
+				static_assert(std::is_base_of<base_operator, Operation>::value, "Not a valid operation");
 				f1 = one.begin();
 				l1 = one.end();
 				f2 = two.begin();
@@ -81,7 +81,7 @@ namespace edn
 
 		// ----------------------------------------------------------------------------------------
 
-		struct Intersection : BaseOperator
+		struct Intersection : base_operator
 		{
 			template<class Iterator>
 			static inline typename Iterator::value_type get_value(const Iterator & it)
@@ -116,7 +116,7 @@ namespace edn
 			}
 		};
 
-		struct Difference : BaseOperator
+		struct Difference : base_operator
 		{
 			template<class Iterator>
 			static inline typename Iterator::value_type get_value(const Iterator & it)
@@ -159,7 +159,7 @@ namespace edn
 
 		// ----------------------------------------------------------------------------------------
 
-		struct Union : BaseOperator
+		struct Union : base_operator
 		{
 			template<class Iterator>
 			static inline typename Iterator::value_type get_value(const Iterator & it)
@@ -249,7 +249,6 @@ namespace edn
 						++it.f1;
 					else
 						++it.f2;
-					
 				}
 			}
 
