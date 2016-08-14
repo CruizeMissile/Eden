@@ -17,6 +17,41 @@ namespace edn
 	class Database;
 	class Entity;
 
+	namespace Query
+	{
+		template<class LeftQuery>
+		struct BaseQuery;
+		template<class LeftQuery, class RightQuery>
+		struct IntersectionQuery;
+		template<class LeftQuery, class RightQuery>
+		struct DifferenceQuery;
+		template<class LeftQuery, class RightQuery>
+		struct UnionQuery;
+		template<class LeftQuery, class RightQuery>
+		struct ExclusiveQuery;
+		struct AllQuery;
+		struct TypeQuery;
+		struct TagQuery;
+		
+		template<class Query>
+		struct Simplify
+		{
+			typedef Query Result;
+			typedef typename Query::RangeType RangeType;
+
+			static Result toSimple(const Query& query)
+			{
+				return query;
+			}
+		};
+
+		template<typename Query>
+		inline typename Simplify<Query>::Result toSimple(const Query& q)
+		{
+			return Simplify<Query>::toSimple(q);
+		}
+	}
+
 	// -----------------------------------------------------------------------------------------------
 	// Entity Definition
 
@@ -83,20 +118,23 @@ namespace edn
 	
 	class Database : public Singleton<Database>
 	{
+	public:
 		typedef std::vector<Entity*> EntityList;
 
 		// A way to index a type and get all of the entities that are associated with it.
 		typedef std::map<Guid, EntityList> TypeIndex;
-
+	
+	private:
 		EntityList entities;
 		TypeIndex componentIndex;
 		TypeIndex tagIndex;
+		static EntityList emptyList;
 
 	public:
-		struct entity_iterator : std::iterator<std::forward_iterator_tag, EntityList>
+		struct entity_iterator : std::iterator<std::forward_iterator_tag, Entity*>
 		{
-			typedef EntityList::iterator iterator;
-			entity_iterator(iterator iter);
+			typedef EntityList::const_iterator iterator;
+			entity_iterator(const iterator iter);
 			entity_iterator(entity_iterator & other);
 			entity_iterator & operator++();
 			entity_iterator operator++(int);
@@ -104,6 +142,49 @@ namespace edn
 			bool operator!=(entity_iterator other) const;
 			Entity* operator*()const;
 			iterator inner;
+		};
+
+		class RangeAll
+		{
+		public:
+			typedef entity_iterator const_iterator;
+
+			inline RangeAll();
+
+			inline const_iterator begin() const;
+			inline const_iterator end() const;
+		private:
+			RangeAll& operator=(const RangeAll&) = delete;
+		};
+
+		class RangeType
+		{
+		public:
+			typedef entity_iterator const_iterator;
+
+			inline RangeType(Guid type);
+
+			inline const_iterator begin() const;
+			inline const_iterator end() const;
+			RangeType& operator=(const RangeType&);
+		private:
+			TypeIndex::const_iterator typeIterator;
+			Guid type;
+		};
+
+		class RangeTag
+		{
+		public:
+			typedef entity_iterator const_iterator;
+
+			inline RangeTag(Guid type);
+
+			inline const_iterator begin() const;
+			inline const_iterator end() const;
+			RangeTag& operator=(const RangeTag&);
+		private:
+			TypeIndex::const_iterator typeIterator;
+			Guid type;
 		};
 
 	public:
@@ -146,14 +227,20 @@ namespace edn
 
 		template<typename Type>
 		bool hasTag(Entity & e, ComponentTag<Type> t);
+
+		template<typename Filter>
+		typename Query::Simplify<Filter>::RangeType where(const Filter & fullQuery) const;
 		
 		// Entity list information
-		u32 getEntityCount();
-		EntityList & getEntities();
+		inline u32 getEntityCount();
+		inline EntityList & getEntities();
 		
 		template<typename Type>
-		EntityList & getEntities();
+		inline EntityList & getEntities();
+
+		inline RangeAll all() const;
 	};
+	Database::EntityList  Database::emptyList = Database::EntityList();
 
 	// -----------------------------------------------------------------------------------------------
 
@@ -182,13 +269,13 @@ namespace edn
 	// -----------------------------------------------------------------------------------------------
 	// entity_iterator
 
-	Database::entity_iterator::entity_iterator(Database::EntityList::iterator iter)
-	: inner(iter)
+	Database::entity_iterator::entity_iterator(iterator iter)
+		: inner(iter)
 	{
 	}
 
 	Database::entity_iterator::entity_iterator(Database::entity_iterator & other)
-	: inner(other.inner)
+		: inner(other.inner)
 	{
 	}
 
@@ -220,11 +307,68 @@ namespace edn
 	}
 
 	// -----------------------------------------------------------------------------------------------
+
+	inline Database::RangeAll::RangeAll()
+	{
+	}
+
+	inline Database::RangeAll::const_iterator Database::RangeAll::begin() const
+	{
+		return const_iterator(Database::Instance().entities.begin());
+	}
+
+	inline Database::RangeAll::const_iterator Database::RangeAll::end() const
+	{
+		return const_iterator(Database::Instance().entities.end());
+	}
+
+	inline Database::RangeType::RangeType(Guid type)
+		: typeIterator(Database::Instance().componentIndex.find(type))
+		, type(type)
+	{
+	}
+
+	inline Database::RangeType::const_iterator Database::RangeType::begin() const
+	{
+		if (typeIterator == Database::Instance().componentIndex.end())
+			return Database::emptyList.begin();
+		return typeIterator->second.begin();
+	}
+
+	inline Database::RangeType::const_iterator Database::RangeType::end() const
+	{
+		if (typeIterator == Database::Instance().componentIndex.end())
+			return Database::emptyList.end();
+		return typeIterator->second.end();
+	}
+
+	// -----------------------------------------------------------------------------------------------
+
+	inline Database::RangeTag::RangeTag(Guid type)
+		: typeIterator(Database::Instance().tagIndex.find(type))
+		, type(type)
+	{
+	}
+
+	inline Database::RangeTag::const_iterator Database::RangeTag::begin() const
+	{
+		if (typeIterator == Database::Instance().tagIndex.end())
+			return Database::emptyList.begin();
+		return typeIterator->second.begin();
+	}
+
+	inline Database::RangeTag::const_iterator Database::RangeTag::end() const
+	{
+		if (typeIterator == Database::Instance().tagIndex.end())
+			return Database::emptyList.end();
+		return typeIterator->second.end();
+	}
+
+	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
 
 	Database::Database()
 	{
-
 	}
 
 	Database::~Database()
@@ -485,23 +629,33 @@ namespace edn
 		return std::binary_search(tags.begin(), tags.end(), t.type);
 	}
 
-	u32 Database::getEntityCount()
+	template<class Filter>
+	inline typename Query::Simplify<Filter>::RangeType Database::where(const Filter & fullQuery) const
+	{
+		return Query::toSimple(fullQuery).toRange();
+	}
+
+	inline u32 Database::getEntityCount()
 	{
 		return static_cast<u32>(entities.size());
 	}
 
-	Database::EntityList & Database::getEntities()
+	inline Database::EntityList & Database::getEntities()
 	{
 		return entities;
 	}
 
 	template<typename Type>
-	Database::EntityList & Database::getEntities()
+	inline Database::EntityList & Database::getEntities()
 	{
 		auto type = Type::GetType();
 		auto it = tagIndex.find(type);
 		ASSERT(it != componentIndex.end(), "There are entities with that type");
 		return it->second;
+	}
+	inline Database::RangeAll Database::all() const
+	{
+		return RangeAll();
 	}
 
 	// -----------------------------------------------------------------------------------------------
@@ -581,21 +735,6 @@ namespace edn
 
 	namespace Query
 	{
-		template<class Query>
-		struct BaseQuery;
-
-		template<class LeftQuery, class RightQuery>
-		struct IntersectionQuery;
-
-		template<class LeftQuery, class RightQuery>
-		struct DifferenceQuery;
-
-		template<class LeftQuery, class RightQuery>
-		struct UnionQuery;
-
-		template<class LeftQuery, class RightQuery>
-		struct ExclusiveQuery;
-
 		template<class LeftQuery>
 		struct BaseQuery
 		{
@@ -606,9 +745,9 @@ namespace edn
 			}
 
 			template<class RightQuery>
-			DifferenceQuery<LeftQuery, RightQuery>& operator!(RightQuery& rhs)
+			DifferenceQuery<AllQuery, RightQuery>& operator!()
 			{
-				return DifferenceQuery<LeftQuery, RightQuery>(*this, rhs);
+				return DifferenceQuery<AllQuery, RightQuery>(AllQuery(), *static_cast<const RightQuery*>(this));
 			}
 
 			template<class RightQuery>
@@ -695,5 +834,81 @@ namespace edn
 			LeftQuery left;
 			RightQuery right;
 		};
+
+		struct AllQuery : public BaseQuery<AllQuery>
+		{
+			typedef Database::RangeAll RangeType;
+
+			RangeType toRange()
+			{
+				return RangeType();
+			}
+		};
+
+		struct TypeQuery : public BaseQuery<TypeQuery>
+		{
+			typedef Database::RangeType RangeType;
+
+			TypeQuery(Guid type)
+				: type(type)
+			{
+			}
+
+			RangeType toRange()
+			{
+				return RangeType(type);
+			}
+		private:
+			Guid type;
+		};
+
+		struct TagQuery : public BaseQuery<TagQuery>
+		{
+			typedef Database::RangeTag RangeType;
+
+			TagQuery(Guid type)
+				: tag(type)
+			{
+			}
+
+			RangeType toRange()
+			{
+				return Database::RangeTag(tag);
+			}
+		private:
+			Guid tag;
+		};
+	}
+
+	template<class Component>
+	inline Query::TypeQuery hasComponent()
+	{
+		static_assert(std::is_base_of<ComponentBase, Component>::value, "Type is not a component");
+		return Query::TypeQuery(Component::Template::GetType());
+	}
+
+	template<class Component>
+	inline Query::TypeQuery hasComponent(Component c)
+	{
+		static_assert(std::is_base_of<ComponentBase, Component>::value, "Type is not a component");
+		return Query::TypeQuery(c.GetType());
+	}
+
+	template<class Tag>
+	inline Query::TagQuery hasTag()
+	{
+		return Query::TypeQuery(ComponentTag<Tag>::type);
+	}
+
+	template<class Tag>
+	inline Query::TagQuery hasTag(ComponentTag<Tag> t)
+	{
+		return Query::TypeQuery(t.type);
+	}
+
+	template<class Range>
+	inline Database::EntityList toVector(const Range range)
+	{
+		return Database::EntityList(range.begin(), range.end());
 	}
 }

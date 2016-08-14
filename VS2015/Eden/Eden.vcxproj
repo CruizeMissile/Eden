@@ -205,9 +205,7 @@
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Shareable.h" />
     <ClInclude Include="..\..\Eden\Core\TypeInfo.h" />
-    <ClInclude Include="..\..\Eden\Core\TypeMap.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
-    <ClInclude Include="..\..\Eden\Core\Unique.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
     <ClInclude Include="..\..\Eden\Entity\Component.h" />
     <ClInclude Include="..\..\Eden\Entity\Database.h" />

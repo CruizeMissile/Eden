@@ -11,6 +11,9 @@ CREATE_TAG(PositionChanged);
 class Position : public Component<Position>
 {
 public:
+	Position(Entity & owner)
+		: Component(owner), x(0), y(0), z(0) { }
+
 	Position(Entity & owner, float x, float y, float z)
 		: Component(owner), x(x), y(y), z(z) { }
 
@@ -31,6 +34,9 @@ CREATE_TAG(NameChanged);
 class Name : public Component<Name>
 {
 public:
+	Name(Entity & owner)
+		: Component(owner), name("Name"){ }
+
 	Name(Entity & owner, std::string name)
 		: Component(owner), name(name) { }
 
@@ -146,5 +152,26 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 		CHECK(entity->has<Base>());
 		CHECK(entity->has<Alpha>());
 		CHECK(!entity->has<Beta>());
+	}
+
+	SECTION("Querying Database by type")
+	{
+		std::vector<Entity::Ptr> entityList;
+		
+		bool toggle = true;
+
+		for (int i = 0; i < 100; ++i)
+		{
+			auto e = db.create();
+			if (toggle)
+				e->add<Name>();
+			else
+				e->add<Position>();
+			entityList.push_back(e);
+			toggle = !toggle;
+		}
+
+		auto result = toVector(db.where(hasComponent<Position>()));
+		CHECK(result.size() == 50);
 	}
 }
