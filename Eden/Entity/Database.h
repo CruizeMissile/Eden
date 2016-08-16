@@ -37,7 +37,6 @@ namespace edn
 		struct Simplify
 		{
 			typedef Query Result;
-			typedef typename Query::RangeType RangeType;
 
 			static Result toSimple(const Query& query)
 			{
@@ -134,17 +133,20 @@ namespace edn
 		struct entity_iterator : std::iterator<std::forward_iterator_tag, Entity*>
 		{
 			typedef EntityList::const_iterator iterator;
-			entity_iterator(const iterator iter);
-			entity_iterator(entity_iterator & other);
-			entity_iterator & operator++();
-			entity_iterator operator++(int);
-			bool operator==(entity_iterator other) const;
-			bool operator!=(entity_iterator other) const;
-			Entity* operator*()const;
+			inline entity_iterator(iterator iter);
+			inline entity_iterator(const entity_iterator & other);
+
+			inline entity_iterator & operator++();
+			inline entity_iterator operator++(int);
+			inline bool operator==(const entity_iterator & other) const;
+			inline bool operator!=(const entity_iterator & other) const;
+			inline Entity* operator*()const;
 			iterator inner;
 		};
 
-		class RangeAll
+		class BaseRange {};
+
+		class RangeAll : public BaseRange
 		{
 		public:
 			typedef entity_iterator const_iterator;
@@ -157,7 +159,7 @@ namespace edn
 			RangeAll& operator=(const RangeAll&) = delete;
 		};
 
-		class RangeType
+		class RangeType : public BaseRange
 		{
 		public:
 			typedef entity_iterator const_iterator;
@@ -166,13 +168,13 @@ namespace edn
 
 			inline const_iterator begin() const;
 			inline const_iterator end() const;
-			RangeType& operator=(const RangeType&);
 		private:
+			RangeType& operator=(const RangeType&) = delete;
 			TypeIndex::const_iterator typeIterator;
 			Guid type;
 		};
 
-		class RangeTag
+		class RangeTag : public BaseRange
 		{
 		public:
 			typedef entity_iterator const_iterator;
@@ -181,8 +183,8 @@ namespace edn
 
 			inline const_iterator begin() const;
 			inline const_iterator end() const;
-			RangeTag& operator=(const RangeTag&);
 		private:
+			RangeTag& operator=(const RangeTag&) = delete;
 			TypeIndex::const_iterator typeIterator;
 			Guid type;
 		};
@@ -229,7 +231,7 @@ namespace edn
 		bool hasTag(Entity & e, ComponentTag<Type> t);
 
 		template<typename Filter>
-		typename Query::Simplify<Filter>::RangeType where(const Filter & fullQuery) const;
+		typename Query::Simplify<Filter>::Result::RangeType  where(const Filter & fullQuery) const;
 		
 		// Entity list information
 		inline u32 getEntityCount();
@@ -274,7 +276,7 @@ namespace edn
 	{
 	}
 
-	Database::entity_iterator::entity_iterator(Database::entity_iterator & other)
+	Database::entity_iterator::entity_iterator(const Database::entity_iterator & other)
 		: inner(other.inner)
 	{
 	}
@@ -291,12 +293,12 @@ namespace edn
 		return *this;
 	}
 
-	bool Database::entity_iterator::operator==(Database::entity_iterator other) const
+	bool Database::entity_iterator::operator==(const Database::entity_iterator & other) const
 	{
 		return inner == other.inner;
 	}
 
-	bool Database::entity_iterator::operator!=(Database::entity_iterator other) const
+	bool Database::entity_iterator::operator!=(const Database::entity_iterator & other) const
 	{
 		return inner != other.inner;
 	}
@@ -570,13 +572,14 @@ namespace edn
 	template<typename Type>
 	void Database::addTag(Entity & e, ComponentTag<Type> t)
 	{
+#ifdef EDN_DEBUG
+		if (hasTag(e, t))
+			return;
+#endif
 		auto & tags = e.tags;
 
 		auto type = t.type;
 		auto position = std::lower_bound(tags.begin(), tags.end(), type);
-
-		if (position != tags.end())
-			return;
 
 		tags.insert(position, type);
 
@@ -630,7 +633,7 @@ namespace edn
 	}
 
 	template<class Filter>
-	inline typename Query::Simplify<Filter>::RangeType Database::where(const Filter & fullQuery) const
+	inline typename Query::Simplify<Filter>::Result::RangeType Database::where(const Filter & fullQuery) const
 	{
 		return Query::toSimple(fullQuery).toRange();
 	}
@@ -644,7 +647,7 @@ namespace edn
 	{
 		return entities;
 	}
-
+	 
 	template<typename Type>
 	inline Database::EntityList & Database::getEntities()
 	{
@@ -739,42 +742,45 @@ namespace edn
 		struct BaseQuery
 		{
 			template<class RightQuery>
-			IntersectionQuery<LeftQuery, RightQuery>& operator&&(RightQuery& rhs)
+			IntersectionQuery<LeftQuery, RightQuery> operator&&(const RightQuery& rhs) const
 			{
-				return IntersectionQuery<LeftQuery, RightQuery>(*this, rhs);
+				return IntersectionQuery<LeftQuery, RightQuery>(*static_cast<const LeftQuery*>(this), rhs);
+			}
+
+			DifferenceQuery<AllQuery, LeftQuery> operator!() const
+			{
+				return DifferenceQuery<AllQuery, LeftQuery>(AllQuery(), *static_cast<const LeftQuery*>(this));
 			}
 
 			template<class RightQuery>
-			DifferenceQuery<AllQuery, RightQuery>& operator!()
+			UnionQuery<LeftQuery, RightQuery> operator||(const RightQuery& rhs) const
 			{
-				return DifferenceQuery<AllQuery, RightQuery>(AllQuery(), *static_cast<const RightQuery*>(this));
+				return UnionQuery<LeftQuery, RightQuery>(*static_cast<const LeftQuery*>(this), rhs);
 			}
 
 			template<class RightQuery>
-			UnionQuery<LeftQuery, RightQuery>& operator||(RightQuery& rhs)
+			ExclusiveQuery<LeftQuery, RightQuery> operator^(const RightQuery& rhs) const
 			{
-				return UnionQuery<LeftQuery, RightQuery>(*this, rhs);
-			}
-
-			template<class RightQuery>
-			ExclusiveQuery<LeftQuery, RightQuery>& operator^(RightQuery& rhs)
-			{
-				return ExclusiveQuery<LeftQuery, RightQuery>(*this, rhs);
+				return ExclusiveQuery<LeftQuery, RightQuery>(*static_cast<const LeftQuery*>(this), rhs);
 			}
 		};
 
 		template<class LeftQuery, class RightQuery>
 		struct IntersectionQuery : public BaseQuery<IntersectionQuery<LeftQuery, RightQuery>>
 		{
-			IntersectionQuery(LeftQuery lhs, RightQuery rhs)
+			typedef RangeOperation<
+				typename LeftQuery::RangeType::const_iterator,
+				typename RightQuery::RangeType::const_iterator, Intersection> RangeType;
+			
+			IntersectionQuery(const LeftQuery & lhs, const RightQuery & rhs)
 				: left(lhs)
 				, right(rhs)
 			{
 			}
 
-			RangeOperation<LeftQuery, RightQuery, Intersection> makeRange()
+			RangeType toRange()
 			{
-				return make_intersection_range(left, right);
+				return make_intersection_range(left.toRange(), right.toRange());
 			}
 
 			LeftQuery left;
@@ -784,15 +790,19 @@ namespace edn
 		template<class LeftQuery, class RightQuery>
 		struct DifferenceQuery : public BaseQuery<DifferenceQuery<LeftQuery, RightQuery>>
 		{
-			DifferenceQuery(LeftQuery lhs, RightQuery rhs)
+			typedef RangeOperation<
+				typename LeftQuery::RangeType::const_iterator,
+				typename RightQuery::RangeType::const_iterator, Difference> RangeType;
+			
+			DifferenceQuery(const LeftQuery & lhs, const RightQuery & rhs)
 				: left(lhs)
 				, right(rhs)
 			{
 			}
 
-			RangeOperation<LeftQuery, RightQuery, Difference> makeRange()
+			RangeType toRange()
 			{
-				return make_difference_range(left, right);
+				return make_difference_range(left.toRange(), right.toRange());
 			}
 
 			LeftQuery left;
@@ -802,15 +812,19 @@ namespace edn
 		template<class LeftQuery, class RightQuery>
 		struct UnionQuery : public BaseQuery<UnionQuery<LeftQuery, RightQuery>>
 		{
-			UnionQuery(LeftQuery lhs, RightQuery rhs)
+			typedef RangeOperation<
+				typename LeftQuery::RangeType::const_iterator,
+				typename RightQuery::RangeType::const_iterator, Union> RangeType;
+
+			UnionQuery(const LeftQuery & lhs, const RightQuery & rhs)
 				: left(lhs)
 				, right(rhs)
 			{
 			}
 
-			RangeOperation<LeftQuery, RightQuery, Union> makeRange()
+			RangeType toRange()
 			{
-				return make_union_range(left, right);
+				return make_union_range(left.toRange(), right.toRange());
 			}
 
 			LeftQuery left;
@@ -820,15 +834,19 @@ namespace edn
 		template<class LeftQuery, class RightQuery>
 		struct ExclusiveQuery : public BaseQuery<ExclusiveQuery<LeftQuery, RightQuery>>
 		{
-			ExclusiveQuery(LeftQuery lhs, RightQuery rhs)
+			typedef RangeOperation<
+				typename LeftQuery::RangeType::const_iterator,
+				typename RightQuery::RangeType::const_iterator, Exclusive> RangeType;
+
+			ExclusiveQuery(const LeftQuery & lhs, const RightQuery & rhs)
 				: left(lhs)
 				, right(rhs)
 			{
 			}
 
-			RangeOperation<LeftQuery, RightQuery, Exclusive> makeRange()
+			RangeType toRange()
 			{
-				return make_exclusive_range(left, right);
+				return make_exclusive_range(left.toRange(), right.toRange());
 			}
 
 			LeftQuery left;
@@ -837,7 +855,8 @@ namespace edn
 
 		struct AllQuery : public BaseQuery<AllQuery>
 		{
-			typedef Database::RangeAll RangeType;
+			typedef typename Database::RangeAll RangeType;
+			AllQuery() { }
 
 			RangeType toRange()
 			{
@@ -847,7 +866,7 @@ namespace edn
 
 		struct TypeQuery : public BaseQuery<TypeQuery>
 		{
-			typedef Database::RangeType RangeType;
+			typedef typename Database::RangeType RangeType;
 
 			TypeQuery(Guid type)
 				: type(type)
@@ -864,10 +883,10 @@ namespace edn
 
 		struct TagQuery : public BaseQuery<TagQuery>
 		{
-			typedef Database::RangeTag RangeType;
+			typedef typename Database::RangeTag RangeType;
 
-			TagQuery(Guid type)
-				: tag(type)
+			TagQuery(Guid tag)
+				: tag(tag)
 			{
 			}
 
@@ -877,6 +896,50 @@ namespace edn
 			}
 		private:
 			Guid tag;
+		};
+
+		// If we are intersecting one with all queries it is just one
+		template<class One>
+		struct Simplify<IntersectionQuery<One, AllQuery>>
+		{
+			typedef Simplify<One> S1;
+			typedef typename S1::Result Result;
+			typedef IntersectionQuery<One, AllQuery> Case;
+			
+			static Result toSimple(Case & c)
+			{
+				return S1::toSimple(c.left);
+			}
+		};
+
+		// This is the same case as before just the other order
+		template<class Two>
+		struct Simplify<IntersectionQuery<AllQuery, Two>>
+		{
+			typedef Simplify<Two> S2;
+			typedef typename S2::Result Result;
+			typedef IntersectionQuery<AllQuery, Two> Case;
+			
+			static Result toSimple(Case & q)
+			{
+				return S2::toSimple(q.right);
+			}
+		};
+
+		// This case is for where(has<One>() && !has<Two>())
+		// this can be optimised to me the difference of one and two
+		template<class One, class Two>
+		struct Simplify<IntersectionQuery<One, DifferenceQuery<AllQuery, Two>>>
+		{
+			typedef Simplify<One> S1;
+			typedef Simplify<Two> S2;
+			typedef DifferenceQuery<typename S1::Result, typename S2::Result> Result;
+			typedef IntersectionQuery<One, DifferenceQuery<AllQuery, Two>> Case;
+			
+			static Result toSimple(const Case & c)
+			{
+				return Result(S1::toSimple(c.left), S2::toSimple(c.right.right));
+			}
 		};
 	}
 
@@ -897,17 +960,17 @@ namespace edn
 	template<class Tag>
 	inline Query::TagQuery hasTag()
 	{
-		return Query::TypeQuery(ComponentTag<Tag>::type);
+		return Query::TagQuery(ComponentTag<Tag>::type);
 	}
 
 	template<class Tag>
 	inline Query::TagQuery hasTag(ComponentTag<Tag> t)
 	{
-		return Query::TypeQuery(t.type);
+		return Query::TagQuery(t.type);
 	}
 
 	template<class Range>
-	inline Database::EntityList toVector(const Range range)
+	inline Database::EntityList toVector(const Range & range)
 	{
 		return Database::EntityList(range.begin(), range.end());
 	}

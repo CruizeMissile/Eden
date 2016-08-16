@@ -18,7 +18,8 @@ TEST_CASE("Querying logic", "[Query]")
 	SECTION("Intersection")
 	{
 		List expected = { 1, 6, 10, 22, 26 };
-		auto intersection = make_intersection_range(one, two);
+		//auto intersection = make_intersection_range(one, two);
+		auto intersection = make_intersection_range(one.begin(), one.end(), two.begin(), two.end());
 		auto it = intersection.begin();
 		auto end = intersection.end();
 
@@ -29,7 +30,8 @@ TEST_CASE("Querying logic", "[Query]")
 	SECTION("Difference")
 	{
 		List expected = { 2, 4, 7, 8, 12, 17, 30 };
-		auto difference = make_difference_range(one, two);
+		//auto difference = make_difference_range(one, two);
+		auto difference = make_difference_range(one.begin(), one.end(), two.begin(), two.end());
 		auto it = difference.begin();
 		auto end = difference.end();
 		
@@ -41,7 +43,8 @@ TEST_CASE("Querying logic", "[Query]")
 	{
 		List expected = {1, 2, 3, 4, 6, 7, 8, 9, 10, 11,
 			12, 13, 15, 17, 21, 22, 23, 24, 26, 30, 40};
-		auto union_range = make_union_range(one, two);
+		//auto union_range = make_union_range(one, two);
+		auto union_range = make_union_range(one.begin(), one.end(), two.begin(), two.end());
 		auto it = union_range.begin();
 		auto end = union_range.end();
 
@@ -52,7 +55,8 @@ TEST_CASE("Querying logic", "[Query]")
 	SECTION("Exclusive")
 	{
 		List expected = { 2, 3, 4, 7, 8, 9, 11, 12, 13, 15, 17, 21, 23, 24, 30, 40 };
-		auto exclusive = make_exclusive_range(one, two);
+		//auto exclusive = make_exclusive_range(one, two);
+		auto exclusive = make_exclusive_range(one.begin(), one.end(), two.begin(), two.end());
 		auto it = exclusive.begin();
 		auto end = exclusive.end();
 

@@ -93,9 +93,8 @@ namespace edn
 	}
 
 	template<typename Type>
-	class ComponentTag
+	struct ComponentTag
 	{
-	public:
 		static Guid type;
 	};
 

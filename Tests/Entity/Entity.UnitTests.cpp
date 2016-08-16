@@ -159,19 +159,35 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 		std::vector<Entity::Ptr> entityList;
 		
 		bool toggle = true;
+		bool tag_toggle = true;
+		bool two_toggle = true;
 
 		for (int i = 0; i < 100; ++i)
 		{
 			auto e = db.create();
 			if (toggle)
+			{
 				e->add<Name>();
+				if (tag_toggle)
+					e->addTag(NameChanged());
+				tag_toggle = !tag_toggle;
+			}
 			else
+			{
 				e->add<Position>();
+				if (two_toggle)
+					e->add<Name>();
+				two_toggle = !two_toggle;
+			}
 			entityList.push_back(e);
 			toggle = !toggle;
 		}
 
-		auto result = toVector(db.where(hasComponent<Position>()));
-		CHECK(result.size() == 50);
+		CHECK(toVector(db.where(hasComponent<Name>() && hasTag(NameChanged()))).size() == 25);
+		CHECK(toVector(db.where(hasComponent<Name>() && !hasTag(NameChanged()))).size() == 50);
+		CHECK(toVector(db.where(hasComponent<Name>() || hasTag(NameChanged()))).size() == 75);
+
+		// Note: Exclude is not working
+		//CHECK(toVector(db.where(hasComponent<Name>() ^ hasComponent<Position>())).size() == 75);
 	}
 }
