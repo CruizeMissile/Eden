@@ -194,6 +194,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Eden\Application\Application.h" />
     <ClInclude Include="..\..\Eden\Core\AssetManager.h" />
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
@@ -225,6 +226,8 @@
     <ClInclude Include="..\..\Eden\Precompiled.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Eden\Application\Appliation.cpp" />
+    <ClCompile Include="..\..\Eden\Application\Application_Win32.cpp" />
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
     <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />

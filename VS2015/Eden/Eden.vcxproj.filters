@@ -19,6 +19,9 @@
     <Filter Include="Entity">
       <UniqueIdentifier>{525f5b67-80c6-415c-bb88-daf669165756}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{e43ab08f-06ab-40e4-a68a-bf6665f726ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -106,6 +109,9 @@
     <ClInclude Include="..\..\Eden\Entity\Query.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\Application.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -141,6 +147,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Core\MD5.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\Appliation.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\Application_Win32.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

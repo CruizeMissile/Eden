@@ -1,24 +1,35 @@
 #pragma once
 
-#include "Core/MacroHelpers.h"
-#include "Entity/Guid.h"
+#include "Core/Platform.h"
+#include "Core/Types.h"
+#include <iostream>
 
+namespace Hidden
+{
+	static const u32 FRONT_SIZE = sizeof("Hidden::GetTypeNameHelper<");
+	static const u32 BACK_SIZE = sizeof(">::GetTypeName");
+	template<class T>
+	struct GetTypeNameHelper
+	{
+		static String GetTypeName()
+		{
+			String func(__FUNCTION__);
+			u32 size = sizeof(__FUNCTION__) - FRONT_SIZE - BACK_SIZE;
+			String result = func.substr(FRONT_SIZE - 1, size + 1);
+			u32 space = static_cast<u32>(result.find(' '));
+			if (space == String::npos)
+				return result;
+			result = result.substr(space + 1);
+			return result;
+		}
+	};
+}
 
-template<typename T>
+template<class T>
 struct TypeInfo
 {
-	static const char * name;
-	static u32 hash;
+	static const String name;
 };
 
-#define _INTERNAL_EDN_REGISTER_TYPE_NAME( _ ) \
-	template<> const char * TypeInfo<_>::name = #_
-
-#define _INTERNAL_EDN_REGISTER_TYPE_HASH( _ ) \
-	template<> u32 TypeInfo<_>::hash = EDN_HASH(EDN_STRINGIZE( _ ))
-
-
-//#define _INTERNAL_EDN_REGISTER_TYPE_HASH( _ ) \
-//	template<> u32 TypeInfo<_>::hash = static_cast<u32>(std::hash<const char*>{}(EDN_STRINGIZE(_)));
-
-#define EDN_REGISTER_TYPE(_) _INTERNAL_EDN_REGISTER_TYPE_NAME(_); _INTERNAL_EDN_REGISTER_TYPE_HASH(_)
+template<class T>
+const String TypeInfo<T>::name = Hidden::GetTypeNameHelper<T>::GetTypeName();

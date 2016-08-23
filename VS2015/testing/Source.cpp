@@ -5,6 +5,7 @@
 #include "Entity/Component.h"
 
 #include "Core\AssetManager.h"
+#include "Application/Application.h"
 
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work. 
 // @Todo: Need to make it so that is not the case.
@@ -89,12 +90,19 @@ int engine()
 
 int testing()
 {
-	system("pause");
+	Application app;
+	
+	while (app.isRunning())
+	{
+		app.update();
+	}
+
+	//system("pause");
 	return 0;
 }
 
 int main()
 {
-	return engine();
-	//return testing();
+	//return engine();
+	return testing();
 }
