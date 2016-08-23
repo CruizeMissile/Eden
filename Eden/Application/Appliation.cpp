@@ -10,8 +10,7 @@ namespace edn
 
 	Application::Application()
 		: title(ApplicationConfiguration::Default.title)
-		, width(ApplicationConfiguration::Default.width)
-		, height(ApplicationConfiguration::Default.height)
+		, size(Size{ ApplicationConfiguration::Default.width, ApplicationConfiguration::Default.height })
 		, flags(ApplicationConfiguration::Default.flags)
 		, style(WindowStyle::EDN_WINDOW_WINDOWED)
 		, prev_style(style)
@@ -22,8 +21,7 @@ namespace edn
 
 	Application::Application(const ApplicationConfiguration & config)
 		: title(config.title)
-		, width(config.width)
-		, height(config.height)
+		, size(Size{config.width, config.height})
 		, flags(config.flags)
 		, style(WindowStyle::EDN_WINDOW_WINDOWED)
 		, prev_style(style)

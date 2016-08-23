@@ -94,21 +94,11 @@ LRESULT CALLBACK WindowsEventHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 	case WM_KEYDOWN:
 		switch ((char)wParam)
 		{
-		case '1':
-			app->setWindowStyle(WindowStyle::EDN_WINDOW_FULLSCREEN);
-			break;
-		case '2':
-			app->setWindowStyle(WindowStyle::EDN_WINDOW_WINDOWED);
-			break;
-		case '3':
-			app->setWindowStyle(WindowStyle::EDN_WINDOW_WINDOWED_FIXED);
-			break;
-		case '4':
-			app->setWindowStyle(WindowStyle::EDN_WINDOW_BORDERLESS);
-			break;
-		case '5':
-			app->setWindowStyle(WindowStyle::EDN_WINDOW_BORDERLESS_WINDOW);
-			break;
+		case '1': app->setWindowStyle(WindowStyle::EDN_WINDOW_FULLSCREEN); break;
+		case '2': app->setWindowStyle(WindowStyle::EDN_WINDOW_WINDOWED); break;
+		case '3': app->setWindowStyle(WindowStyle::EDN_WINDOW_WINDOWED_FIXED); break;
+		case '4': app->setWindowStyle(WindowStyle::EDN_WINDOW_BORDERLESS); break;
+		case '5': app->setWindowStyle(WindowStyle::EDN_WINDOW_BORDERLESS_WINDOW);break;
 		}
 		break;
 	case WM_KEYUP:
@@ -144,7 +134,7 @@ namespace edn
 		DWORD ex_style = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 		DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
-		RECT wr = { 0, 0, LONG(width), LONG(height) };
+		RECT wr = { 0, 0, LONG(size.width), LONG(size.height) };
 		AdjustWindowRectEx(&wr, style, FALSE, ex_style);
 		hwnd = CreateWindowEx(
 			0,
@@ -204,8 +194,8 @@ namespace edn
 				auto msize = get_monitor_size();
 
 				RECT rect = { 0 };
-				rect.right = width;
-				rect.bottom = height;
+				rect.right = size.width;
+				rect.bottom = size.height;
 				SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
 				AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 				center_window(hwnd);
@@ -213,7 +203,7 @@ namespace edn
 
 			if (prev_style == WindowStyle::EDN_WINDOW_BORDERLESS_WINDOW)
 			{
-				SetWindowPos(hwnd, HWND_TOP, 0, 0, width, height, SWP_FRAMECHANGED);
+				SetWindowPos(hwnd, HWND_TOP, 0, 0, size.width, size.height, SWP_FRAMECHANGED);
 				SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
 				center_window(hwnd);
 			}
@@ -233,8 +223,8 @@ namespace edn
 		case WindowStyle::EDN_WINDOW_FULLSCREEN:
 			EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
 			mode.dmSize = sizeof(DEVMODE);
-			mode.dmPelsWidth = width;
-			mode.dmPelsHeight = height;
+			mode.dmPelsWidth = size.width;
+			mode.dmPelsHeight = size.height;
 			mode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
 
 			success = ChangeDisplaySettings(&mode, 0) == DISP_CHANGE_SUCCESSFUL;
@@ -242,8 +232,8 @@ namespace edn
 			break;
 
 		case WindowStyle::EDN_WINDOW_BORDERLESS:
-			rect.right = width;
-			rect.bottom = height;
+			rect.right = size.width;
+			rect.bottom = size.height;
 			AdjustWindowRect(&rect, STYLE_BORDERLESS, 0);
 			SetWindowPos(hwnd, HWND_TOP, 0, 0, (rect.right - rect.left), (rect.bottom - rect.top), SWP_FRAMECHANGED);
 			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_BORDERLESS);
@@ -251,9 +241,9 @@ namespace edn
 			break;
 
 		case WindowStyle::EDN_WINDOW_WINDOWED_FIXED:
-			rect.right = width;
-			rect.bottom = height;
-			AdjustWindowRect(&rect, STYLE_BORDERLESS, 0);
+			rect.right = size.width;
+			rect.bottom = size.height;
+			AdjustWindowRect(&rect, STYLE_WINDOWED_FIXED, 0);
 			SetWindowPos(hwnd, HWND_TOP, 0, 0, (rect.right - rect.left), (rect.bottom - rect.top), SWP_FRAMECHANGED);
 			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED_FIXED);
 			center_window(hwnd);
@@ -267,8 +257,8 @@ namespace edn
 			break;
 
 		case WindowStyle::EDN_WINDOW_WINDOWED:
-			rect.right = width;
-			rect.bottom = height;
+			rect.right = size.width;
+			rect.bottom = size.height;
 			AdjustWindowRect(&rect, STYLE_WINDOWED, 0);
 			SetWindowPos(hwnd, HWND_TOP, 0, 0, (rect.right - rect.left), (rect.bottom - rect.top), SWP_FRAMECHANGED);
 			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
@@ -277,99 +267,5 @@ namespace edn
 		}
 
 	}
-	//void Application::updateOsWindowStyle()
-	//{
-	//	bool success;
-	//	DEVMODE mode = { 0 };
-
-	//	if (prev_style == WindowStyle::EDN_WINDOW_FULLSCREEN || prev_style == WindowStyle::EDN_WIDNOW_BORDERLESS_WINDOW)
-	//	{
-	//		// Since I am moving from fullscreen to something that is not fullscreen
-	//		// can do some of it outside of the switch statement
-	//		success = ChangeDisplaySettings(0, 0) == DISP_CHANGE_SUCCESSFUL;
-	//		if (!success) { cout << "We are fucked!!! failed to get out of fullscreen." << endl; }
-
-	//		auto ms = get_monitor_size();
-
-	//		RECT rect = {0};
-	//		rect.right = width;
-	//		rect.bottom = height;
-	//		
-	//		SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
-	//		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	//		MoveWindow(hwnd, (ms.width - (rect.right - rect.left)) / 2, (ms.height - (rect.bottom - rect.top)) / 2,
-	//			rect.right - rect.left, rect.bottom - rect.top, TRUE);
-	//		
-	//		switch (style)
-	//		{
-	//		case WindowStyle::EDN_WIDNOW_BORDERLESS_WINDOW:
-	//			// Requesting current devmode
-	//			EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
-	//			mode.dmSize = sizeof(DEVMODE);
-	//			mode.dmPelsWidth = width;
-	//			mode.dmPelsHeight = height;
-	//			mode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
-
-	//			success = ChangeDisplaySettings(&mode, 0) == DISP_CHANGE_SUCCESSFUL;
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_BORDERLESS);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_BORDERLESS:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_WINDOWED:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_WINDOWED_FIXED:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED_FIXED);
-	//			break;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		switch (style)
-	//		{
-	//		case WindowStyle::EDN_WINDOW_FULLSCREEN:
-	//			// Requesting current devmode
-	//			EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
-	//			mode.dmSize = sizeof(DEVMODE);
-	//			mode.dmPelsWidth = width;
-	//			mode.dmPelsHeight = height;
-	//			mode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
-	//			
-	//			success = ChangeDisplaySettings(&mode, 0) == DISP_CHANGE_SUCCESSFUL;
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, WS_SYSMENU | WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE);
-	//			break;
-
-	//		case WindowStyle::EDN_WIDNOW_BORDERLESS_WINDOW:
-	//			// Requesting current devmode
-	//			EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
-	//			mode.dmSize = sizeof(DEVMODE);
-	//			mode.dmPelsWidth = width;
-	//			mode.dmPelsHeight = height;
-
-	//			success = ChangeDisplaySettings(&mode, 0) == DISP_CHANGE_SUCCESSFUL;
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_BORDERLESS);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_BORDERLESS:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_BORDERLESS);
-	//			center_window(hwnd);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_WINDOWED:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED);
-	//			center_window(hwnd);
-	//			break;
-
-	//		case WindowStyle::EDN_WINDOW_WINDOWED_FIXED:
-	//			SetWindowLongPtr(hwnd, GWL_STYLE, STYLE_WINDOWED_FIXED);
-	//			center_window(hwnd);
-	//			break;
-	//		}
-	//	}
-	//}
 }
 #endif

@@ -2,6 +2,7 @@
 #include "Core/Platform.h"
 #include "Core/Types.h"
 #include "vulkan/vulkan.h"
+#include "Math/Vector.h"
 
 namespace edn
 {
@@ -20,7 +21,7 @@ namespace edn
 		EDN_WINDOW_VSYNC = 1 << 1,
 	};
 
-	typedef struct ApplicationConfiguration
+	struct ApplicationConfiguration
 	{
 		static const ApplicationConfiguration Default;
 
@@ -28,6 +29,11 @@ namespace edn
 		u32 width, height;
 
 		u32 flags;
+	};
+
+	struct Size
+	{
+		u32 width, height;
 	};
 
 
@@ -60,7 +66,8 @@ namespace edn
 		std::string title;
 		WindowStyle style, prev_style;
 
-		u32 width, height;
+		Size size;
+		Size bb_size;
 		u32 flags;
 		bool running = false;
 
