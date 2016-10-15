@@ -1,6 +1,4 @@
-#include "Game/Window.h"
 #include "Math/Vector.h"
-#include "Graphics/Mesh.h"
 #include "Core/Common.h"
 #include "Entity/Component.h"
 
@@ -14,7 +12,6 @@
 // instead of making sure that the user has to undef main every time. Could place the undef in the window
 // class for now if I cant find a fix for it.
 
-#undef main
 using namespace edn;
 using namespace std;
 
@@ -48,48 +45,6 @@ private:
 
 int engine()
 {
-	WindowConfiguration window_config = {
-		"Title",
-		600, 400,
-		200, 200,
-		EDN_WINDOW_VSYNC | EDN_WINDOW_HIDE_CURSOR
-	};
-
-	std::cout << sizeof(SDL_Scancode) << std::endl;
-
-	Window & window = Window::Instance();
-	window.Initialize();
-	window.SetClearColor(0x282828);
-
-	AssetManager::SetAssetPath(os::MakePath(os::ExecDir(), "Assets"));
-	AssetManager::SetCachePath(os::MakePath(os::ExecDir(), "Cached"));
-
-	AssetManager::Register<TestAsset>();
-	AssetManager::Register<Mesh>();
-
-	String filename = "testing.txt";
-
-	//TestAsset * asset = AssetManager::Load<TestAsset>(filename);
-
-	filename = "BigBoy.obj";
-	Mesh * mesh = AssetManager::Load<Mesh>(filename);
-
-	//std::cout << asset->Text() << std::endl;
-
-	while (window.IsRunning())
-	{
-		window.PollEvents();
-		window.Update();
-		window.Clear();
-
-		window.SwapBuffers();
-	}
-	window.Cleanup();
-	return 0;
-}
-
-int testing()
-{
 	Application app;
 	
 	while (app.isRunning())
@@ -97,12 +52,10 @@ int testing()
 		app.update();
 	}
 
-	//system("pause");
 	return 0;
 }
 
 int main()
 {
-	//return engine();
-	return testing();
+	return engine();
 }
