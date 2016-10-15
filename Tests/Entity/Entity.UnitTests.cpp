@@ -83,8 +83,8 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 		entity->add<Position>(3.f, 2.f, 1.f);
 		entity->add<Name>("This is the name Component");
 
-		auto position = entity->get<Position>();
-		auto name = entity->get<Name>();
+		auto& position = entity->get<Position>();
+		auto& name = entity->get<Name>();
 
 		CHECK(position.GetType() != name.GetType());
 	}
@@ -92,7 +92,7 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 	SECTION("Getting Components")
 	{
 		entity->add<Name>("EDEN");
-		auto name = entity->get<Name>();
+		auto& name = entity->get<Name>();
 		CHECK(name.name == "EDEN");
 	}
 
@@ -180,6 +180,16 @@ TEST_CASE("Entities Interaction with database", "[Entity]")
 			entityList.push_back(e);
 			toggle = !toggle;
 		}
+
+		// Checking iterating using a for loop with a where statement
+		u32 count = 0;
+		for (Entity& entity : db.where(hasComponent<Name>() && hasTag(NameChanged())))
+		{
+			CHECK(entity.has<Name>());
+			CHECK(entity.hasTag(NameChanged()));
+			count++;
+		}
+		CHECK(count == 25);
 
 		CHECK(toVector(db.where(hasComponent<Name>() && hasTag(NameChanged()))).size() == 25);
 		CHECK(toVector(db.where(hasComponent<Name>() && !hasTag(NameChanged()))).size() == 50);

@@ -19,7 +19,9 @@
 	#define WIN32_LEAN_AND_MEAN
 	#endif
 	#include <Windows.h>
-	#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+	// @Note: This is not recommended as every project that uses this file will not
+	// have a console window
+	//#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 
 #elif defined (__APPLE__) && defined(__MACH__)
 	#define EDN_MACOSX

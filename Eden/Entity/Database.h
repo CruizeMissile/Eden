@@ -32,7 +32,7 @@ namespace edn
 		struct AllQuery;
 		struct TypeQuery;
 		struct TagQuery;
-		
+
 		template<class Query>
 		struct Simplify
 		{
@@ -67,9 +67,9 @@ namespace edn
 
 		// Function is a struct to pass into std::lower_bound easier also here to keep only
 		// in Entity and database
-		struct ComponentComparitor 
+		struct ComponentComparitor
 		{
-			bool operator() (const ComponentTuple & lhs, const ComponentTuple & rhs)
+			bool operator() (const ComponentTuple& lhs, const ComponentTuple& rhs)
 			{
 				return lhs.first < rhs.first;
 			}
@@ -78,19 +78,19 @@ namespace edn
 		~Entity();
 
 		template<typename Type, typename... Args>
-		Type & add(Args&&... args);
+		Type& add(Args&&... args);
 
 		template<typename Type, typename... Args>
-		Type & replace(Args&&... args);
+		Type& replace(Args&&... args);
 
 		template<typename Type>
 		void remove();
 
 		template<typename Type>
-		Type & get();
+		Type& get();
 
 		template<typename Type>
-		Type * tryGet();
+		Type* tryGet();
 
 		template<typename Type>
 		bool has();
@@ -105,24 +105,30 @@ namespace edn
 		bool hasTag(ComponentTag<Type> t);
 
 		u32 getComponentCount();
-		Entity::ComponentList & getComponents();
+		Entity::ComponentList& getComponents();
 	private:
 		Entity() = default;
+		Entity(const Entity&) = delete;
+		Entity(Entity&&) = default;
+		Entity& operator=(const Entity&) = delete;
+		Entity& operator=(Entity&&) = delete;
+
 		ComponentList components;
 		TagList tags;
 	};
 
 	// -----------------------------------------------------------------------------------------------
 	// Database Definition
-	
+
 	class Database : public Singleton<Database>
 	{
 	public:
 		typedef std::vector<Entity*> EntityList;
+		typedef std::vector<std::reference_wrapper<Entity>> EntityRefList;
 
 		// A way to index a type and get all of the entities that are associated with it.
 		typedef std::map<Guid, EntityList> TypeIndex;
-	
+
 	private:
 		EntityList entities;
 		TypeIndex componentIndex;
@@ -133,15 +139,42 @@ namespace edn
 		struct entity_iterator : std::iterator<std::forward_iterator_tag, Entity*>
 		{
 			typedef EntityList::const_iterator iterator;
+			typedef EntityList::const_iterator const_iterator;
 			inline entity_iterator(iterator iter);
-			inline entity_iterator(const entity_iterator & other);
+			inline entity_iterator(const entity_iterator& other);
 
-			inline entity_iterator & operator++();
+			inline entity_iterator& operator++();
 			inline entity_iterator operator++(int);
-			inline bool operator==(const entity_iterator & other) const;
-			inline bool operator!=(const entity_iterator & other) const;
+			inline bool operator==(const entity_iterator& other) const;
+			inline bool operator!=(const entity_iterator& other) const;
 			inline Entity* operator*()const;
 			iterator inner;
+		};
+
+		template<typename TIterator>
+		struct entity_ref_iterator
+		{
+			typedef typename entity_ref_iterator<TIterator> this_type;
+			typedef typename std::forward_iterator_tag iterator_category;
+			typedef typename Entity& value_type;
+			typedef std::ptrdiff_t difference_type;
+			typedef Entity* pointer;
+			typedef Entity& reference;
+
+			inline entity_ref_iterator(TIterator iterator);
+			inline entity_ref_iterator(const this_type&) = default;
+			inline entity_ref_iterator(this_type&&) = default;
+
+			inline this_type& operator=(const this_type&) = default;
+			inline this_type& operator=(this_type&&) = default;
+
+			inline this_type& operator++();
+			inline this_type operator++(int);
+			inline bool operator==(const this_type& other) const;
+			inline bool operator!=(const this_type& other) const;
+			inline Entity& operator*() const;
+
+			TIterator inner;
 		};
 
 		class BaseRange {};
@@ -189,56 +222,76 @@ namespace edn
 			Guid type;
 		};
 
+		template<typename TRange>
+		class RefRange
+		{
+		public:
+			typedef entity_ref_iterator<typename TRange::const_iterator> const_iterator;
+			typedef RefRange<TRange> this_type;
+
+			inline RefRange(TRange range);
+			inline RefRange(const this_type&) = delete;
+			inline RefRange(this_type&&) = default;
+
+			inline this_type& operator=(const this_type&) = delete;
+			inline this_type& operator=(this_type&&) = default;
+
+			inline const_iterator begin() const;
+			inline const_iterator end() const;
+
+			TRange range;
+		};
+
 	public:
 		Database();
 		~Database();
 
 		// Entity creation and deletion
 		Entity::Ptr create();
-		void destroy(Entity & e);
+		void destroy(Entity& e);
 
 		// Component creation, deletion, getting and checking
 		template<typename Type, typename... Args>
-		Type & addComponent(Entity & e, Args&&... args);
-		
+		Type& addComponent(Entity& e, Args&&... args);
+
 		template<typename Type, typename... Args>
-		Type & replaceComponent(Entity & e, Args&&... args);
+		Type& replaceComponent(Entity& e, Args&&... args);
 
 		template<typename Type>
-		bool removeComponent(Entity & e);
-		bool removeComponent(Entity & e, Guid type, ComponentBase * c);
+		bool removeComponent(Entity& e);
+		bool removeComponent(Entity& e, Guid type, ComponentBase* c);
 
-		void cleanEntity(Entity & e);
-
-		template<typename Type>
-		Type & getComponent(Entity & e);
+		void cleanEntity(Entity& e);
 
 		template<typename Type>
-		Type * tryGetComponent(Entity & e);
+		Type& getComponent(Entity& e);
 
 		template<typename Type>
-		bool hasComponent(Entity & e);
-		
+		Type* tryGetComponent(Entity& e);
+
+		template<typename Type>
+		bool hasComponent(Entity& e);
+
 		// Tag addition removal getting and checking
 		template<typename Type>
-		void addTag(Entity & e, ComponentTag<Type> t);
+		void addTag(Entity& e, ComponentTag<Type> t);
 
 		template<typename Type>
-		void removeTag(Entity & e, ComponentTag<Type> t);
-		void removeTag(Entity & e, Guid type);
+		void removeTag(Entity& e, ComponentTag<Type> t);
+		void removeTag(Entity& e, Guid type);
 
 		template<typename Type>
-		bool hasTag(Entity & e, ComponentTag<Type> t);
+		bool hasTag(Entity& e, ComponentTag<Type> t);
 
 		template<typename Filter>
-		typename Query::Simplify<Filter>::Result::RangeType  where(const Filter & fullQuery) const;
-		
+		typename RefRange<typename Query::Simplify<Filter>::Result::RangeType> where(const Filter& fullQuery) const;
+
 		// Entity list information
 		inline u32 getEntityCount();
-		inline EntityList & getEntities();
-		
+		inline EntityList& getEntities();
+
 		template<typename Type>
-		inline EntityList & getEntities();
+		inline EntityList& getEntities();
 
 		inline RangeAll all() const;
 	};
@@ -261,7 +314,7 @@ namespace edn
 		};
 
 		template<typename Type>
-		Type* safe_cast(ComponentBase * c)
+		Type* safe_cast(ComponentBase* c)
 		{
 			static_assert(std::is_base_of<ComponentBase, Type>::value, "Not base of componentbase.");
 			return _safe_cast<Type, Type::Template>()(c);
@@ -276,12 +329,12 @@ namespace edn
 	{
 	}
 
-	Database::entity_iterator::entity_iterator(const Database::entity_iterator & other)
+	Database::entity_iterator::entity_iterator(const Database::entity_iterator& other)
 		: inner(other.inner)
 	{
 	}
 
-	Database::entity_iterator & Database::entity_iterator::operator++()
+	Database::entity_iterator& Database::entity_iterator::operator++()
 	{
 		inner++;
 		return *this;
@@ -289,16 +342,17 @@ namespace edn
 
 	Database::entity_iterator Database::entity_iterator::operator++(int value)
 	{
-		inner += value;
-		return *this;
+		entity_iterator temp(*this);
+		operator++();
+		return temp;
 	}
 
-	bool Database::entity_iterator::operator==(const Database::entity_iterator & other) const
+	bool Database::entity_iterator::operator==(const Database::entity_iterator& other) const
 	{
 		return inner == other.inner;
 	}
 
-	bool Database::entity_iterator::operator!=(const Database::entity_iterator & other) const
+	bool Database::entity_iterator::operator!=(const Database::entity_iterator& other) const
 	{
 		return inner != other.inner;
 	}
@@ -306,6 +360,48 @@ namespace edn
 	Entity* Database::entity_iterator::operator*() const
 	{
 		return *inner;
+	}
+
+	// -----------------------------------------------------------------------------------------------
+	// entity_iterator
+
+	template<typename TIterator>
+	inline Database::entity_ref_iterator<TIterator>::entity_ref_iterator(TIterator iterator)
+		: inner(iterator)
+	{
+	}
+
+	template<typename TIterator>
+	inline typename Database::entity_ref_iterator<TIterator>::this_type& Database::entity_ref_iterator<TIterator>::operator++()
+	{
+		inner++;
+		return *this;
+	}
+
+	template<typename TIterator>
+	inline typename Database::entity_ref_iterator<TIterator>::this_type Database::entity_ref_iterator<TIterator>::operator++(int)
+	{
+		this_type temp(*this);
+		operator++();
+		return temp;
+	}
+
+	template<typename TIterator>
+	inline bool Database::entity_ref_iterator<TIterator>::operator==(const typename Database::entity_ref_iterator<TIterator>::this_type& other) const
+	{
+		return inner == other.inner;
+	}
+
+	template<typename TIterator>
+	inline bool Database::entity_ref_iterator<TIterator>::operator!=(const typename Database::entity_ref_iterator<TIterator>::this_type& other) const
+	{
+		return inner != other.inner;
+	}
+
+	template<typename TIterator>
+	inline Entity& Database::entity_ref_iterator<TIterator>::operator*() const
+	{
+		return **inner;
 	}
 
 	// -----------------------------------------------------------------------------------------------
@@ -367,6 +463,26 @@ namespace edn
 	}
 
 	// -----------------------------------------------------------------------------------------------
+
+	template<typename TRange>
+	inline Database::RefRange<TRange>::RefRange(TRange range)
+		: range(range)
+	{
+	}
+
+	template<typename TRange>
+	inline typename Database::RefRange<TRange>::const_iterator Database::RefRange<TRange>::begin() const
+	{
+		return const_iterator(range.begin());
+	}
+
+	template<typename TRange>
+	inline typename Database::RefRange<TRange>::const_iterator Database::RefRange<TRange>::end() const
+	{
+		return const_iterator(range.end());
+	}
+
+	// -----------------------------------------------------------------------------------------------
 	// Database Implementation
 
 	Database::Database()
@@ -387,10 +503,10 @@ namespace edn
 		return handle;
 	}
 
-	void Database::destroy(Entity & e)
+	void Database::destroy(Entity& e)
 	{
 		// Getting the components and removing them and also removing the entity from the type index
-		auto & components = e.components;
+		auto& components = e.components;
 		while(!components.empty())
 		{
 			// Getting the component at the end of the list
@@ -401,7 +517,7 @@ namespace edn
 			removeComponent(e, type, c->second);
 		}
 
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 		while (!tags.empty())
 		{
 			// Getting the tag at the end of the list
@@ -417,16 +533,16 @@ namespace edn
 	}
 
 	template<typename Type, typename... Args>
-	Type & Database::addComponent(Entity & e, Args&&... args)
+	Type& Database::addComponent(Entity& e, Args&&... args)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
 		ASSERT(!hasComponent<Type::Template>(e), "Entity already has component type");
 
-		auto & components = e.components;
+		auto& components = e.components;
 
 		// Have to lower bounds once to check to see where it will be inserted. Can also check to
 		// see if it is already in the entity. If it is then we can assert
-		auto position = std::lower_bound(components.begin(), components.end(), 
+		auto position = std::lower_bound(components.begin(), components.end(),
 			Entity::ComponentTuple(Type::GetType(), nullptr), Entity::ComponentComparitor());
 
 		auto type = Type::GetType();
@@ -434,18 +550,18 @@ namespace edn
 		components.insert(position, tuple);
 
 		// Update the component type index to have this entity
-		auto & index_list = componentIndex[type];
-		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
-		index_list.insert(entity_position, &e);
+		auto& index_list = componentIndex[type];
+		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(),&e);
+		index_list.insert(entity_position,&e);
 
 		return *static_cast<Type*>(tuple.second);
 	}
-	
+
 	template<typename Type, typename... Args>
-	Type & Database::replaceComponent(Entity & e, Args&&... args)
+	Type& Database::replaceComponent(Entity& e, Args&&... args)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of component");
-		auto & components = e.components;
+		auto& components = e.components;
 
 		auto position = std::lower_bound(components.begin(), components.end(),
 			Entity::ComponentTuple(Type::GetType(), nullptr), Entity::ComponentComparitor());
@@ -464,7 +580,7 @@ namespace edn
 		{
 			components.insert(position, tuple);
 			// Update the component type index to have this entity
-			auto & index_list = componentIndex[type];
+			auto& index_list = componentIndex[type];
 			auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 			index_list.insert(entity_position, &e);
 		}
@@ -472,14 +588,14 @@ namespace edn
 	}
 
 	template<typename Type>
-	bool Database::removeComponent(Entity & e)
+	bool Database::removeComponent(Entity& e)
 	{
 		static_assert(std::is_base_of<ComponentBase, Type>::value, "Type is not base of Component");
-		auto & components = e.components;
+		auto& components = e.components;
 
 		auto type = Type::GetType();
 		auto tuple = Entity::ComponentTuple(type, nullptr);
-		
+
 		// Getting the component from the entity list
 		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
 		if (it == components.end())
@@ -490,7 +606,7 @@ namespace edn
 			return false;
 
 		// Removing entity from component type index
-		auto & index_list = componentIndex[type];
+		auto& index_list = componentIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -500,9 +616,9 @@ namespace edn
 		return true;
 	}
 
-	bool Database::removeComponent(Entity & e, Guid type, ComponentBase * c)
+	bool Database::removeComponent(Entity& e, Guid type, ComponentBase* c)
 	{
-		auto & components = e.components;
+		auto& components = e.components;
 
 		auto tuple = Entity::ComponentTuple(type, c);
 
@@ -511,7 +627,7 @@ namespace edn
 			return false;
 
 		// Removing entity from component type index
-		auto & index_list = componentIndex[type];
+		auto& index_list = componentIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -521,16 +637,16 @@ namespace edn
 		return true;
 	}
 
-	void Database::cleanEntity(Entity & e)
+	void Database::cleanEntity(Entity& e)
 	{
-		auto & components = e.components;
+		auto& components = e.components;
 		while (!components.empty())
 		{
 			auto c = std::next(components.end(), -1);
 			removeComponent(e, c->first, c->second);
 		}
 
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 		while (!tags.empty())
 		{
 			auto t = std::next(tags.end(), -1);
@@ -539,18 +655,18 @@ namespace edn
 	}
 
 	template<typename Type>
-	Type & Database::getComponent(Entity & e)
+	Type& Database::getComponent(Entity& e)
 	{
 		auto result = tryGetComponent<Type>(e);
-		ASSERT(result != nullptr, 
+		ASSERT(result != nullptr,
 			"Component does not exist in entity. Cannot return reference to a nullptr. Try using tryGet()");
 		return *result;
 	}
 
 	template<typename Type>
-	Type * Database::tryGetComponent(Entity & e)
+	Type* Database::tryGetComponent(Entity& e)
 	{
-		auto & components = e.components;
+		auto& components = e.components;
 
 		auto tuple = Entity::ComponentTuple(Type::GetType(), nullptr);
 		auto it = std::lower_bound(components.begin(), components.end(), tuple, Entity::ComponentComparitor());
@@ -562,45 +678,45 @@ namespace edn
 	}
 
 	template<typename Type>
-	bool Database::hasComponent(Entity & e)
+	bool Database::hasComponent(Entity& e)
 	{
 		return tryGetComponent<Type>(e) != nullptr;
 	}
 
 	// Tags -----
-	
+
 	template<typename Type>
-	void Database::addTag(Entity & e, ComponentTag<Type> t)
+	void Database::addTag(Entity& e, ComponentTag<Type> t)
 	{
 #ifdef EDN_DEBUG
 		if (hasTag(e, t))
 			return;
 #endif
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 
 		auto type = t.type;
 		auto position = std::lower_bound(tags.begin(), tags.end(), type);
 
 		tags.insert(position, type);
 
-		auto & index_list = tagIndex[type];
+		auto& index_list = tagIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.insert(entity_position, &e);
 	}
 
 	template<typename Type>
-	void Database::removeTag(Entity & e, ComponentTag<Type> t)
+	void Database::removeTag(Entity& e, ComponentTag<Type> t)
 	{
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 		auto type = t.type;
-		
+
 		// Getting the component from the entity list
 		auto it = std::lower_bound(tags.begin(), tags.end(), type);
 		if (it == tags.end())
 			return;
 
 		// Removing entity from component type index
-		auto & index_list = tagIndex[type];
+		auto& index_list = tagIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -608,16 +724,16 @@ namespace edn
 		tags.erase(it);
 	}
 
-	void Database::removeTag(Entity & e, Guid type)
+	void Database::removeTag(Entity& e, Guid type)
 	{
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 
 		auto it = std::lower_bound(tags.begin(), tags.end(), type);
 		if (it == tags.end())
 			return;
 
 		// Removing entity from component type index
-		auto & index_list = tagIndex[type];
+		auto& index_list = tagIndex[type];
 		auto entity_position = std::lower_bound(index_list.begin(), index_list.end(), &e);
 		index_list.erase(entity_position);
 
@@ -626,16 +742,18 @@ namespace edn
 	}
 
 	template<typename Type>
-	bool Database::hasTag(Entity & e, ComponentTag<Type> t)
+	bool Database::hasTag(Entity& e, ComponentTag<Type> t)
 	{
-		auto & tags = e.tags;
+		auto& tags = e.tags;
 		return std::binary_search(tags.begin(), tags.end(), t.type);
 	}
 
 	template<class Filter>
-	inline typename Query::Simplify<Filter>::Result::RangeType Database::where(const Filter & fullQuery) const
+	inline typename Database::RefRange<typename Query::Simplify<Filter>::Result::RangeType> Database::where(const Filter& fullQuery) const
 	{
-		return Query::toSimple(fullQuery).toRange();
+		//return Query::toSimple(fullQuery).toRange();
+		auto range = typename Query::Simplify<Filter>::Result::RangeType(Query::toSimple(fullQuery).toRange());
+		return RefRange<typename Query::Simplify<Filter>::Result::RangeType>(range);
 	}
 
 	inline u32 Database::getEntityCount()
@@ -643,13 +761,13 @@ namespace edn
 		return static_cast<u32>(entities.size());
 	}
 
-	inline Database::EntityList & Database::getEntities()
+	inline Database::EntityList& Database::getEntities()
 	{
 		return entities;
 	}
-	 
+
 	template<typename Type>
-	inline Database::EntityList & Database::getEntities()
+	inline Database::EntityList& Database::getEntities()
 	{
 		auto type = Type::GetType();
 		auto it = tagIndex.find(type);
@@ -670,13 +788,13 @@ namespace edn
 	}
 
 	template<typename Type, typename... Args>
-	Type & Entity::add(Args&&... args)
+	Type& Entity::add(Args&&... args)
 	{
 		return Database::Instance().addComponent<Type>(*this, std::forward<Args>(args)...);
 	}
 
 	template<typename Type, typename... Args>
-	Type & Entity::replace(Args&&... args)
+	Type& Entity::replace(Args&&... args)
 	{
 		return Database::Instance().replaceComponent<Type>(*this, std::forward<Args>(args)...);
 	}
@@ -688,13 +806,13 @@ namespace edn
 	}
 
 	template<typename Type>
-	Type & Entity::get()
+	Type& Entity::get()
 	{
 		return Database::Instance().getComponent<Type>(*this);
 	}
 
 	template<typename Type>
-	Type * Entity::tryGet()
+	Type* Entity::tryGet()
 	{
 		return Database::Instance().tryGetComponent<Type>(*this);
 	}
@@ -728,11 +846,11 @@ namespace edn
 		return static_cast<u32>(components.size());
 	}
 
-	Entity::ComponentList & Entity::getComponents()
+	Entity::ComponentList& Entity::getComponents()
 	{
 		return components;
 	}
-	
+
 	// -----------------------------------------------------------------------------------------------
 	// Query
 
@@ -771,8 +889,8 @@ namespace edn
 			typedef RangeOperation<
 				typename LeftQuery::RangeType::const_iterator,
 				typename RightQuery::RangeType::const_iterator, Intersection> RangeType;
-			
-			IntersectionQuery(const LeftQuery & lhs, const RightQuery & rhs)
+
+			IntersectionQuery(const LeftQuery& lhs, const RightQuery& rhs)
 				: left(lhs)
 				, right(rhs)
 			{
@@ -793,8 +911,8 @@ namespace edn
 			typedef RangeOperation<
 				typename LeftQuery::RangeType::const_iterator,
 				typename RightQuery::RangeType::const_iterator, Difference> RangeType;
-			
-			DifferenceQuery(const LeftQuery & lhs, const RightQuery & rhs)
+
+			DifferenceQuery(const LeftQuery& lhs, const RightQuery& rhs)
 				: left(lhs)
 				, right(rhs)
 			{
@@ -816,7 +934,7 @@ namespace edn
 				typename LeftQuery::RangeType::const_iterator,
 				typename RightQuery::RangeType::const_iterator, Union> RangeType;
 
-			UnionQuery(const LeftQuery & lhs, const RightQuery & rhs)
+			UnionQuery(const LeftQuery& lhs, const RightQuery& rhs)
 				: left(lhs)
 				, right(rhs)
 			{
@@ -838,7 +956,7 @@ namespace edn
 				typename LeftQuery::RangeType::const_iterator,
 				typename RightQuery::RangeType::const_iterator, Exclusive> RangeType;
 
-			ExclusiveQuery(const LeftQuery & lhs, const RightQuery & rhs)
+			ExclusiveQuery(const LeftQuery& lhs, const RightQuery& rhs)
 				: left(lhs)
 				, right(rhs)
 			{
@@ -905,8 +1023,8 @@ namespace edn
 			typedef Simplify<One> S1;
 			typedef typename S1::Result Result;
 			typedef IntersectionQuery<One, AllQuery> Case;
-			
-			static Result toSimple(Case & c)
+
+			static Result toSimple(Case& c)
 			{
 				return S1::toSimple(c.left);
 			}
@@ -919,8 +1037,8 @@ namespace edn
 			typedef Simplify<Two> S2;
 			typedef typename S2::Result Result;
 			typedef IntersectionQuery<AllQuery, Two> Case;
-			
-			static Result toSimple(Case & q)
+
+			static Result toSimple(Case& q)
 			{
 				return S2::toSimple(q.right);
 			}
@@ -935,8 +1053,8 @@ namespace edn
 			typedef Simplify<Two> S2;
 			typedef DifferenceQuery<typename S1::Result, typename S2::Result> Result;
 			typedef IntersectionQuery<One, DifferenceQuery<AllQuery, Two>> Case;
-			
-			static Result toSimple(const Case & c)
+
+			static Result toSimple(const Case& c)
 			{
 				return Result(S1::toSimple(c.left), S2::toSimple(c.right.right));
 			}
@@ -970,8 +1088,8 @@ namespace edn
 	}
 
 	template<class Range>
-	inline Database::EntityList toVector(const Range & range)
+	inline Database::EntityRefList toVector(const Range& range)
 	{
-		return Database::EntityList(range.begin(), range.end());
+		return Database::EntityRefList(range.begin(), range.end());
 	}
 }

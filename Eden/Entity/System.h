@@ -8,7 +8,7 @@
 
 namespace edn
 {
-	
+
 	class SystemBase
 	{
 	public:
@@ -29,7 +29,7 @@ namespace edn
 	// -----------------------------------------------------------------------------------------------
 	// System Manager
 
-	class SystemManager : public Singleton<SystemManager> 
+	class SystemManager : public Singleton<SystemManager>
 	{
 		typedef std::pair<Guid, SystemBase*> SystemTuple;
 		typedef std::vector<SystemTuple> SystemList;
@@ -37,7 +37,7 @@ namespace edn
 
 		struct SystemComparitor
 		{
-			bool operator() (const SystemTuple & lhs, const SystemTuple & rhs)
+			bool operator() (const SystemTuple& lhs, const SystemTuple& rhs)
 			{
 				return lhs.first < rhs.first;
 			}
@@ -60,12 +60,12 @@ namespace edn
 	Type * SystemManager::create()
 	{
 		static_assert(std::is_base_of<SystemBase, Type>::value, "Type is not base of System");
-		
+
 		auto type = get_guid<Type>();
 		auto it = std::lower_bound(systems.begin(), systems.end(), SystemTuple(type, nullptr), SystemComparitor());
-		
+
 		ASSERT(it == systems.end());
-		
+
 		auto system = new Type();
 		systems.insert(it, SystemTuple(type, system);
 		return system;
@@ -75,7 +75,7 @@ namespace edn
 	void SystemManager::destroy(SystemBase * s)
 	{
 		destroy(s, get_guid<Type>());
-		
+
 	}
 
 	void SystemManager::destroy(SystemBase * s, Guid type)

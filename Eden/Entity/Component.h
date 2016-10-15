@@ -14,6 +14,8 @@ namespace edn
 	{
 	public:
 		ComponentBase() { }
+		ComponentBase(const ComponentBase&) = delete;
+		ComponentBase(ComponentBase&&) = default;
 		virtual ~ComponentBase() { }
 	};
 
@@ -23,7 +25,9 @@ namespace edn
 	public:
 		typedef Type Template;
 
-		Component(const Entity & e);
+		Component(Entity& e);
+		Component(const Component&) = delete;
+		Component(Component&&) = default;
 		~Component() = default;
 
 		static Guid GetType();
@@ -31,7 +35,7 @@ namespace edn
 		virtual String toString() = 0;
 
 		// The owner will never be null to it can be a reference
-		const Entity & owner;
+		Entity& owner;
 	private:
 		static Guid type_id;
 	};
@@ -46,7 +50,7 @@ namespace edn
 	}
 
 	template<typename Type>
-	Component<Type>::Component(const Entity & e)
+	Component<Type>::Component(Entity& e)
 		: owner(e)
 	{
 	}
@@ -67,7 +71,7 @@ namespace edn
 		static Guid get_type();
 
 	private:
-		static Guid & inst_guid();
+		static Guid& inst_guid();
 		static Guid next_guid();
 	};
 
@@ -78,7 +82,7 @@ namespace edn
 		return guid;
 	}
 
-	inline Guid & ComponentTagType::inst_guid()
+	inline Guid& ComponentTagType::inst_guid()
 	{
 		static Guid guid = 0;
 		return guid;

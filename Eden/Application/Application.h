@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Platform.h"
 #include "Core/Types.h"
-#include "vulkan/vulkan.h"
 #include "Math/Vector.h"
 
 namespace edn

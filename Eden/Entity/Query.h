@@ -32,6 +32,15 @@ namespace edn
 				Operation::get_first(*this);
 			}
 
+			inline range_operation_const_iterator(this_type&& other)
+				: f1(std::move(other.f1))
+				, l1(std::move(other.l1))
+				, f2(std::move(other.f2))
+				, l2(std::move(other.l2))
+			{
+				Operation::get_first(*this);
+			}
+
 			inline range_operation_const_iterator& operator++()
 			{
 				Operation::get_next(*this);
@@ -41,21 +50,21 @@ namespace edn
 			range_operation_const_iterator operator++(int)
 			{
 				range_operation_const_iterator temp(*this);
-				Operation::get_value(*this);
-				return *this;
+				Operation::get_next(*this);
+				return temp;
 			}
 
-			inline bool operator==(const range_operation_const_iterator& other)
+			inline bool operator==(const range_operation_const_iterator& other) const
 			{
 				return f1 == other.f1 && f2 == other.f2;
 			}
 
-			inline bool operator!=(const range_operation_const_iterator& other)
+			inline bool operator!=(const range_operation_const_iterator& other) const
 			{
 				return Operation::not_equal(*this, other);
 			}
 
-			inline typename Iterator1::value_type operator*()
+			inline typename Iterator1::value_type operator*() const
 			{
 				return Operation::get_value(*this);
 			}
@@ -72,19 +81,19 @@ namespace edn
 		struct Intersection : base_operator
 		{
 			template<class Iterator>
-			static inline typename Iterator::value_type get_value(Iterator & it)
+			static inline typename Iterator::value_type get_value(Iterator& it)
 			{
 				return *it.f1;
 			}
 
 			template<class Iterator1, class Iterator2>
-			static inline bool not_equal(const Iterator1 & one, const Iterator2 & two)
+			static inline bool not_equal(const Iterator1& one, const Iterator2& two)
 			{
 				return one.f1 != two.f1 && one.f2 != two.f2;
 			}
 
 			template<class Iterator>
-			static void get_first(Iterator & it)
+			static void get_first(Iterator& it)
 			{
 				while ((it.f1 != it.l1 && it.f2 != it.l2) && *it.f1 != *it.f2)
 					*it.f1 < *it.f2 ? ++it.f1 : ++it.f2;
@@ -97,7 +106,7 @@ namespace edn
 			}
 
 			template<class Iterator>
-			static void get_next(Iterator & it)
+			static void get_next(Iterator& it)
 			{
 				++it.f1;
 				get_first(it);
@@ -107,19 +116,19 @@ namespace edn
 		struct Difference : base_operator
 		{
 			template<class Iterator>
-			static inline typename Iterator::value_type get_value(Iterator & it)
+			static inline typename Iterator::value_type get_value(Iterator& it)
 			{
 				return *it.f1;
 			}
 
 			template<class Iterator1, class Iterator2>
-			static inline bool not_equal(const Iterator1 & one, const Iterator2 & two)
+			static inline bool not_equal(const Iterator1& one, const Iterator2& two)
 			{
 				return one.f1 != two.f1 || one.f2 != two.f2;
 			}
 
 			template<class Iterator>
-			static void get_first(Iterator & it)
+			static void get_first(Iterator& it)
 			{
 				while ((it.f1 != it.l1 && it.f2 != it.l2) && !(*it.f1 < *it.f2))
 				{
@@ -133,7 +142,7 @@ namespace edn
 			}
 
 			template<class Iterator>
-			static void get_next(Iterator & it)
+			static void get_next(Iterator& it)
 			{
 				if (it.f1 != it.l1)
 				{
@@ -150,7 +159,7 @@ namespace edn
 		struct Union : base_operator
 		{
 			template<class Iterator>
-			static inline typename Iterator::value_type get_value(Iterator & it)
+			static inline typename Iterator::value_type get_value(Iterator& it)
 			{
 				if (it.f1 != it.l1 && (it.f2 == it.l2 || *it.f1 < *it.f2))
 					return *it.f1;
@@ -158,18 +167,18 @@ namespace edn
 			}
 
 			template<class Iterator1, class Iterator2>
-			static inline bool not_equal(const Iterator1 & one, const Iterator2 & two)
+			static inline bool not_equal(const Iterator1& one, const Iterator2& two)
 			{
 				return one.f1 != two.f1 || one.f2 != two.f2;
 			}
 
 			template<class Iterator>
-			static void get_first(Iterator & it)
+			static void get_first(Iterator& it)
 			{
 			}
 
 			template<class Iterator>
-			static void get_next(Iterator & it)
+			static void get_next(Iterator& it)
 			{
 				if (it.f1 != it.l1)
 				{
@@ -203,7 +212,7 @@ namespace edn
 		struct Exclusive : base_operator
 		{
 			template<class Iterator>
-			static inline typename Iterator::value_type get_value(Iterator & it)
+			static inline typename Iterator::value_type get_value(Iterator& it)
 			{
 				if (it.f1 == it.l1)
 					return *it.f2;
@@ -215,13 +224,13 @@ namespace edn
 			}
 
 			template<class Iterator1, class Iterator2>
-			static inline bool not_equal(const Iterator1 & one, const Iterator2 & two)
+			static inline bool not_equal(const Iterator1& one, const Iterator2& two)
 			{
 				return one.f1 != two.f1 || one.f2 != two.f2;
 			}
 
 			template<class Iterator>
-			static void get_first(Iterator & it)
+			static void get_first(Iterator& it)
 			{
 				if (it.f1 == it.l1 || it.f2 == it.l2)
 					return;
@@ -241,7 +250,7 @@ namespace edn
 			}
 
 			template<class Iterator>
-			static void get_next(Iterator & it)
+			static void get_next(Iterator& it)
 			{
 				if (it.f1 != it.l1 && (it.f2 == it.l2 || *it.f1 < *it.f2))
 					++it.f1;
@@ -279,7 +288,7 @@ namespace edn
 			{}
 
 			template<class Range1, class Range2>
-			inline RangeOperation(const Range1 & range1, const Range2 & range2)
+			inline RangeOperation(const Range1& range1, const Range2& range2)
 				: f1(range1.begin())
 				, l1(range1.end())
 				, f2(range2.begin())
@@ -298,56 +307,56 @@ namespace edn
 		// Helper functions to add the operator template
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Intersection>
-			make_intersection_range(Iterator1 & one, Iterator2 & two)
+			make_intersection_range(Iterator1& one, Iterator2& two)
 		{
 			return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Intersection>(one, two);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<Iterator1, Iterator2, Intersection>
-			make_intersection_range(Iterator1 & f1, Iterator1 & l1, Iterator2 & f2, Iterator2 & l2)
+			make_intersection_range(Iterator1 &f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
 		{
 			return RangeOperation<Iterator1, Iterator2, Intersection>(f1, l1, f2, l2);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Difference>
-			make_difference_range(Iterator1 & one, Iterator2 & two)
+			make_difference_range(Iterator1& one, Iterator2& two)
 		{
 			return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Difference>(one, two);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<Iterator1, Iterator2, Difference>
-			make_difference_range(Iterator1 & f1, Iterator1 & l1, Iterator2 & f2, Iterator2 & l2)
+			make_difference_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
 		{
 			return RangeOperation<Iterator1, Iterator2, Difference>(f1, l1, f2, l2);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Union>
-			make_union_range(Iterator1 & one, Iterator2 & two)
+			make_union_range(Iterator1& one, Iterator2& two)
 		{
 			return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Union>(one, two);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<Iterator1, Iterator2, Union>
-			make_union_range(Iterator1 & f1, Iterator1 & l1, Iterator2 & f2, Iterator2 & l2)
+			make_union_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
 		{
 			return RangeOperation<Iterator1, Iterator2, Union>(f1, l1, f2, l2);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Exclusive>
-			make_exclusive_range(Iterator1 & one, Iterator2 & two)
+			make_exclusive_range(Iterator1& one, Iterator2& two)
 		{
 			return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Exclusive>(one, two);
 		}
 
 		template<class Iterator1, class Iterator2>
 		inline RangeOperation<Iterator1, Iterator2, Exclusive>
-			make_exclusive_range(Iterator1 & f1, Iterator1 & l1, Iterator2 & f2, Iterator2 & l2)
+			make_exclusive_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
 		{
 			return RangeOperation<Iterator1, Iterator2, Exclusive>(f1, l1, f2, l2);
 		}
