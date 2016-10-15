@@ -25,11 +25,6 @@
 #include <vector>
 
 //
-// OpenGL and GLEW
-//
-#include <gl/glew.h>
-
-//
 // Core
 //
 #include "Core/Common.h"
