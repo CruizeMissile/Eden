@@ -1,74 +1,37 @@
-#pragma once
-#include "Core/Platform.h"
-#include "Core/Types.h"
-#include "Math/Vector.h"
-#include "Windows/Window.h"
+#include "../Core/Platform.h"
+#include "../Core/Types.h"
+#include "WindowStyles.h"
+
+#if defined(EDN_WINDOWS)
+	#include "Windows/Window.h"
+#endif
 
 namespace edn
 {
-
-	typedef Win32::Window Window;
-
-	enum class ApplicationFlags
-	{
-		EDN_WINDOW_RUNNING = 1,
-		EDN_WINDOW_VSYNC = 1 << 1,
-	};
-
-	struct ApplicationConfiguration
-	{
-		static const ApplicationConfiguration Default;
-
-		String title;
-		u32 width, height;
-
-		u32 flags;
-	};
-
-	struct Size
-	{
-		u32 width, height;
-	};
-
+#if defined(EDN_WINDOWS)
+	using Window = Win32::Window;
+	using WindowCreateInfo = Win32::WindowCreateInfo;
+#endif
 
 	class Application
 	{
 	public:
-		Application();
-		Application(const ApplicationConfiguration & config);
+		Application() = default;
+		Application(const WindowCreateInfo& info);
 		~Application();
 
+		void initialize(const WindowCreateInfo& info = WindowCreateInfo::Default);
+		void cleanup();
+
+		void run();
 		void update();
-		void close();
-
-		bool isRunning() { return running; }
-		WindowStyle getStyle() { return style; }
-
+		
 		void setWindowStyle(WindowStyle style);
 
+		bool isRunning() { return window.isRunning(); }
+
 	private:
-
-		void updateOsWindowStyle();
-
-		void setupOsWindow();
-		void cleanupOsWindow();
-
-		void updateOsWindow();
-		void setupSurface();
-
-
-		std::string title;
-		WindowStyle style, prev_style;
-
-		Size size;
-		Size bb_size;
-		u32 flags;
-		bool running = false;
-
-#if defined EDN_WINDOWS
-		HINSTANCE hinstance;
-		HWND hwnd;
-		String classname;
-#endif
+		Window window;
 	};
+	extern Application app;
 }

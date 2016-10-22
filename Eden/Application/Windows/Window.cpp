@@ -99,6 +99,7 @@ namespace edn
 			case WindowStyle::WINDOWED_FIXED:
 				return (GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER)) * 2;
 				break;
+			default: return 0;
 			}
 		}
 
@@ -230,9 +231,6 @@ namespace edn
 			if (fullscreen && !borderless)
 			{
 				success = ChangeDisplaySettings(0, 0) == DISP_CHANGE_SUCCESSFUL;
-				//rc.right = width;
-				//rc.bottom = height;
-				//AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, false);
 				GetClientRect(hwnd, &rcClient);
 				GetWindowRect(hwnd, &rcWind);
 				ptDiff.x = (rcWind.right - rcWind.left) - rcClient.right;

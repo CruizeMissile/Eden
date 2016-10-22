@@ -97,13 +97,13 @@
     <ClInclude Include="..\..\Eden\Entity\Query.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Application\Application.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Eden\Application\Windows\Window.h">
       <Filter>Application\Windows</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Eden\Application\WindowStyles.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\Application.h">
       <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
@@ -127,14 +127,11 @@
     <ClCompile Include="..\..\Eden\Core\MD5.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Eden\Application\Appliation.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Application\Application_Win32.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Eden\Application\Windows\Window.cpp">
       <Filter>Application\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\Application.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
