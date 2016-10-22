@@ -2,17 +2,12 @@
 #include "Core/Platform.h"
 #include "Core/Types.h"
 #include "Math/Vector.h"
+#include "Windows/Window.h"
 
 namespace edn
 {
-	enum class WindowStyle
-	{
-		EDN_WINDOW_FULLSCREEN,
-		EDN_WINDOW_BORDERLESS,
-		EDN_WINDOW_WINDOWED,
-		EDN_WINDOW_WINDOWED_FIXED,
-		EDN_WINDOW_BORDERLESS_WINDOW,
-	};
+
+	typedef Win32::Window Window;
 
 	enum class ApplicationFlags
 	{

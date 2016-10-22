@@ -22,6 +22,9 @@
     <Filter Include="Application">
       <UniqueIdentifier>{e43ab08f-06ab-40e4-a68a-bf6665f726ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Windows">
+      <UniqueIdentifier>{ab81d10a-92e9-48ed-84e6-8b70dbb13ea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -97,6 +100,12 @@
     <ClInclude Include="..\..\Eden\Application\Application.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\Windows\Window.h">
+      <Filter>Application\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\WindowStyles.h">
+      <Filter>Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -123,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Application\Application_Win32.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\Windows\Window.cpp">
+      <Filter>Application\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -103,11 +103,11 @@
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,11 +128,11 @@
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,11 +157,11 @@
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -186,15 +186,17 @@
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Application\Application.h" />
+    <ClInclude Include="..\..\Eden\Application\WindowStyles.h" />
+    <ClInclude Include="..\..\Eden\Application\Windows\Window.h" />
     <ClInclude Include="..\..\Eden\Core\AssetManager.h" />
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
@@ -223,6 +225,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Application\Appliation.cpp" />
     <ClCompile Include="..\..\Eden\Application\Application_Win32.cpp" />
+    <ClCompile Include="..\..\Eden\Application\Windows\Window.cpp" />
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
     <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />

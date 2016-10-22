@@ -3,6 +3,7 @@
 
 namespace edn
 {
+#if 0
 	const ApplicationConfiguration ApplicationConfiguration::Default = 
 	{
 		"EDEN ENGINE", 1280, 720, 0
@@ -54,4 +55,5 @@ namespace edn
 		updateOsWindowStyle();
 		prev_style = style;
 	}
+#endif
 }

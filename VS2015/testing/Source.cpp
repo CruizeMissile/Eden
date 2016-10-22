@@ -45,11 +45,19 @@ private:
 
 int engine()
 {
-	Application app;
-	
-	while (app.isRunning())
+	//Application app;
+	//
+	//while (app.isRunning())
+	//{
+	//	app.update();
+	//}
+
+	Window w;
+	w.initialize();
+
+	while (w.isRunning())
 	{
-		app.update();
+		w.update();
 	}
 
 	return 0;

@@ -1,6 +1,6 @@
 #include "Precompiled.h"
 
-#if defined(EDN_WINDOWS)
+#if defined(EDN_WINDOWS_)
 #include "Application/Application.h"
 
 using namespace std;
