@@ -60,7 +60,7 @@ namespace edn
 			Debug::~Debug()
 			{
 #if defined(EDN_DEBUG)
-				destroy_report_callback_fr(instance.instance, report, nullptr);
+				destroy_report_callback_fr(instance, report, nullptr);
 				report = VK_NULL_HANDLE;
 #endif
 			}

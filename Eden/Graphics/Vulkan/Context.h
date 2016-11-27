@@ -33,7 +33,6 @@ namespace edn
 					Debug::SetupLayerExtentions();
 				}
 
-			//protected:
 				Instance instance;
 				Surface surface;
 				PhysicalDevice gpu;

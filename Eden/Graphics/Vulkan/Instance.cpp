@@ -30,6 +30,11 @@ namespace edn
 				info.flags = 0;
 				VKErrorCheck(vkCreateInstance(&info, nullptr, &instance));
 			}
+
+			Instance::~Instance()
+			{
+				vkDestroyInstance(instance, nullptr);
+			}
 		}
 	}
 }

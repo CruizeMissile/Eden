@@ -1,9 +1,10 @@
 #include "Precompiled.h"
 
-#include "PhysicalDevice.h"
 #include "Instance.h"
-#include "Utility.h"
 #include "LayerExtentions.h"
+#include "PhysicalDevice.h"
+#include "Surface.h"
+#include "Utility.h"
 #include <map>
 #include <set>
 

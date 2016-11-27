@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vulkan.h"
-#include "Surface.h"
 #include <vector>
 
 namespace edn
@@ -11,6 +10,7 @@ namespace edn
 		namespace Vk
 		{
 			class Instance;
+			class Surface;
 			class PhysicalDevice
 			{
 			public:
@@ -26,6 +26,7 @@ namespace edn
 				std::vector<VkQueueFamilyProperties> queues;
 				std::vector<VkExtensionProperties> extentions;
 				std::vector<VkLayerProperties> layers;
+
 			};
 		}
 	}

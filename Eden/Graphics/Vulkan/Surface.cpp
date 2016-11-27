@@ -1,8 +1,8 @@
 #include "Precompiled.h"
 
-#include "Surface.h"
 #include "Instance.h"
 #include "LayerExtentions.h"
+#include "Surface.h"
 
 namespace edn
 {
@@ -28,8 +28,14 @@ namespace edn
 			}
 
 			Surface::Surface(Instance& instance, Window& window)
+				: instance(instance)
 			{
 				create_surface(instance, surface, window);
+			}
+
+			Surface::~Surface()
+			{
+				vkDestroySurfaceKHR(instance, surface, nullptr);
 			}
 
 			void Surface::SetupLayerExtentions()

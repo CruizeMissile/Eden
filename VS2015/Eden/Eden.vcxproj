@@ -243,6 +243,7 @@
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp" />
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Utility.cpp" />
     <ClCompile Include="..\..\Eden\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Eden\Math\Quaternion.cpp" />
     <ClCompile Include="..\..\Eden\Math\Vector.cpp" />

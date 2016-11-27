@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Vulkan.h"
-//#include "Instance.h"
-//#include "PhysicalDevice.h"
 
 namespace edn
 {
@@ -17,6 +15,7 @@ namespace edn
 			{
 			public:
 				Device(Instance& instance, PhysicalDevice& gpu, Surface& surface);
+				~Device();
 
 				operator VkDevice&() { return device; }
 

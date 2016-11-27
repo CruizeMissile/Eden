@@ -2,9 +2,10 @@
 
 #include "Device.h"
 #include "Instance.h"
-#include "PhysicalDevice.h"
-#include "Utility.h"
 #include "LayerExtentions.h"
+#include "PhysicalDevice.h"
+#include "Surface.h"
+#include "Utility.h"
 #include <set>
 
 namespace edn
@@ -47,6 +48,11 @@ namespace edn
 				VKErrorCheck(vkCreateDevice(gpu, &create_info, nullptr, &device));
 				vkGetDeviceQueue(device, indices.graphicsFamily, 0, &graphics_queue);
 				vkGetDeviceQueue(device, indices.presentFamily, 0, &present_queue);
+			}
+
+			Device::~Device()
+			{
+				vkDestroyDevice(device, nullptr);
 			}
 		}
 	}

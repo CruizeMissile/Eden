@@ -172,13 +172,16 @@
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp">
       <Filter>Graphics\Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp">
       <Filter>Graphics\Vulkan</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Debug.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Utility.cpp">
       <Filter>Graphics\Vulkan</Filter>
     </ClCompile>
   </ItemGroup>

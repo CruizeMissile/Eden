@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vulkan.h"
 #include "../../Core/Types.h"
+#include "Vulkan.h"
 #include <vector>
 
 namespace edn
@@ -20,7 +20,8 @@ namespace edn
 				};
 
 				Instance();
-				
+				~Instance();
+
 				operator VkInstance&() { return instance; }
 
 				VkInstance instance = nullptr;
