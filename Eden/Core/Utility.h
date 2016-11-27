@@ -4,6 +4,8 @@
 #include "Platform.h"
 #include "Types.h"
 #include <fstream>
+#include <functional>
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // Macro Helpers
@@ -75,6 +77,22 @@ namespace edn
 			number = number >> 1;
 		}
 		return result;
+	}
+
+	/**
+	 * Emplace N number of elements into a vector
+	 * 
+	 * template<typename... Args>
+	 * void add(Args&&... args) { variadic_vector_emplace(v, std::forward<Args>(args)...); }
+	 */
+	template<typename T>
+	void variadic_vector_emplace(std::vector<T>&) {}
+
+	template<typename T, typename First, typename... Args>
+	void variadic_vector_emplace(std::vector<T>& v, First&& first, Args&&... args)
+	{
+		v.emplace_back(std::forward<First>(first));
+		variadic_vector_emplace(v, std::forward<Args>(args)...);
 	}
 }
 

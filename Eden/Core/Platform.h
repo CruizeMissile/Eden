@@ -19,6 +19,15 @@
 	#define WIN32_LEAN_AND_MEAN
 	#endif
 	#include <Windows.h>
+	
+	// undef the shittiest win32 macros of ALL TIME. No one needs these they just get in the way
+	// and it is our fault for having to include the biggest pile of shit windows.h
+	#undef near
+	#undef far
+	#undef min
+	#undef max	
+	// Sanity has been restored
+
 	// @Note: This is not recommended as every project that uses this file will not
 	// have a console window
 	//#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
