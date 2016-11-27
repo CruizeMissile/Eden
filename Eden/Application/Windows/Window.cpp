@@ -39,6 +39,9 @@ namespace edn
 				case VK_ESCAPE: window->setRunning(false); break;
 				}
 				break;
+			case WM_QUIT:
+				std::cout << "Quiting" << std::endl;
+				break;
 			default: break;
 			}
 			return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -129,7 +132,7 @@ namespace edn
 			hinstance = GetModuleHandle(0);
 			class_name = title + std::to_string(s_counter);
 
-			WNDCLASSEX wc{ 0 };
+			WNDCLASSEX wc = { 0 };
 			wc.cbSize = sizeof(wc);
 			wc.hInstance = hinstance;
 			wc.lpfnWndProc = WindowsEventHandler;
@@ -214,6 +217,11 @@ namespace edn
 
 			style = sty;
 			change_style();
+		}
+
+		void Window::show()
+		{
+			ShowWindow(hwnd, SW_SHOW);
 		}
 
 		void Window::change_style()

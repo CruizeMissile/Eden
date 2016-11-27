@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../Core/Platform.h"
 #include "../Core/Types.h"
 #include "WindowStyles.h"
@@ -29,6 +31,7 @@ namespace edn
 		void setWindowStyle(WindowStyle style);
 
 		bool isRunning() { return window.isRunning(); }
+		Window& getWindow() { return window; }
 
 	private:
 		Window window;

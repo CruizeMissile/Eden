@@ -5,6 +5,8 @@
 #include "Core\AssetManager.h"
 #include "Application/Application.h"
 
+#include "Graphics/Vulkan/Context.h"
+
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work. 
 // @Todo: Need to make it so that is not the case.
 
@@ -45,7 +47,13 @@ private:
 
 int engine()
 {
+	using namespace Graphics::Vk;
+	Graphics::Vk::Context::SetupVk();
+
 	app.initialize();
+
+	Context context(app.getWindow());
+
 	while (app.isRunning())
 	{
 		app.update();

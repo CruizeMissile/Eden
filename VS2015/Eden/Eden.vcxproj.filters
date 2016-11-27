@@ -25,6 +25,9 @@
     <Filter Include="Application\Windows">
       <UniqueIdentifier>{ab81d10a-92e9-48ed-84e6-8b70dbb13ea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Vulkan">
+      <UniqueIdentifier>{534014d6-7f6f-462e-843b-98b2fb007420}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Core\Platform.h">
@@ -106,6 +109,33 @@
     <ClInclude Include="..\..\Eden\Application\Application.h">
       <Filter>Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Vulkan.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Context.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Instance.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Surface.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Utility.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Device.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Debug.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -132,6 +162,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Application\Application.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Instance.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Debug.cpp">
+      <Filter>Graphics\Vulkan</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

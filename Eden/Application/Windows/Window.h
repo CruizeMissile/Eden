@@ -33,6 +33,11 @@ namespace edn
 			bool isRunning() { return running; }
 			void setRunning(bool running) { this->running = running; }
 
+			void show();
+
+			HWND getHwnd() { return hwnd; }
+			HINSTANCE getHInstance() { return hinstance; }
+
 		private:
 			void change_style();
 
