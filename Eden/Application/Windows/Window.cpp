@@ -219,11 +219,6 @@ namespace edn
 			change_style();
 		}
 
-		void Window::show()
-		{
-			ShowWindow(hwnd, SW_SHOW);
-		}
-
 		void Window::change_style()
 		{
 			// http://stackoverflow.com/a/431548

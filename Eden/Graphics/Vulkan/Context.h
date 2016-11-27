@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "PhysicalDevice.h"
 #include "Device.h"
+#include "Swapchain.h"
 #include "../../Application/Application.h"
 
 
@@ -24,6 +25,7 @@ namespace edn
 					, surface(instance, window)
 					, gpu(instance, surface)
 					, device(instance, gpu, surface)
+					, swapchain(gpu, device, surface, window)
 				{
 				}
 
@@ -38,6 +40,7 @@ namespace edn
 				PhysicalDevice gpu;
 				Device device;
 				Debug debug;
+				Swapchain swapchain;
 			};
 		}
 	}

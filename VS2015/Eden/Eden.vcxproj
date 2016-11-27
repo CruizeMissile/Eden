@@ -222,6 +222,7 @@
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.h" />
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.h" />
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\Surface.h" />
+    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Swapchain.h" />
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\Utility.h" />
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\Vulkan.h" />
     <ClInclude Include="..\..\Eden\Logging\Log.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp" />
+    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Swapchain.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Utility.cpp" />
     <ClCompile Include="..\..\Eden\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Eden\Math\Quaternion.cpp" />
