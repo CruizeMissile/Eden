@@ -13,9 +13,17 @@ namespace edn
 			class Device;
 			class PhysicalDevice;
 			class Surface;
+
+
 			class Swapchain
 			{
 			public:
+				class Buffer
+				{
+					VkImage image;
+					VkImageView view;
+				};
+
 				Swapchain(PhysicalDevice& gpu, Device& device, Surface& surface, Window& window);
 				~Swapchain();
 
