@@ -10,6 +10,10 @@
 #error Platform not supported by Eden
 #endif
 
+#if defined(EDN_DEBUG)
+#include "../../Core/Debug.h"
+#endif
+
 #include "vulkan/vulkan.h"
 
 namespace edn
@@ -103,7 +107,7 @@ namespace edn
 				}
 
 				std::string message = "Vulkan runtime error: " + error_str;
-				assert(false && message.c_str());
+				ASSERT(false, message.c_str());
 			}
 #else
 			static void VKErrorCheck(VkResult result) {}
