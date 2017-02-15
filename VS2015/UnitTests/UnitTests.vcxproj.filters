@@ -19,6 +19,9 @@
     <ClCompile Include="..\..\Tests\Entity\Query.UnitTests.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Tests\Core\Path.Unittests.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Tests\UnitTest.h" />

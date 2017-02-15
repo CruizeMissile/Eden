@@ -139,6 +139,9 @@
     <ClInclude Include="..\..\Eden\Graphics\Vulkan\Swapchain.h">
       <Filter>Graphics\Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Eden\Core\Path.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Core\OS.cpp">
@@ -189,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Swapchain.cpp">
       <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Core\Path.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

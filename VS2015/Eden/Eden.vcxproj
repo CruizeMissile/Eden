@@ -204,6 +204,7 @@
     <ClInclude Include="..\..\Eden\Core\MacroHelpers.h" />
     <ClInclude Include="..\..\Eden\Core\MD5.h" />
     <ClInclude Include="..\..\Eden\Core\OS.h" />
+    <ClInclude Include="..\..\Eden\Core\Path.h" />
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Shareable.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
     <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
+    <ClCompile Include="..\..\Eden\Core\Path.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Debug.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp" />
     <ClCompile Include="..\..\Eden\Graphics\Vulkan\Instance.cpp" />
