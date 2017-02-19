@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Debug.h"
-#include "Core/Common.h"
 #include "Core/Shareable.h"
+#include "Core/Singleton.h"
 #include "Entity/Component.h"
 #include "Entity/Guid.h"
 #include "Entity/Query.h"
@@ -120,7 +120,7 @@ namespace edn
 	// -----------------------------------------------------------------------------------------------
 	// Database Definition
 
-	class Database : public Singleton<Database>
+	static class Database : public Singleton<class Database>
 	{
 	public:
 		typedef std::vector<Entity*> EntityList;
@@ -294,7 +294,7 @@ namespace edn
 		inline EntityList& getEntities();
 
 		inline RangeAll all() const;
-	};
+	} &Db = Singleton<class Database>::instanceRef; 
 	Database::EntityList  Database::emptyList = Database::EntityList();
 
 	// -----------------------------------------------------------------------------------------------
@@ -412,30 +412,30 @@ namespace edn
 
 	inline Database::RangeAll::const_iterator Database::RangeAll::begin() const
 	{
-		return const_iterator(Database::Instance().entities.begin());
+		return const_iterator(Db.entities.begin());
 	}
 
 	inline Database::RangeAll::const_iterator Database::RangeAll::end() const
 	{
-		return const_iterator(Database::Instance().entities.end());
+		return const_iterator(Db.entities.end());
 	}
 
 	inline Database::RangeType::RangeType(Guid type)
-		: typeIterator(Database::Instance().componentIndex.find(type))
+		: typeIterator(Db.componentIndex.find(type))
 		, type(type)
 	{
 	}
 
 	inline Database::RangeType::const_iterator Database::RangeType::begin() const
 	{
-		if (typeIterator == Database::Instance().componentIndex.end())
+		if (typeIterator == Db.componentIndex.end())
 			return Database::emptyList.begin();
 		return typeIterator->second.begin();
 	}
 
 	inline Database::RangeType::const_iterator Database::RangeType::end() const
 	{
-		if (typeIterator == Database::Instance().componentIndex.end())
+		if (typeIterator == Db.componentIndex.end())
 			return Database::emptyList.end();
 		return typeIterator->second.end();
 	}
@@ -443,21 +443,21 @@ namespace edn
 	// -----------------------------------------------------------------------------------------------
 
 	inline Database::RangeTag::RangeTag(Guid type)
-		: typeIterator(Database::Instance().tagIndex.find(type))
+		: typeIterator(Db.tagIndex.find(type))
 		, type(type)
 	{
 	}
 
 	inline Database::RangeTag::const_iterator Database::RangeTag::begin() const
 	{
-		if (typeIterator == Database::Instance().tagIndex.end())
+		if (typeIterator == Db.tagIndex.end())
 			return Database::emptyList.begin();
 		return typeIterator->second.begin();
 	}
 
 	inline Database::RangeTag::const_iterator Database::RangeTag::end() const
 	{
-		if (typeIterator == Database::Instance().tagIndex.end())
+		if (typeIterator == Db.tagIndex.end())
 			return Database::emptyList.end();
 		return typeIterator->second.end();
 	}
@@ -784,7 +784,7 @@ namespace edn
 
 	Entity::~Entity()
 	{
-		Database::Instance().destroy(*this);
+		Db.destroy(*this);
 	}
 
 	template<typename Type, typename... Args>

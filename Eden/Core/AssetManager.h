@@ -3,6 +3,7 @@
 
 #include "Precompiled.h"
 #include "AssetPool.h"
+#include "Singleton.h"
 
 namespace edn
 {
@@ -23,7 +24,7 @@ namespace edn
 		String m_subDir;
 	};
 
-	class AssetManager : public Singleton<AssetManager>
+	static class AssetManager : public Singleton<class AssetManager>
 	{
 		typedef std::unique_ptr<AssetPoolInterface> AssetPoolPtr;
 		typedef std::unordered_map<std::type_index, AssetPoolPtr> AssetPoolList;
@@ -34,15 +35,15 @@ namespace edn
 		static void Register();
 
 		template<typename Type>
-		static Type * Load(String file);
+		Type * Load(String file);
 
 		//Texture * texture = AssetManager::Load<Texture>(filename);
 
-		static String & AssetPath() { return AssetManager::Instance().m_rootAssetPath; }
-		static String & CachePath() { return AssetManager::Instance().m_rootCachePath; }
+		String & AssetPath() { return m_rootAssetPath; }
+		String & CachePath() { return m_rootCachePath; }
 
-		static void SetAssetPath(String path) { AssetManager::Instance().m_rootAssetPath = path; }
-		static void SetCachePath(String path) { AssetManager::Instance().m_rootCachePath = path; }
+		void SetAssetPath(String path) { m_rootAssetPath = path; }
+		void SetCachePath(String path) { m_rootCachePath = path; }
 
 	private:
 		template<typename Type>
@@ -56,7 +57,7 @@ namespace edn
 		AssetPoolList m_assets;
 		String m_rootAssetPath;
 		String m_rootCachePath;
-	};
+	} &AssetManager = Singleton<class AssetManager>::instanceRef;
 
 	//
 	// Asset
@@ -91,17 +92,16 @@ namespace edn
 	template<typename Type>
 	Type * AssetManager::Load(String file)
 	{
-		AssetManager & mgr = AssetManager::Instance();
 		// Validate component type
 		static_assert(std::is_base_of<Asset, Type>::value, "Not a Asset type");
 
 		// Getting the Type asset list
-		Type * value = mgr.lookup<Type>(file);
+		Type * value = lookup<Type>(file);
 
 		// could not find the 
 		if (value == nullptr)
 		{
-			value = mgr.create<Type>(file);
+			value = create<Type>(file);
 			value->Load(file);
 			return value;
 		}

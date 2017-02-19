@@ -1,40 +1,34 @@
 #pragma once
-
-#include "../Core/Platform.h"
-#include "../Core/Types.h"
-#include "WindowStyles.h"
+#include "Core/Platform.h"
+#include "Core/Singleton.h"
+#include "Core/Types.h"
 
 #if defined(EDN_WINDOWS)
-	#include "Windows/Window.h"
+#include "Application/Win32/Win32-Window.h"
 #endif
 
 namespace edn
 {
 #if defined(EDN_WINDOWS)
-	using Window = Win32::Window;
-	using WindowCreateInfo = Win32::WindowCreateInfo;
+	using Window = win32::Window;
+#else
+#error Not Implemented
 #endif
 
-	class Application
+	static class Application : public Singleton<class Application>
 	{
+		friend Window;
 	public:
-		Application() = default;
-		Application(const WindowCreateInfo& info);
-		~Application();
+		Application() {}
+		~Application() {}
 
-		void initialize(const WindowCreateInfo& info = WindowCreateInfo::Default);
-		void cleanup();
+		void createWindow(const WindowInfo& info = WindowInfo::Default);
 
-		void run();
-		void update();
-		
-		void setWindowStyle(WindowStyle style);
+		void shutdown() { running = false; }
 
-		bool isRunning() { return window.isRunning(); }
-		Window& getWindow() { return window; }
 
-	private:
+		bool running;
 		Window window;
-	};
-	extern Application app;
+	private:
+	} &App = Singleton<class Application>::instanceRef;
 }

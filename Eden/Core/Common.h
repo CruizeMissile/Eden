@@ -16,22 +16,6 @@ namespace edn
 		NonCopyable& operator=(const NonCopyable&) = delete;
 	};
 
-	//
-	// Singleton
-	//
-	template<typename Type>
-	class Singleton : public NonCopyable
-	{
-	public:
-		static Type & Instance()
-		{
-			static Type instance;
-			return instance;
-		}
-	protected:
-		explicit Singleton<Type>() {}
-	};
-
 	struct IRect
 	{
 		u32 width;

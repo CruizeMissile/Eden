@@ -13,9 +13,6 @@
     <Filter Include="Math">
       <UniqueIdentifier>{05919c56-a05a-4134-b03b-95e63a14b010}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{77ddd31d-3783-471d-8fe1-843cc3ed040a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entity">
       <UniqueIdentifier>{525f5b67-80c6-415c-bb88-daf669165756}</UniqueIdentifier>
     </Filter>
@@ -23,10 +20,7 @@
       <UniqueIdentifier>{e43ab08f-06ab-40e4-a68a-bf6665f726ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Application\Windows">
-      <UniqueIdentifier>{ab81d10a-92e9-48ed-84e6-8b70dbb13ea1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Vulkan">
-      <UniqueIdentifier>{534014d6-7f6f-462e-843b-98b2fb007420}</UniqueIdentifier>
+      <UniqueIdentifier>{a89c48e3-7e0c-457d-8308-9eb651894b64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,47 +94,23 @@
     <ClInclude Include="..\..\Eden\Entity\Query.h">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Application\Windows\Window.h">
-      <Filter>Application\Windows</Filter>
+    <ClInclude Include="..\..\Eden\Core\Path.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Application\WindowStyles.h">
-      <Filter>Application</Filter>
+    <ClInclude Include="..\..\Eden\Core\TFlags.h">
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Eden\Application\Application.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Vulkan.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Context.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Instance.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Surface.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Utility.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Device.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Debug.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Swapchain.h">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Eden\Core\Path.h">
+    <ClInclude Include="..\..\Eden\Core\Singleton.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\WindowInfo.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Eden\Application\Win32\Win32-Window.h">
+      <Filter>Application\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,38 +133,17 @@
     <ClCompile Include="..\..\Eden\Core\MD5.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Eden\Application\Windows\Window.cpp">
+    <ClCompile Include="..\..\Eden\Core\Path.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\Win32\Win32-Window.cpp">
       <Filter>Application\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Eden\Application\WindowInfo.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Eden\Application\Application.cpp">
       <Filter>Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Instance.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Debug.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Utility.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Swapchain.cpp">
-      <Filter>Graphics\Vulkan</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Eden\Core\Path.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

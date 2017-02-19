@@ -102,7 +102,7 @@
       <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Eden.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -114,7 +114,7 @@
       <AdditionalIncludeDirectories>$(EDEN_ENGINE_PATH)\Eden;$(EDEN_ENGINE_PATH)\Tests;$(EDEN_ENGINE_PATH)\Resources\3rd Party\unittests;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Eden.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -130,7 +130,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Eden.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -146,7 +146,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Eden.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

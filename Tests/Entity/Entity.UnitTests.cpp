@@ -73,7 +73,7 @@ public:
 
 TEST_CASE("Entities Interaction with database", "[Entity]")
 {
-	auto & db = Database::Instance();
+	auto & db = Db;
 	auto entity = db.create();
 	
 	SECTION("Adding and removing components")

@@ -70,19 +70,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(EDEN_ENGINE_PATH)\Build\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
+    <OutDir>$(EDEN_ENGINE_PATH)\Output\Lib\$(Configuration)_$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)_$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -99,11 +99,11 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Output\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -124,11 +124,11 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Output\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -153,11 +153,11 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Output\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -182,11 +182,11 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Dependencies\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(EDEN_ENGINE_PATH)\Resources\3rd Party\$(PlatformTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Build\Include\"</Command>
+      <Command>xcopy /D /Y /S "$(EDEN_ENGINE_PATH)\Eden\*.h" "$(EDEN_ENGINE_PATH)\Output\Include\"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -195,8 +195,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Eden\Application\Application.h" />
-    <ClInclude Include="..\..\Eden\Application\WindowStyles.h" />
-    <ClInclude Include="..\..\Eden\Application\Windows\Window.h" />
+    <ClInclude Include="..\..\Eden\Application\Win32\Win32-Window.h" />
+    <ClInclude Include="..\..\Eden\Application\WindowInfo.h" />
     <ClInclude Include="..\..\Eden\Core\AssetManager.h" />
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
@@ -208,6 +208,8 @@
     <ClInclude Include="..\..\Eden\Core\Platform.h" />
     <ClInclude Include="..\..\Eden\Core\ScopeGuard.h" />
     <ClInclude Include="..\..\Eden\Core\Shareable.h" />
+    <ClInclude Include="..\..\Eden\Core\Singleton.h" />
+    <ClInclude Include="..\..\Eden\Core\TFlags.h" />
     <ClInclude Include="..\..\Eden\Core\TypeInfo.h" />
     <ClInclude Include="..\..\Eden\Core\Types.h" />
     <ClInclude Include="..\..\Eden\Core\Utility.h" />
@@ -216,16 +218,6 @@
     <ClInclude Include="..\..\Eden\Entity\Guid.h" />
     <ClInclude Include="..\..\Eden\Entity\Query.h" />
     <ClInclude Include="..\..\Eden\Entity\System.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Context.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Debug.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Device.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Instance.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Surface.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Swapchain.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Utility.h" />
-    <ClInclude Include="..\..\Eden\Graphics\Vulkan\Vulkan.h" />
     <ClInclude Include="..\..\Eden\Logging\Log.h" />
     <ClInclude Include="..\..\Eden\Math\Math.h" />
     <ClInclude Include="..\..\Eden\Math\Matrix.h" />
@@ -235,19 +227,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Eden\Application\Application.cpp" />
-    <ClCompile Include="..\..\Eden\Application\Windows\Window.cpp" />
+    <ClCompile Include="..\..\Eden\Application\Win32\Win32-Window.cpp" />
+    <ClCompile Include="..\..\Eden\Application\WindowInfo.cpp" />
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
     <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Core\Path.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Debug.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Device.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Instance.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\LayerExtentions.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\PhysicalDevice.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Surface.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Swapchain.cpp" />
-    <ClCompile Include="..\..\Eden\Graphics\Vulkan\Utility.cpp" />
     <ClCompile Include="..\..\Eden\Math\Matrix.cpp" />
     <ClCompile Include="..\..\Eden\Math\Quaternion.cpp" />
     <ClCompile Include="..\..\Eden\Math\Vector.cpp" />

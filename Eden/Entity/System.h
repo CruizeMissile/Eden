@@ -29,7 +29,7 @@ namespace edn
 	// -----------------------------------------------------------------------------------------------
 	// System Manager
 
-	class SystemManager : public Singleton<SystemManager>
+	class SystemManager : public SingletonOld<SystemManager>
 	{
 		typedef std::pair<Guid, SystemBase*> SystemTuple;
 		typedef std::vector<SystemTuple> SystemList;
