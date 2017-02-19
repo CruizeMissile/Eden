@@ -76,7 +76,7 @@ namespace edn
 
 		// Return True if path is an existing directory. This follows symbolic links, so
 		// both islink() and isdir() can be true for the same path.
-		static bool Isdir(const Path& path);
+		static bool IsDir(const Path& path);
 
 		// Return True if path is an existing regular file. This follows symbolic links,
 		// so both islink() and isfile() can be true for the same path.
@@ -135,6 +135,14 @@ namespace edn
 
 		friend std::ostream& operator<<(std::ostream& os, const Path& path);
 		operator String&();
+
+		bool isabs();
+		bool isdir();
+		bool isfile();
+		bool exists();
+
+		Path dirname();
+		Path basename();
 
 		String value;
 	};

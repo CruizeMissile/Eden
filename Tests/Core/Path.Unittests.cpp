@@ -30,7 +30,7 @@ TEST_CASE("Path")
 
 	CHECK(Path::Exists(exec_dir));
 	CHECK(Path::IsAbs(exec_dir));
-	CHECK(!Path::Isdir(exec_dir));
+	CHECK(!Path::IsDir(exec_dir));
 	CHECK(Path::IsFile(exec_dir));
 
 	SECTION(JOIN)

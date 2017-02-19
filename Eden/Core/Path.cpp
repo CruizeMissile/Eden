@@ -157,7 +157,7 @@ namespace edn
 		return Splitdirve(path)[0].value.length() > 0;
 	}
 
-	bool Path::Isdir(const Path& path)
+	bool Path::IsDir(const Path& path)
 	{
 		DWORD attrib = GetFileAttributes(path.value.c_str());
 		return	(attrib != INVALID_FILE_ATTRIBUTES) &&
@@ -452,5 +452,14 @@ namespace edn
 	{
 		return os << path.value;
 	}
+
+	// Member functions
+	bool Path::isabs() { return Path::IsAbs(*this); }
+	bool Path::isdir() { return Path::IsDir(*this); }
+	bool Path::isfile() { return Path::IsFile(*this); }
+	bool Path::exists() { return Path::Exists(*this); }
+
+	Path Path::dirname() { return Path::Dirname(*this); }
+	Path Path::basename() { return Path::Basename(*this); }
 }
 
