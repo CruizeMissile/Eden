@@ -790,55 +790,55 @@ namespace edn
 	template<typename Type, typename... Args>
 	Type& Entity::add(Args&&... args)
 	{
-		return Database::Instance().addComponent<Type>(*this, std::forward<Args>(args)...);
+		return Db.addComponent<Type>(*this, std::forward<Args>(args)...);
 	}
 
 	template<typename Type, typename... Args>
 	Type& Entity::replace(Args&&... args)
 	{
-		return Database::Instance().replaceComponent<Type>(*this, std::forward<Args>(args)...);
+		return Db.replaceComponent<Type>(*this, std::forward<Args>(args)...);
 	}
 
 	template<typename Type>
 	void Entity::remove()
 	{
-		Database::Instance().removeComponent<Type>(*this);
+		Db.removeComponent<Type>(*this);
 	}
 
 	template<typename Type>
 	Type& Entity::get()
 	{
-		return Database::Instance().getComponent<Type>(*this);
+		return Db.getComponent<Type>(*this);
 	}
 
 	template<typename Type>
 	Type* Entity::tryGet()
 	{
-		return Database::Instance().tryGetComponent<Type>(*this);
+		return Db.tryGetComponent<Type>(*this);
 	}
 
 	template<typename Type>
 	bool Entity::has()
 	{
-		return Database::Instance().hasComponent<Type>(*this);
+		return Db.hasComponent<Type>(*this);
 	}
 
 	template<typename Type>
 	void Entity::addTag(ComponentTag<Type> t)
 	{
-		Database::Instance().addTag<Type>(*this, t);
+		Db.addTag<Type>(*this, t);
 	}
 
 	template<typename Type>
 	void Entity::removeTag(ComponentTag<Type> t)
 	{
-		Database::Instance().removeTag<Type>(*this, t);
+		Db.removeTag<Type>(*this, t);
 	}
 
 	template<typename Type>
 	bool Entity::hasTag(ComponentTag<Type> t)
 	{
-		return Database::Instance().hasTag<Type>(*this, t);
+		return Db.hasTag<Type>(*this, t);
 	}
 
 	u32 Entity::getComponentCount()

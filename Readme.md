@@ -17,4 +17,5 @@ All Dependencies used under their respective licenses. Copyright is held by thei
 * [Catch](https://github.com/philsquared/Catch)
 * [Glew](http://glew.sourceforge.net)
 * [Gsl](https://github.com/Microsoft/GSL)
+* [Loguru](https://github.com/emilk/loguru)
 * [Vulkan](https://www.khronos.org/vulkan/)

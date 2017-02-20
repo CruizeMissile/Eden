@@ -42,7 +42,6 @@
 //
 // Logging
 //
-#include "Logging/Log.h"
 
 
 #endif

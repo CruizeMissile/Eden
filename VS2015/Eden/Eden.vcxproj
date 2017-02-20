@@ -201,6 +201,7 @@
     <ClInclude Include="..\..\Eden\Core\AssetPool.h" />
     <ClInclude Include="..\..\Eden\Core\Common.h" />
     <ClInclude Include="..\..\Eden\Core\Debug.h" />
+    <ClInclude Include="..\..\Eden\Core\Logging.h" />
     <ClInclude Include="..\..\Eden\Core\MacroHelpers.h" />
     <ClInclude Include="..\..\Eden\Core\MD5.h" />
     <ClInclude Include="..\..\Eden\Core\OS.h" />
@@ -218,7 +219,6 @@
     <ClInclude Include="..\..\Eden\Entity\Guid.h" />
     <ClInclude Include="..\..\Eden\Entity\Query.h" />
     <ClInclude Include="..\..\Eden\Entity\System.h" />
-    <ClInclude Include="..\..\Eden\Logging\Log.h" />
     <ClInclude Include="..\..\Eden\Math\Math.h" />
     <ClInclude Include="..\..\Eden\Math\Matrix.h" />
     <ClInclude Include="..\..\Eden\Math\Quaternion.h" />
@@ -230,6 +230,7 @@
     <ClCompile Include="..\..\Eden\Application\Win32\Win32-Window.cpp" />
     <ClCompile Include="..\..\Eden\Application\WindowInfo.cpp" />
     <ClCompile Include="..\..\Eden\Core\AssetManager.cpp" />
+    <ClCompile Include="..\..\Eden\Core\Logging.cpp" />
     <ClCompile Include="..\..\Eden\Core\MD5.cpp" />
     <ClCompile Include="..\..\Eden\Core\OS.cpp" />
     <ClCompile Include="..\..\Eden\Core\Path.cpp" />

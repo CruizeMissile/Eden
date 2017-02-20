@@ -23,6 +23,6 @@ namespace edn
 			return;
 		}
 
-		Log() << "Cound not find file " << filename << " In asset or cache filepath" << std::endl;
+		//Log() << "Cound not find file " << filename << " In asset or cache filepath" << std::endl;
 	}
 }
