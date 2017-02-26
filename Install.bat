@@ -19,7 +19,7 @@ rem Checks to see the the enviroment variable exists. If it dosent then it will
 rem automagicly install the variable. If it does exists it will ask the user
 rem if they want to uninstall it
 
-IF N"%EDEN_ENGINE_PATH%" == N"" (
+IF N"%EDEN_PATH%" == N"" (
     GOTO :INSTALL
 )
 
@@ -29,9 +29,9 @@ rem // ------------------------------------------------------------------------
 rem // UNINSTALL PROMPT
 
 :UNINSTALL_PROMPT
-echo !-!-!-!-!-!-          EDEN_ENGINE_PATH is already defined.          -!-!-!-!-!-!
+echo !-!-!-!-!-!-          EDEN_PATH is already defined.          -!-!-!-!-!-!
 echo.
-echo EDEN_ENGINE_PATH: %EDEN_ENGINE_PATH%
+echo EDEN_PATH: %EDEN_PATH%
 echo.
 
 SET /P UNINSTALL_CHOICE="Do you want to Uninstall Eden Engine(y/n)?"
@@ -48,24 +48,24 @@ rem // ------------------------------------------------------------------------
 
 
 rem // ------------------------------------------------------------------------
-rem // INSTALLING EDEN_ENGINE_PATH VARIABLE
+rem // INSTALLING EDEN_PATH VARIABLE
 
 :UNINSTALL
-echo Uninstalling EDEN_ENGINE_PATH enviroment variable...
-REG delete HKCU\Environment /V EDEN_ENGINE_PATH /F
+echo Uninstalling EDEN_PATH enviroment variable...
+REG delete HKCU\Environment /V EDEN_PATH /F
 GOTO :RESTART_EXPLORER
 rem // ------------------------------------------------------------------------
 
 
 
 rem // ------------------------------------------------------------------------
-rem // INSTALLING EDEN_ENGINE_PATH VARIABLE
+rem // INSTALLING EDEN_PATH VARIABLE
 
 :INSTALL
 echo.
-ECHO Installing EDEN_ENGINE_PATH to: %CD%
-rem SET EDEN_ENGINE_PATH="%CD%"
-SETX EDEN_ENGINE_PATH "%CD%"
+ECHO Installing EDEN_PATH to: %CD%
+rem SET EDEN_PATH="%CD%"
+SETX EDEN_PATH "%CD%"
 GOTO :RESTART_EXPLORER
 rem // ------------------------------------------------------------------------
 
