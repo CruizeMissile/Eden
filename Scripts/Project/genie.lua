@@ -22,7 +22,7 @@ function get_targetdir(project_name)
 		libdirs { OUTPUT_DIR .. "/" .. project_name  .. "/Release-x32" }
 	configuration {"Release", "x64"}
 		targetdir(OUTPUT_DIR .. "/" .. project_name  .. "/Release-x64")
-		libdirs { OUTPUT_DIR .. "/" .. project_name  .. "/Release-x64" }
+		libdirs { OUTPUT_DIR .. "/" .. project_name  .. "/Release-x64" }		
 end
 
 --
@@ -67,6 +67,8 @@ project "Eden"
 			"/wd 4127", -- Disable 'Conditional expression is constant' for do {} while(0).
             "/wd 4201", -- Disable 'Nonstandard extension used: nameless struct/union'. Used for uniforms in the project.
             "/wd 4345", -- Disable 'An object of POD type constructed with an initializer of the form () will be default-initialized'. It's an obsolete warning.
+            "/wd 4814", -- Disable 'in C++14 'constexpr' will not imply 'const'; consider explicitly specifying 'const'. Thanks I can handle that
+            "/wd 4101", -- Disable  no 'object' file generated. Ok so this doesn't make sense when I am up to my eye balls in templates. Yes some branches will not actualy be hit.
 		}
 
 	configuration "windows"
