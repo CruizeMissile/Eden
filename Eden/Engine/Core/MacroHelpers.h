@@ -16,17 +16,7 @@
 #define EDN_STRINGIZE_2( _ ) #_
 #define EDN_STRINGIZE( _ ) EDN_STRINGIZE_2( _ )
 
-// Don't forget to use END_DISABLE
-#define EDN_DISABLE_WARNING( WARN_ID ) \
-  __pragma( warning( push ) ) \
-  __pragma( warning( disable : WARN_ID ) )
-
-// Disables a warning without the push call
-#define EDN_PERM_DSIABLE_WARNING( WARN_ID ) \
-  __pragma( warning( disable : WARN_ID ) )
-
-#define EDN_END_DISABLE( ) \
-  __pragma( warning( pop ) )
+#define EDN_FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
 #define EDN_PASTE( _, __ )  _##__
 

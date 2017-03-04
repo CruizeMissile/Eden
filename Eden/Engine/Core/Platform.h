@@ -120,6 +120,17 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// Disable compiler warnings on MSVC
+
+#if defined(EDN_COMPILER_MSVC)
+	#define EDN_DISABLE_WARNING(WARNING_NUMBER) __pragma(warning(disable : WARNING_NUMBER))
+	#define EDN_RESET_WARNING(WARNING_NUMBER) __pragma(warning(default : WARNING_NUMBER))
+#else
+	#define EDN_DISABLE_WARNING(WARNING_NUMBER)
+	#define EDN_RESET_WARNING(WARNING_NUMBER) 
+#endif
+
+// ----------------------------------------------------------------------------
 // Miselaneous defines
 
 #if defined(EDN_WINDOWS)
