@@ -35,7 +35,11 @@ def main():
 
     path = os.path.join(current_dir, "Scripts", "Project")
     with pushd(path):
-        subprocess.call(subprocess.list2cmdline(command), shell=True)
+        if 'win32' == sys.platform:
+            subprocess.call(subprocess.list2cmdline(command))
+        else:
+            subprocess.call(subprocess.list2cmdline(command), shell=True)
+
     return 0
 
 
