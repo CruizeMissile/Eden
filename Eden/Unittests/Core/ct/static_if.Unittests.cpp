@@ -70,15 +70,15 @@ void eat_fruit2(T fruit)
 	fruit.peel();
 
 	ct::static_if(is_banana<T>{})
-		.then([](auto& fruit)
+		.then([](auto& f)
 	{
-		f.eat_banana()
+		f.eat_banana();
 	})(fruit);
 
 	ct::static_if(is_apple<T>{})
-		.then([](auto& fruit)
+		.then([](auto& f)
 	{
-		f.eat_apple()
+		f.eat_apple();
 	})(fruit);
 }
 

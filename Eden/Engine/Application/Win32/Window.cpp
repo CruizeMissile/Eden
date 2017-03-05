@@ -1,8 +1,10 @@
 #include "Precompiled.h"
-#include "Win32-Window.h"
+#include "Window.h"
 #include "Application/Application.h"
 
 using namespace std;
+
+#if defined(EDN_WINDOWS)
 
 // This is the HINSTANCE of the application.
 extern "C" IMAGE_DOS_HEADER __ImageBase;
@@ -104,7 +106,7 @@ namespace edn
 				system("pause");
 				exit(0);
 			}
-			
+
 			setFullscreen(info.fullscreen);
 
 			ShowWindow(hwnd, SW_SHOW);
@@ -158,7 +160,7 @@ namespace edn
 			{
 				if (isresizable = resizable)
 					return true;
-				
+
 				if (fullscreen || !bordered)
 				{
 					// Will change the state so the next time the state changes it
@@ -286,7 +288,7 @@ bool apply_style(HWND hwnd, LONG style, u32 width, u32 height)
 	RECT wr = get_window_style(style, width, height);
 
 	if (SetWindowLongPtr(hwnd, GWL_STYLE, style) == ERROR ||
-		SetWindowPos(hwnd, 0, 0, 0, wr.right - wr.left, wr.bottom - wr.top, 
+		SetWindowPos(hwnd, 0, 0, 0, wr.right - wr.left, wr.bottom - wr.top,
 			SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW) == ERROR)
 	{
 		cout << "Failed to apply style" << endl;
@@ -306,3 +308,5 @@ bool apply_resultion(HWND hwnd, LONG style, u32 width, u32 height)
 	}
 	return true;
 }
+
+#endif

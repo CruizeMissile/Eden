@@ -2,6 +2,8 @@
 #include "Application/WindowInfo.h"
 #include "Core/Platform.h"
 
+#if defined(EDN_WINDOWS)
+
 namespace edn
 {
 	namespace win32
@@ -44,3 +46,5 @@ namespace edn
 		};
 	}
 }
+
+#endif

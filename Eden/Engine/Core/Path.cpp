@@ -1,12 +1,20 @@
 #include "Precompiled.h"
 #include "Path.h"
+#include "ScopeGuard.h"
 
 #include <algorithm>
 #include <cctype>
 #include <locale>
 
-#if defined(EDN_WINDOWS)
-//#include <direct.h>
+#if defined(EDN_LINUX)
+#include <fts.h>
+#include <fcntl.h>
+#include <sys/sendfile.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <unistd.h>
+#include <limits.h>
 #endif
 
 using StringList = std::vector<String>;
@@ -103,7 +111,7 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return SetCurrentDirectory(path.value.c_str()) != 0;
 #else
-#error Not Implemented
+		return chdir(path.value.c_str()) != 0;
 #endif
 	}
 
@@ -112,10 +120,21 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return CopyFile(oldpath.value.c_str(), newpath.value.c_str(), overwrite ? TRUE : FALSE) != 0;
 #else
-#error Not Implemented
+		s32 read_fd;
+		s32 write_fd;
+		struct stat st;
+		off_t offset = 0;
+
+		read_fd = open(oldpath.value.c_str(), O_RDONLY);
+		fstat(read_fd, &st);
+		write_fd = open(newpath.value.c_str(), O_WRONLY | O_CREAT, st.st_mode);
+		sendfile(write_fd, read_fd, &offset, st.st_size);
+		close(read_fd);
+		close(write_fd);
+		return true;
 #endif
 	}
-	
+
 	Path Path::Cwd()
 	{
 #if defined(EDN_WINDOWS)
@@ -123,15 +142,18 @@ namespace edn
 		GetCurrentDirectory(MAX_PATH, path);
 		return path;
 #else
-#error Not Implemented
+		char path[PATH_MAX];
+		if (getcwd(path, sizeof(path)) != 0)
+			return Path();
+		return path;
 #endif
 	}
-	
+
 	Path Path::Dirname(const Path& path)
 	{
 		return Split(path)[0];
 	}
-	
+
 	Path Path::Execdir()
 	{
 #if defined(EDN_WINDOWS)
@@ -139,29 +161,42 @@ namespace edn
 		GetModuleFileName(NULL, path, MAX_PATH);
 		return path;
 #else
-#error Not Implemented
+		char result[ PATH_MAX ];
+		ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
+		return std::string( result, (count > 0) ? count : 0 );
 #endif
 	}
-	
+
 	bool Path::Exists(const Path& path)
 	{
 #if defined(EDN_WINDOWS)
 		return GetFileAttributes(path.value.c_str()) != INVALID_FILE_ATTRIBUTES;
 #else
-#error Not Implemented
+		struct stat s;
+		return stat(path.value.c_str(), &s) == 0
+			&& (S_ISDIR(s.st_mode) || S_ISREG(s.st_mode) || S_ISLNK(s.st_mode));
 #endif
 	}
-	
+
 	bool Path::IsAbs(const Path& path)
 	{
+#if defined(EDN_WINDOWS)
 		return Splitdirve(path)[0].value.length() > 0;
+#else
+		return path.value[0] == '/';
+#endif
 	}
 
 	bool Path::IsDir(const Path& path)
 	{
+#if defined(EDN_WINDOWS)
 		DWORD attrib = GetFileAttributes(path.value.c_str());
 		return	(attrib != INVALID_FILE_ATTRIBUTES) &&
 			(attrib & FILE_ATTRIBUTE_DIRECTORY);
+#else
+		struct stat s;
+		return (stat(path.value.c_str(), &s) == 0 && S_ISDIR(s.st_mode));
+#endif
 	}
 
 	bool Path::IsFile(const Path& path)
@@ -171,7 +206,8 @@ namespace edn
 		HANDLE handle = FindFirstFile(path.value.c_str(), &data);
 		return handle != INVALID_HANDLE_VALUE;
 #else
-#error Not Implemented
+		struct stat s;
+		return (stat(path.value.c_str(), &s) == 0 && S_ISREG(s.st_mode));
 #endif
 
 	}
@@ -186,9 +222,31 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return CreateDirectory(path.value.c_str(), 0) != 0;
 #else
-#error Not Implemented
-#endif
+		// http://stackoverflow.com/a/5685578
+		mode_t mode = 0755;
+		auto result = mkdir(path.value.c_str(), mode);
 
+		if (result == 0)
+			return true;
+
+		u32 pos;
+		switch(errno)
+		{
+		case ENOENT:
+			// parent does not exist, try to create it
+			pos = path.value.find_last_of(Seperator);
+			if (pos == String::npos)
+				return false;
+			if (!Makedir(path.value.substr(0, pos)))
+				return false;
+			return mkdir(path.value.c_str(), mode) == 0;
+		case EEXIST:
+			// done
+			return IsDir(path);
+		default:
+			return false;
+		}
+#endif
 	}
 
 	bool Path::Movefile(const Path& oldpath, const Path& newpath)
@@ -196,7 +254,7 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return MoveFile(oldpath.value.c_str(), newpath.value.c_str()) != 0;
 #else
-#error Not Implemented
+/* #error Not Implemented */
 #endif
 	}
 
@@ -318,21 +376,16 @@ namespace edn
 	bool Path::Remove(const Path& path)
 	{
 #if defined(EDN_WINDOWS)
-		return DeleteFile(path.value.c_str()) != 0;
+		return DeleteFile(path.value.c_str()) == 0;
 #else
-#error Not Implemented
+		return unlink(path.value.c_str()) == 0;
 #endif
 
 	}
 
 	bool Path::Rename(const Path& oldpath, const Path& newpath)
 	{
-#if defined(EDN_WINDOWS)
 		return rename(oldpath.value.c_str(), newpath.value.c_str()) == 0; // Todo: check if right
-#else
-#error Not Implemented
-#endif
-
 	}
 
 	bool Path::Rmdir(const Path& path)
@@ -340,7 +393,46 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return RemoveDirectory(path.value.c_str()) != 0;
 #else
-#error Not Implemented
+		// http://stackoverflow.com/a/27808574
+		char* files[] = {(char*) path.value.c_str(), 0};
+		FTS* ftsp = 0;
+		FTSENT* curr;
+		int ret = 0;
+
+		// FTS_NOCHDIR  - Avoid changing cwd, which could cause unexpected behavior
+		//                in multithreaded programs
+		// FTS_PHYSICAL - Don't follow symlinks. Prevents deletion of files outside
+		//                of the specified directory
+		// FTS_XDEV     - Don't cross filesystem boundaries
+		ftsp = fts_open(files, FTS_NOCHDIR | FTS_PHYSICAL | FTS_XDEV, 0);
+		if (!ftsp)
+			return false;
+
+		auto cleanup = MakeScopeGuard([&]()
+		{
+			fts_close(ftsp);
+		});
+
+		while ((curr = fts_read(ftsp)))
+		{
+			switch(curr->fts_info)
+			{
+			case FTS_NS:
+			case FTS_DNR:
+			case FTS_ERR:
+				return false;
+
+			case FTS_DP:
+			case FTS_F:
+			case FTS_SL:
+			case FTS_SLNONE:
+			case FTS_DEFAULT:
+				if (remove(curr->fts_accpath) < 0)
+					ret = -1;
+				break;
+			}
+		}
+		return ret == 0;
 #endif
 
 	}

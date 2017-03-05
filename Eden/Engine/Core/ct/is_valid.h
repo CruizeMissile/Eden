@@ -22,13 +22,13 @@ namespace edn
 					-> decltype(
 						std::declval<T>()(std::declval<Ts>()...), std::true_type::value)
 				{
-					return std::true_type{};
+					return std::true_type::value;
 				}
 
 				template <typename...>
 				constexpr auto test(...) noexcept
 				{
-					return std::false_type:value;
+					return std::false_type::value;
 				}
 
 			public:

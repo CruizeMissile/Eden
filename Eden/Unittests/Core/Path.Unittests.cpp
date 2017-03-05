@@ -2,7 +2,7 @@
 #include "Core/Path.h"
 #include <iostream>
 
-using namespace edn; 
+using namespace edn;
 using namespace std;
 
 #define SPLIT "Split"
@@ -27,6 +27,7 @@ TEST_CASE("Path")
 {
 	auto exec_dir = Path::Execdir();
 	auto cwd_dir = Path::Cwd();
+	cout << exec_dir << endl;
 
 	CHECK(Path::Exists(exec_dir));
 	CHECK(Path::IsAbs(exec_dir));
@@ -36,7 +37,7 @@ TEST_CASE("Path")
 	SECTION(JOIN)
 	{
 		auto result = Path::Join("D:", String("a"), "b", "c", "d", String(".."), "e");
-		
+
 		std::vector<String> list = { "D:", "a", "b", "c", "d", "..", "e" };
 		auto compare = join(list.begin(), list.end(), String(1, Path::Seperator));
 		CHECK(result.value == compare);
@@ -94,6 +95,7 @@ TEST_CASE("DRIVE_Paths")
 	}
 }
 
+#if 0
 TEST_CASE("UNC_Paths")
 {
 	auto path = Path("\\\\machine\\mountpoint\\directory\\etc\\");
@@ -101,7 +103,7 @@ TEST_CASE("UNC_Paths")
 	SECTION(SPLIT_DIRVES)
 	{
 		auto result = Path::Splitdirve(path);
-		
+
 		CHECK(result[0].value == "\\\\machine\\mountpoint");
 		CHECK(result[1].value == "directory\\etc\\");
 	}
@@ -109,10 +111,10 @@ TEST_CASE("UNC_Paths")
 	SECTION(SPLIT)
 	{
 		auto result = Path::Split(path);
-		
+
 		CHECK(result[0].value == "\\\\machine\\mountpoint\\directory");
 		CHECK(result[1].value == "etc");
-		
+
 		CHECK(result[0].value == Path::Dirname(path).value);
 		CHECK(result[1].value == Path::Basename(path).value);
 	}
@@ -120,7 +122,7 @@ TEST_CASE("UNC_Paths")
 	SECTION(SPLIT_TEXT)
 	{
 		auto result = Path::Splitext(path);
-		
+
 		CHECK(result[0].value == "\\\\machine\\mountpoint\\directory\\etc\\");
 		CHECK(result[1].value == "");
 	}
@@ -133,3 +135,4 @@ TEST_CASE("UNC_Paths")
 		CHECK(result.value == "\\\\machine\\mountpoint\\a\\b\\e\\h\\i");
 	}
 }
+#endif

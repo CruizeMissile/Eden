@@ -97,10 +97,10 @@ namespace edn
 			{
 				while ((it.f1 != it.l1 && it.f2 != it.l2) && *it.f1 != *it.f2)
 					*it.f1 < *it.f2 ? ++it.f1 : ++it.f2;
-				
+
 				if (it.f1 == it.l1)
 					it.f2 = it.l2;
-				
+
 				if (it.f2 == it.l2)
 					it.f1 = it.l1;
 			}
@@ -263,7 +263,7 @@ namespace edn
 		// ----------------------------------------------------------------------------------------
 
 		// stores the begin and end functions so that it can loop through a range a way to wrap the
-		// range_operation_const_iterator 
+		// range_operation_const_iterator
 		template<typename Iterator1, typename Iterator2, typename Operation>
 		class RangeOperation
 		{

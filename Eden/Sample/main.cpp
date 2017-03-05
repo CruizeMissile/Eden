@@ -1,7 +1,6 @@
 #include "Application/Application.h"
-#include "Core/Logging.h"
 
-// @Note: Not sure why the sample project has to include the engine dependencies in order to work. 
+// @Note: Not sure why the sample project has to include the engine dependencies in order to work.
 // @Todo: Need to make it so that is not the case.
 
 using namespace edn;
@@ -22,6 +21,5 @@ int engine()
 
 int main(int argc, char** argv)
 {
-	Logging::init(argc, argv);
 	return engine();
-} 
+}

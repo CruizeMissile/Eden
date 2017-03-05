@@ -42,6 +42,9 @@ solution "Eden"
 	configuration { "Release" }
 		flags { "NoBufferSecurityCheck", "OptimizeSpeed", }
 
+	configuration { "gmake" }
+		buildoptions { "-std=c++14" }
+
 project "Eden"
     kind "StaticLib"
 

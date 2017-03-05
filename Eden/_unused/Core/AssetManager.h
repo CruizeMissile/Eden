@@ -32,7 +32,7 @@ namespace edn
 
 	public:
 		template<typename Type>
-		static void Register();
+		void Register();
 
 		template<typename Type>
 		Type * Load(String file);
@@ -70,15 +70,13 @@ namespace edn
 	template<typename Type>
 	void AssetManager::Register()
 	{
-		AssetManager & mgr = AssetManager::Instance();
-
 		// Validate Asset type
 		static_assert(std::is_base_of<Asset, Type>::value, "Not a asset type");
 
 		// Check if Asset type is registered
-		auto it = mgr.m_assets.find(typeid(Type));
+		auto it = AssetManager.m_assets.find(typeid(Type));
 
-		if (it != mgr.m_assets.end())
+		if (it != AssetManager.m_assets.end())
 			return;
 
 		std::type_index index = typeid(Type);
@@ -86,7 +84,7 @@ namespace edn
 		auto poolPtr = std::make_unique<AssetPool<Type>>();
 
 		auto pair = std::make_pair(index, std::move(poolPtr));
-		auto result = mgr.m_assets.insert(std::move(pair));
+		auto result = AssetManager.m_assets.insert(std::move(pair));
 	}
 
 	template<typename Type>
@@ -98,7 +96,7 @@ namespace edn
 		// Getting the Type asset list
 		Type * value = lookup<Type>(file);
 
-		// could not find the 
+		// could not find the
 		if (value == nullptr)
 		{
 			value = create<Type>(file);
@@ -140,8 +138,6 @@ namespace edn
 		AssetPool<Type> * pool = reinterpret_cast<AssetPool<Type>*>(it->second.get());
 		return pool;
 	}
-
 }
-
 
 #endif

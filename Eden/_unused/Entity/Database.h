@@ -57,7 +57,7 @@ namespace edn
 	class Entity : public Shareable<Entity>
 	{
 		friend class Database;
-		friend std::_Ref_count_obj<Entity>;
+		/* friend SharableAlloc; */
 	public:
 
 		// Tuple is used to store the type information with the base pointer
@@ -154,9 +154,9 @@ namespace edn
 		template<typename TIterator>
 		struct entity_ref_iterator
 		{
-			typedef typename entity_ref_iterator<TIterator> this_type;
-			typedef typename std::forward_iterator_tag iterator_category;
-			typedef typename Entity& value_type;
+			typedef entity_ref_iterator<TIterator> this_type;
+			typedef std::forward_iterator_tag iterator_category;
+			typedef Entity& value_type;
 			typedef std::ptrdiff_t difference_type;
 			typedef Entity* pointer;
 			typedef Entity& reference;
@@ -284,7 +284,7 @@ namespace edn
 		bool hasTag(Entity& e, ComponentTag<Type> t);
 
 		template<typename Filter>
-		typename RefRange<typename Query::Simplify<Filter>::Result::RangeType> where(const Filter& fullQuery) const;
+		RefRange<typename Query::Simplify<Filter>::Result::RangeType> where(const Filter& fullQuery) const;
 
 		// Entity list information
 		inline u32 getEntityCount();
@@ -294,7 +294,7 @@ namespace edn
 		inline EntityList& getEntities();
 
 		inline RangeAll all() const;
-	} &Db = Singleton<class Database>::instanceRef; 
+	} &Db = Singleton<class Database>::instanceRef;
 	Database::EntityList  Database::emptyList = Database::EntityList();
 
 	// -----------------------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ namespace edn
 		Type* safe_cast(ComponentBase* c)
 		{
 			static_assert(std::is_base_of<ComponentBase, Type>::value, "Not base of componentbase.");
-			return _safe_cast<Type, Type::Template>()(c);
+			return _safe_cast<Type, typename Type::Template>()(c);
 		}
 	}
 
@@ -429,14 +429,14 @@ namespace edn
 	inline Database::RangeType::const_iterator Database::RangeType::begin() const
 	{
 		if (typeIterator == Db.componentIndex.end())
-			return Database::emptyList.begin();
+			return static_cast<Database::RangeType::const_iterator>(Database::emptyList.begin());
 		return typeIterator->second.begin();
 	}
 
 	inline Database::RangeType::const_iterator Database::RangeType::end() const
 	{
 		if (typeIterator == Db.componentIndex.end())
-			return Database::emptyList.end();
+			return static_cast<Database::RangeType::const_iterator>(Database::emptyList.end());
 		return typeIterator->second.end();
 	}
 
@@ -451,14 +451,14 @@ namespace edn
 	inline Database::RangeTag::const_iterator Database::RangeTag::begin() const
 	{
 		if (typeIterator == Db.tagIndex.end())
-			return Database::emptyList.begin();
+			return static_cast<Database::RangeType::const_iterator>(Database::emptyList.begin());
 		return typeIterator->second.begin();
 	}
 
 	inline Database::RangeTag::const_iterator Database::RangeTag::end() const
 	{
 		if (typeIterator == Db.tagIndex.end())
-			return Database::emptyList.end();
+			return static_cast<Database::RangeType::const_iterator>(Database::emptyList.end());
 		return typeIterator->second.end();
 	}
 
@@ -570,7 +570,7 @@ namespace edn
 		auto tuple = Entity::ComponentTuple(type, new Type(e, std::forward<Args>(args)...));
 
 		// Checking to see if we are creating a new entity or replacing
-		if (hasComponent<Type::Template>(e)) // Replacing component
+		if (hasComponent<typename Type::Template>(e)) // Replacing component
 		{
 			auto old = position->second;
 			position->second = tuple.second;

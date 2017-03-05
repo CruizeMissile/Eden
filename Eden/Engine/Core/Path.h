@@ -14,13 +14,13 @@ namespace edn
 	{
 	public:
 #if defined(EDN_WINDOWS)
-		static constexpr char Seperator = '\\';
-		static constexpr char AltSeperator = '/';
+		static constexpr const char Seperator = '\\';
+		static constexpr const char AltSeperator = '/';
 #else
-		static constexpr char Seperator = '/';
-		static constexpr char AltSeperator = '\\';
+		static constexpr const char Seperator = '/';
+		static constexpr const char AltSeperator = '\\';
 #endif
-		static constexpr char BothSeperators[] = { '\\', '/'	};
+		static constexpr const char BothSeperators[] = { '\\', '/' };
 
 		Path() = default;
 		Path(const Path&) = default;

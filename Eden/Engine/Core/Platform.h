@@ -19,13 +19,13 @@
 	#define WIN32_LEAN_AND_MEAN
 	#endif
 	#include <Windows.h>
-	
+
 	// undef the shittiest win32 macros of ALL TIME. No one needs these they just get in the way
 	// and it is our fault for having to include the biggest pile of shit windows.h
 	#undef near
 	#undef far
 	#undef min
-	#undef max	
+	#undef max
 	// Sanity has been restored
 
 	// @Note: This is not recommended as every project that uses this file will not
@@ -64,12 +64,16 @@
 #elif defined(__clang__)
 	// Clang.
 	#define EDN_COMPILER_CLANG
-#elif defined(__GNUC__) || defined(__GNUG__) && !(defined(__clang__) || defined(__INTEL_COMPILER))
+#elif defined(__GNUC__) || defined(__GNUG__)
 	// GNU GCC/G++ Compiler.
-	#define EDN_COMPILER_GNU_GCC
+	#define EDN_COMPILER_GCC
 #elif defined(__INTEL_COMPILER)
 	// Intel C++ Compiler.
 	#define EDN_COMPILER_INTEL
+#endif
+
+#if !defined(EDN_COMPILER_MSVC) && !defined(EDN_COMPILER_GCC) && !defined(EDN_COMPILER_CLANG)
+#error No compiler macro defined. Compiler is not supported by Eden.
 #endif
 
 // ----------------------------------------------------------------------------
@@ -81,15 +85,18 @@
 	#else
 		#define EDN_32_BIT
 	#endif
-	// @Note: Figure out bit size for the other platforms.
 #endif
 
-#if defined(EDN_COMPILER_GNUC_GCC)
-	#if defined(__x86_64__) || defined(__ppc64__)
+#if defined(EDN_COMPILER_GCC)
+	#if defined(__x86_64__) || defined(__LP64__) || defined(_i386_)
 		#define EDN_64_BIT
 	#else
 		#define EDN_32_BIT
 	#endif
+#endif
+
+#if !defined(EDN_32_BIT) && !defined(EDN_64_BIT)
+#error Cound not figure out the bit archetecture
 #endif
 
 // ----------------------------------------------------------------------------
@@ -127,7 +134,7 @@
 	#define EDN_RESET_WARNING(WARNING_NUMBER) __pragma(warning(default : WARNING_NUMBER))
 #else
 	#define EDN_DISABLE_WARNING(WARNING_NUMBER)
-	#define EDN_RESET_WARNING(WARNING_NUMBER) 
+	#define EDN_RESET_WARNING(WARNING_NUMBER)
 #endif
 
 // ----------------------------------------------------------------------------

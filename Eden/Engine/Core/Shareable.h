@@ -12,18 +12,28 @@ namespace edn
 
 		Ptr GetPtr()
 		{
-			return shared_from_this();
+			return this->shared_from_this();
 		}
 
 		Ref GetRef()
 		{
-			return shared_from_this();
+			return this->shared_from_this();
 		}
 
 		template<typename... Args>
 		static Ptr MakeNew(Args&&... params)
 		{
-			return std::make_shared<Derived>(std::forward<Args>(params)...);
+			return std::make_shared<private_enabler>(std::forward<Args>(params)...);
 		}
+
+	private:
+		struct private_enabler;
+	};
+
+	// http://stackoverflow.com/a/20961251
+	template<class Derived>
+	struct Shareable<Derived>::private_enabler : public Shareable<Derived>
+	{
+		private_enabler() : Shareable<Derived>() {}
 	};
 }

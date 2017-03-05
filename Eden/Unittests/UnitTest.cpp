@@ -3,7 +3,11 @@
 #define CATCH_CONFIG_RUNNER
 #endif
 
-#define CATCH_CONFIG_COLOUR_WINDOWS 
+#include "Core/Platform.h"
+
+#if defined(EDN_WINDOWS)
+#define CATCH_CONFIG_COLOUR_WINDOWS
+#endif
 
 #include "UnitTest.h"
 
@@ -11,8 +15,8 @@ int main(int argc, char* const argv[])
 {
 	int result = Catch::Session().run(argc, argv);
 
-	// global clean-up...
-	//if (result != 0)
+#if defined(EDN_WINDOWS)
 	system("pause");
+#endif
 	return result;
 }
