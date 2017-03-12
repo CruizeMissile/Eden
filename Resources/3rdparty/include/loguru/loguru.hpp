@@ -2501,11 +2501,17 @@ namespace loguru
 		log(_verbosity, _file, _line, "%s", message.c_str());
 	}
 
+#if defined(_MSC_VER)
+#pragma warning(disable : 4722)
+#endif
 	AbortLogger::~AbortLogger() noexcept(false)
 	{
 		auto message = _ss.str();
 		loguru::log_and_abort(1, _expr, _file, _line, "%s", message.c_str());
 	}
+#if defined(_MSC_VER)
+#pragma warning(default : 4722)
+#endif
 
 #endif // LOGURU_WITH_STREAMS
 
