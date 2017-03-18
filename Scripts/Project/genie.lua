@@ -9,7 +9,7 @@ DEPENDENCY_DIR     = EDEN_DIR  .. "/Resources" .. "/3rdparty"
 BUILD_DIR          = EDEN_DIR  .. "/Build"
 BUILD_INCLUDE_DIR  = EDEN_DIR  .. "/Build/Include"
 OUTPUT_DIR         = BUILD_DIR .. "/Bin"
-SOLTUION_DIR       = BUILD_DIR .. "/Project/" .. _ACTION    
+SOLTUION_DIR       = BUILD_DIR .. "/Project/" .. _ACTION
 
 function setup_configuration(project_name)
     includedirs
@@ -103,7 +103,7 @@ project "Eden"
         prebuildcommands { "xcopy /D /Y /S /i /q \"" .. ENGINE_SOURCE_DIR:gsub("%/", "\\") .. "\\*.h\" \"" .. BUILD_INCLUDE_DIR:gsub("%/", "\\") .. "\"" }
 
     configuration { "linux or macosx" }
-        prebuildcommands { "cp -ru \"" .. ENGINE_SOURCE_DIR .. "/*.h\" \"" .. BUILD_INCLUDE_DIR .. "\"" }
+        prebuildcommands { "mkdir -p \"" .. BUILD_INCLUDE_DIR .. "\"  && rsync -arm --include '*/' --include '*.h' --exclude '*' \"" .. ENGINE_SOURCE_DIR .. "\" \"" .. BUILD_INCLUDE_DIR .. "\""}
 
 project "UnitTests"
     kind "ConsoleApp"
