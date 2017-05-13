@@ -546,6 +546,13 @@ extern "C" {
  *
  *  @ingroup init
  *  @{ */
+/*! @brief No error has occurred.
+ *
+ *  No error has occurred.
+ *
+ *  @analysis Yay.
+ */
+#define GLFW_NO_ERROR               0
 /*! @brief GLFW has not been initialized.
  *
  *  This occurs if a GLFW function was called that must not be called unless the
@@ -1607,10 +1614,37 @@ GLFWAPI void glfwGetVersion(int* major, int* minor, int* rev);
  */
 GLFWAPI const char* glfwGetVersionString(void);
 
+/*! @brief Returns and clears the last error for the calling thread.
+ *
+ *  This function returns and clears the [error code](@ref error) of the last
+ *  error that occurred on the calling thread.  If no error has occurred since
+ *  the last call, it returns @ref GLFW_NO_ERROR.
+ *
+ *  @return The last error code for the calling thread, or @ref GLFW_NO_ERROR.
+ *
+ *  @errors None.
+ *
+ *  @remark This function may be called before @ref glfwInit.
+ *
+ *  @thread_safety This function may be called from any thread.
+ *
+ *  @sa @ref error_handling
+ *  @sa @ref glfwSetErrorCallback
+ *
+ *  @since Added in version 3.3.
+ *
+ *  @ingroup init
+ */
+GLFWAPI int glfwGetError(void);
+
 /*! @brief Sets the error callback.
  *
  *  This function sets the error callback, which is called with an error code
  *  and a human-readable description each time a GLFW error occurs.
+ *
+ *  The error code is set before the callback is called.  Calling @ref
+ *  glfwGetError from the error callback will return the same value as the error
+ *  code argument.
  *
  *  The error callback is called on the thread where the error occurred.  If you
  *  are using GLFW from multiple threads, your error callback needs to be
@@ -1634,6 +1668,7 @@ GLFWAPI const char* glfwGetVersionString(void);
  *  @thread_safety This function must only be called from the main thread.
  *
  *  @sa @ref error_handling
+ *  @sa @ref glfwGetError
  *
  *  @since Added in version 3.0.
  *
@@ -2147,8 +2182,6 @@ GLFWAPI void glfwWindowHint(int hint, int value);
  *  desktop file, so this function emits @ref GLFW_PLATFORM_ERROR.
  *
  *  @remark @wayland Screensaver inhibition is currently unimplemented.
- *
- *  @reentrancy This function must not be called from a callback.
  *
  *  @thread_safety This function must only be called from the main thread.
  *
@@ -2733,6 +2766,9 @@ GLFWAPI void glfwHideWindow(GLFWwindow* window);
  *  you are certain that is what the user wants.  Focus stealing can be
  *  extremely disruptive.
  *
+ *  For a less disruptive way of getting the user's attention, see
+ *  [attention requests](@ref window_attention).
+ *
  *  @param[in] window The window to give input focus.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
@@ -2744,12 +2780,40 @@ GLFWAPI void glfwHideWindow(GLFWwindow* window);
  *  @thread_safety This function must only be called from the main thread.
  *
  *  @sa @ref window_focus
+ *  @sa @ref window_attention
  *
  *  @since Added in version 3.2.
  *
  *  @ingroup window
  */
 GLFWAPI void glfwFocusWindow(GLFWwindow* window);
+
+/*! @brief Requests user attention to the specified window.
+ *
+ *  This function requests user attention to the specified window.  On
+ *  platforms where this is not supported, attention is requested to the
+ *  application as a whole.
+ *
+ *  Once the user has given attention, usually by focusing the window or
+ *  application, the system will end the request automatically.
+ *
+ *  @param[in] window The window to request attention to.
+ *
+ *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
+ *  GLFW_PLATFORM_ERROR.
+ *
+ *  @remark @macos Attention is requested to the application as a whole, not the
+ *  specific window.
+ *
+ *  @thread_safety This function must only be called from the main thread.
+ *
+ *  @sa @ref window_attention
+ *
+ *  @since Added in version 3.3.
+ *
+ *  @ingroup window
+ */
+GLFWAPI void glfwRequestWindowAttention(GLFWwindow* window);
 
 /*! @brief Returns the monitor that the window uses for full screen mode.
  *
@@ -3392,11 +3456,12 @@ GLFWAPI int glfwGetInputMode(GLFWwindow* window, int mode);
  */
 GLFWAPI void glfwSetInputMode(GLFWwindow* window, int mode, int value);
 
-/*! @brief Returns the localized name of the specified printable key.
+/*! @brief Returns the layout-specific name of the specified printable key.
  *
- *  This function returns the name of the specified printable key.  This is
- *  typically the character that key would produce without any modifier keys,
- *  intended for displaying key bindings to the user.
+ *  This function returns the name of the specified printable key, encoded as
+ *  UTF-8.  This is typically the character that key would produce without any
+ *  modifier keys, intended for displaying key bindings to the user.  For dead
+ *  keys, it is typically the diacritic it would add to a character.
  *
  *  __Do not use this function__ for [text input](@ref input_char).  You will
  *  break text input for many languages even if it happens to work for yours.
@@ -3438,7 +3503,7 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* window, int mode, int value);
  *
  *  @param[in] key The key to query, or `GLFW_KEY_UNKNOWN`.
  *  @param[in] scancode The scancode of the key to query.
- *  @return The localized name of the key, or `NULL`.
+ *  @return The UTF-8 encoded, layout-specific name of the key, or `NULL`.
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED and @ref
  *  GLFW_PLATFORM_ERROR.
@@ -3654,8 +3719,6 @@ GLFWAPI void glfwSetCursorPos(GLFWwindow* window, double xpos, double ypos);
  *  @pointer_lifetime The specified image data is copied before this function
  *  returns.
  *
- *  @reentrancy This function must not be called from a callback.
- *
  *  @thread_safety This function must only be called from the main thread.
  *
  *  @sa @ref cursor_object
@@ -3679,8 +3742,6 @@ GLFWAPI GLFWcursor* glfwCreateCursor(const GLFWimage* image, int xhot, int yhot)
  *
  *  @errors Possible errors include @ref GLFW_NOT_INITIALIZED, @ref
  *  GLFW_INVALID_ENUM and @ref GLFW_PLATFORM_ERROR.
- *
- *  @reentrancy This function must not be called from a callback.
  *
  *  @thread_safety This function must only be called from the main thread.
  *
