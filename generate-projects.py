@@ -27,7 +27,7 @@ def main():
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
     if 'win32' == sys.platform:
-        command = ['./Genie/windows/genie.exe', 'vs2015']
+        command = ['./Genie/windows/genie.exe', 'vs2017']
     elif 'darwin' == sys.platform:
         command = ['./Genie/darwin/genie', 'xcode4']
     else:
