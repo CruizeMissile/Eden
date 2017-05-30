@@ -12,7 +12,7 @@ int engine()
 
 	while (App.running)
 	{
-		App.window.processOsEvents();
+		App.update();
 	}
 
 	App.shutdown();

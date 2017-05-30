@@ -8,4 +8,10 @@ namespace edn
 		window.createWindow(info);
 		running = true;
 	}
+
+	void Application::update()
+	{
+		window.processOsEvents();
+		running = window.checkRunningStatus();
+	}
 }
