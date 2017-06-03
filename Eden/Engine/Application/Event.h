@@ -73,38 +73,39 @@ namespace edn
 	static class EventQueue : public Singleton<class EventQueue>
 	{
 	public:
-		void Push(std::unique_ptr<EventBase> e)
+		void push(std::unique_ptr<EventBase> e)
 		{
 			#if defined(EDN_DEBUG)
 				ASSERT(!is_dispatching, "Cannot push an event while event queue is being processed. Try calling Dispatch(const EventBase&) to bypass the event queue.");
 			#endif
 			if (e->has_listeners())
-				eventQueue.push_back(std::move(e));
+				eventQueue.push(std::move(e));
 		}
 
-		void Dispatch(const EventBase& e) const
+		void dispatch(const EventBase& e) const
 		{
 			e.raise();
 		}
 
-		void Dispatch()
+		void dispatch()
 		{
 			#if defined(EDN_DEBUG)
 				is_dispatching = true;
 			#endif
 
-			for (u32 i = 0; i < eventQueue.size(); ++i)
-				eventQueue[i]->raise();
+			while (!eventQueue.empty())
+			{
+				eventQueue.front()->raise();
+				eventQueue.pop();
+			}
 
 			#if defined(EDN_DEBUG)
 				is_dispatching = false;
 			#endif
-
-			eventQueue.clear();
 		}
 
 	private:
-		std::vector<std::unique_ptr<EventBase>> eventQueue;
+		std::queue<std::unique_ptr<EventBase>> eventQueue;
 
 #ifdef _DEBUG
 		bool is_dispatching = false;

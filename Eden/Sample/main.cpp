@@ -31,7 +31,7 @@ int engine()
 	while (App.running)
 	{
 		App.update();
-		EventQueue.Dispatch();
+		EventQueue.dispatch();
 	}
 
 	App.shutdown();
