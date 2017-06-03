@@ -1,5 +1,6 @@
 #pragma once
 #include "Application/WindowInfo.h"
+#include "Application/Event.h"
 
 namespace edn
 {
@@ -40,4 +41,10 @@ namespace edn
 		bool is_bordered = true;
 		bool is_resizeable = true;
 	};
+
+	namespace evn
+	{
+		struct WindowEntered : public Event<WindowEntered> {};
+		struct WindowExit: public Event<WindowExit> {};
+	}
 }

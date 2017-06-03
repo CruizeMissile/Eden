@@ -61,9 +61,9 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 void cursor_enter_callback(GLFWwindow* window, int entered)
 {
 	if (entered)
-		cout << "Entered" << endl;
+		edn::EventQueue.push(std::make_unique<edn::evn::WindowEntered>());
 	else
-		cout << "Exit" << endl;
+		edn::EventQueue.push(std::make_unique<edn::evn::WindowExit>());
 }
 
 

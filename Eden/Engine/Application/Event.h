@@ -79,7 +79,7 @@ namespace edn
 				ASSERT(!is_dispatching, "Cannot push an event while event queue is being processed. Try calling Dispatch(const EventBase&) to bypass the event queue.");
 			#endif
 			if (e->has_listeners())
-				eventQueue.push(std::move(e));
+				_queue.push(std::move(e));
 		}
 
 		void dispatch(const EventBase& e) const
@@ -93,10 +93,10 @@ namespace edn
 				is_dispatching = true;
 			#endif
 
-			while (!eventQueue.empty())
+			while (!_queue.empty())
 			{
-				eventQueue.front()->raise();
-				eventQueue.pop();
+				_queue.front()->raise();
+				_queue.pop();
 			}
 
 			#if defined(EDN_DEBUG)
@@ -105,7 +105,7 @@ namespace edn
 		}
 
 	private:
-		std::queue<std::unique_ptr<EventBase>> eventQueue;
+		std::queue<std::unique_ptr<EventBase>> _queue;
 
 #ifdef _DEBUG
 		bool is_dispatching = false;

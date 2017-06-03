@@ -15,6 +15,8 @@ struct Something
 	Listener<evn::MouseButtonUp> on_mouse_up;
 	Listener<evn::KeyDown> on_key_down;
 	Listener<evn::KeyUp> on_key_up;
+	Listener<evn::WindowEntered> on_window_enter;
+	Listener<evn::WindowExit> on_window_exit;
 };
 
 int engine()
@@ -27,6 +29,9 @@ int engine()
 	something.on_mouse_up.callback = [](auto& e) { cout << static_cast<u32>(e.button) << endl; };
 	something.on_key_down.callback = [](auto& e) { cout << static_cast<u32>(e.key) << endl; };
 	something.on_key_up.callback = [](auto& e) { cout << static_cast<u32>(e.key) << endl; };
+	something.on_key_up.callback = [](auto& e) { cout << static_cast<u32>(e.key) << endl; };
+	something.on_window_enter.callback = [](auto& e) { cout << "Entered" << endl; };
+	something.on_window_exit.callback = [](auto& e) { cout << "Exit" << endl; };
 
 	while (App.running)
 	{
