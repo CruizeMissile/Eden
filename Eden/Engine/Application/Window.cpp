@@ -58,7 +58,6 @@ void cursor_enter_callback(GLFWwindow* window, int entered)
 }
 
 
-
 namespace edn
 {
 	Window::Window()

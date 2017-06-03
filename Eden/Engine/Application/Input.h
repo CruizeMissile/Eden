@@ -61,11 +61,6 @@ namespace edn
 
 		void updateCursorPosition(s32 x, s32 y);
 
-
-		//s32 getMouseX() const {}
-		//s32 getMouseX() const {}
-		//vec2 getMousePos() const {}
-
 	private:
 		void update();
 
