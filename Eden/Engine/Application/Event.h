@@ -12,110 +12,102 @@
 
 namespace edn
 {
-	class EventBase 
+	class EventBase
 	{
 	public:
 		virtual ~EventBase() = default;
-		virtual void raise()const = 0;
-		virtual bool has_listeners()const = 0;
+		virtual bool has_listeners() const = 0;
+		virtual void raise() const = 0;
 	};
 
-
-	template<class EventType>
+	template <class EventType>
 	class Listener
 	{
-		//friend EventType;
-		static_assert(std::is_base_of<EventBase, EventType>::value, "Template does not inherit from Event.");
+		static_assert(std::is_base_of<EventBase, EventType>::value, "Template argument must inherit from Event.");
 	public:
-		Listener()
-		{
-			EventType::subscribe(*this);
-		}
+		Listener() { EventType::subscribe(*this); }
+		Listener(std::function<void(const EventType&)> callbackFunc) : callback(callbackFunc) { EventType::subscribe(*this); }
+		~Listener() { EventType::unsubscribe(*this); }
 
-		Listener(std::function<void(const EventType&)> callback)
-			: callback(callback)
-		{
-			EventType::subscribe(*this);
-		}
-
-		~Listener()
-		{
-			EventType::unsubscribe(*this);
-		}
-		std::function<void(const EventType&)> callback = nullptr;
+		std::function<void(const EventType&)> callback;
 	};
 
-
-	template<class Derived>
+	template <class derived>
 	class Event : public EventBase
 	{
-		friend Listener<Derived>;
 	public:
 		virtual ~Event() = default;
 
-		virtual void raise() const
+		virtual bool has_listeners() const final override
 		{
-			for (auto i = 0u ; i < _listeners.size() ; ++i)
-			{
-				if (_listeners[i]->callback)
-					_listeners[i]->callback(*static_cast<const Derived*>(this));
-			}
+			return has_listeners_static();
 		}
-		virtual bool has_listeners() const final override { return has_listeners_static(); }
-		static bool has_listeners_static() { return !_listeners.empty(); }
-		
-		static const auto& get_listeners() { return _listeners; }
-	
+
+		virtual void raise() const final override
+		{
+			for (unsigned i = 0; i < _listeners.size(); i++)
+				if (_listeners[i]->callback)
+					_listeners[i]->callback(*static_cast<const derived*>(this));
+		}
+
+		static bool has_listeners_static()
+		{
+			return !_listeners.empty();
+		}
+
+		static void subscribe(Listener<derived>& listener)
+		{
+			_listeners.push_back(&listener);
+		}
+
+		static void unsubscribe(Listener<derived>& listener)
+		{
+			_listeners.erase(std::find(_listeners.begin(), _listeners.end(), &listener));
+		}
+
 	private:
-		static void subscribe(Listener<Derived>& listener) { _listeners.push_back(&listener); }
-		static void unsubscribe(Listener<Derived>& listener) { _listeners.erase(std::find(_listeners.begin(), _listeners.end(), &listener)); }
-
-		static std::vector<Listener<Derived>*> _listeners;
+		static std::vector<Listener<derived>*> _listeners;
 	};
-	template<class Derived> std::vector<Listener<Derived>*> Event<Derived>::_listeners;
-
+	template<class derived> std::vector<Listener<derived>*> Event<derived>::_listeners;
 
 	static class EventQueue : public Singleton<class EventQueue>
 	{
 	public:
-		void push(std::unique_ptr<EventBase> e)
+		void Push(std::unique_ptr<EventBase> e)
 		{
 			#if defined(EDN_DEBUG)
 				ASSERT(!is_dispatching, "Cannot push an event while event queue is being processed. Try calling Dispatch(const EventBase&) to bypass the event queue.");
 			#endif
 			if (e->has_listeners())
-				_queue.push(std::move(e));
+				eventQueue.push_back(std::move(e));
 		}
 
-		void dispatch(const EventBase& e)
+		void Dispatch(const EventBase& e) const
 		{
 			e.raise();
 		}
 
-		void dispatch()
+		void Dispatch()
 		{
-			#if defined (EDN_DEBUG)
+			#if defined(EDN_DEBUG)
 				is_dispatching = true;
 			#endif
 
-			// Note: This can be changed for a cuncurrent queue to handle multi-threading. Just an thought.
-			while (!_queue.empty())
-			{
-				_queue.front()->raise();
-				_queue.pop();
-			}
+			for (u32 i = 0; i < eventQueue.size(); ++i)
+				eventQueue[i]->raise();
 
-			#if defined (EDN_DEBUG)
+			#if defined(EDN_DEBUG)
 				is_dispatching = false;
 			#endif
+
+			eventQueue.clear();
 		}
 
 	private:
-		#if defined (EDN_DEBUG)
-			bool is_dispatching = false;
-		#endif
-		
-		std::queue<std::unique_ptr<class EventBase>> _queue;
+		std::vector<std::unique_ptr<EventBase>> eventQueue;
 
+#ifdef _DEBUG
+		bool is_dispatching = false;
+#endif
 	} &EventQueue = Singleton<class EventQueue>::instanceRef;
 }

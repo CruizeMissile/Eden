@@ -28,14 +28,22 @@ void key_callback(GLFWwindow* window, s32 key, s32 scancode, s32 action, s32 mod
 {
 	if (action == GLFW_REPEAT) return;
 	edn::Input.setKeyState(static_cast<edn::Key>(key), action == GLFW_PRESS);
-	cout << key << " " << edn::Input.isDown(static_cast<edn::Key>(key)) << endl;
+	if (action == GLFW_PRESS)
+		edn::EventQueue.Push(std::make_unique<edn::evn::KeyDown>(static_cast<edn::Key>(key)));
+	else
+		edn::EventQueue.Push(std::make_unique<edn::evn::KeyUp>(static_cast<edn::Key>(key)));
+	//cout << key << " " << edn::Input.isDown(static_cast<edn::Key>(key)) << endl;
 }
 
 void mouse_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	if (action == GLFW_REPEAT) return;
 	edn::Input.setMouseBtnState(static_cast<edn::MouseButton>(button), action == GLFW_PRESS || action == GLFW_REPEAT);
-	cout << button << " " << edn::Input.isDown(static_cast<edn::MouseButton>(button)) << endl;
+	if (action == GLFW_PRESS)
+		edn::EventQueue.Push(std::make_unique<edn::evn::MouseButtonDown>(static_cast<edn::Key>(button)));
+	else
+		edn::EventQueue.Push(std::make_unique<edn::evn::MouseButtonUp>(static_cast<edn::Key>(button)));
+	//cout << button << " " << edn::Input.isDown(static_cast<edn::MouseButton>(button)) << endl;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -46,6 +54,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	edn::Input.updateCursorPosition(static_cast<s32>(xpos), static_cast<s32>(ypos));
+	edn::EventQueue.Push(std::make_unique<edn::evn::MouseMovement>(static_cast<u32>(xpos), static_cast<u32>(ypos)));
 	//cout << xpos << " " << ypos << endl;
 }
 

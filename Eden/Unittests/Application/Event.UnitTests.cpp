@@ -27,19 +27,19 @@ TEST_CASE("Events")
 		};
 
 		// Push an event in the queue
-		EventQueue.push(std::make_unique<KeyPressed>(static_cast<u32>(1u)));
-		EventQueue.push(std::make_unique<KeyPressed>(static_cast<u32>(2u)));
-		EventQueue.push(std::make_unique<KeyPressed>(static_cast<u32>(3u)));
-		EventQueue.push(std::make_unique<KeyPressed>(static_cast<u32>(4u)));
-		EventQueue.push(std::make_unique<KeyPressed>(static_cast<u32>(5u)));
+		EventQueue.Push(std::make_unique<KeyPressed>(static_cast<u32>(1u)));
+		EventQueue.Push(std::make_unique<KeyPressed>(static_cast<u32>(2u)));
+		EventQueue.Push(std::make_unique<KeyPressed>(static_cast<u32>(3u)));
+		EventQueue.Push(std::make_unique<KeyPressed>(static_cast<u32>(4u)));
+		EventQueue.Push(std::make_unique<KeyPressed>(static_cast<u32>(5u)));
 
-		EventQueue.dispatch(KeyPressed(6u));
+		EventQueue.Dispatch(KeyPressed(6u));
 
 		// The event should have fired and is even should be true
 		std::vector<u32> result1 = { 6 };
 		CHECK(compare(list, result1));
 
-		EventQueue.dispatch();
+		EventQueue.Dispatch();
 
 		// Event queue is processed and is_even should be false
 		std::vector<u32> result2 = { 6, 1, 2, 3, 4, 5 };

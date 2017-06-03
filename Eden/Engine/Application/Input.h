@@ -68,4 +68,39 @@ namespace edn
 		s32 x = 0;
 		s32 y = 0;
 	} &Input = Singleton<class Input>::instanceRef;
+
+
+	namespace evn
+	{
+		struct KeyDown : public Event<KeyDown>
+		{
+			KeyDown(const Key key) : key(key) {}
+			Key key;
+		};
+
+		struct KeyUp : public Event<KeyUp>
+		{
+			KeyUp(const Key key) : key(key) {}
+			Key key;
+		};
+
+		struct MouseButtonDown : public Event<MouseButtonDown>
+		{
+			MouseButtonDown(const Key button) : button(button) {}
+			Key button;
+		};
+
+		struct MouseButtonUp : public Event<MouseButtonUp>
+		{
+			MouseButtonUp(const Key button) : button(button) {}
+			Key button;
+		};
+
+		struct MouseMovement : public Event<MouseMovement>
+		{
+			MouseMovement(const u32 x, const u32 y) : x(x), y(y) {}
+			u32 x, y;
+		};
+	}
+
 }
