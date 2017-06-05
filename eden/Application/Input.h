@@ -59,14 +59,15 @@ namespace edn
 		void setKeyState(const Key key, bool state) { keys[static_cast<u32>(key)] = state; }
 		void setMouseBtnState(const MouseButton btn, bool state) { keys[static_cast<u32>(btn)] = state; }
 
-		void updateCursorPosition(s32 x, s32 y);
+		void setCursorPosition(u32 x, u32 y);
+		void updateCursorPosition(u32 x, u32 y);
 
 	private:
 		void update();
 
 		bool keys[static_cast<u32>(Key::NUM_KEYS)] = { false };
-		s32 x = 0;
-		s32 y = 0;
+		u32 x = 0;
+		u32 y = 0;
 	} &Input = Singleton<class Input>::instanceRef;
 
 

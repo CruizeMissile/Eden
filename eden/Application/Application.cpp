@@ -14,4 +14,14 @@ namespace edn
 		window.processOsEvents();
 		running = window.checkRunningStatus();
 	}
+
+	//vec3 Application::getCursorPosition()
+	//{
+	//	return window.getCursorPosition();
+	//}
+
+	void Application::setCursorPosition(s32 x, s32 y)
+	{
+		window.setCursorPosition(x, y);
+	}
 }

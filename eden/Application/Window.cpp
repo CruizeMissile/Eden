@@ -18,9 +18,9 @@ void setup_glfw_window_hints()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// To make MacOS happy; should not be needed
-	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
+	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	// We don't want the old OpenGL 
+	// We don't want the old OpenGL
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
@@ -86,7 +86,7 @@ namespace edn
 		title = info.title;
 		width = info.width;
 		height = info.height;
-		
+
 		setup_glfw_window_hints();
 
 		window_ptr = glfwCreateWindow(width, height, title.c_str(), 0, 0);
@@ -149,5 +149,9 @@ namespace edn
 	bool Window::setResizable(bool bordered)
 	{
 		return true;
+	}
+	void Window::setCursorPosition(s32 x, s32 y)
+	{
+		glfwSetCursorPos(window_ptr, static_cast<f64>(x), static_cast<f64>(y));
 	}
 }

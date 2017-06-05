@@ -8,6 +8,7 @@ namespace edn
 
 	class Window
 	{
+		friend class Application;
 	public:
 		Window();
 		~Window();
@@ -29,8 +30,11 @@ namespace edn
 
 		void processOsEvents();
 
-	private:
+	protected:
+		void setCursorPosition(s32 x, s32 y);
+		void getCursorPosition();
 
+	private:
 		String title;
 		u32 width;
 		u32 height;
