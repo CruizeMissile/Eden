@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Singleton.h"
 #include "Core/Platform.h"
+#include <algorithm>
 #include <functional>
 #include <memory>
 #include <queue>

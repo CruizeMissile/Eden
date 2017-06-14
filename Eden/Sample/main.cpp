@@ -1,6 +1,7 @@
 #include "Application/Application.h"
 #include "Application/Event.h"
 #include "Application/Input.h"
+#include <iostream>
 
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work.
 // @Todo: Need to make it so that is not the case.
@@ -22,7 +23,7 @@ struct Something
 int engine()
 {
 	App.createWindow();
-	
+
 	Something something;
 	something.on_mouse_move.callback = [](auto& e) { cout << e.x << " : " << e.y << endl; };
 	something.on_mouse_down.callback = [](auto& e) { cout << static_cast<u32>(e.button) << endl; };
