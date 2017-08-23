@@ -24,7 +24,12 @@ detect_platform()
 print_info()
 set_output_paths()
 
-# add_subdirectory_ex(3rdparty)
+add_subdirectory_ex(3rdparty)
 add_subdirectory_ex(Eden)
+
+# Building samples
+if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+    add_subdirectory_ex(samples)
+endif()
 
 set_project_custom_defines()

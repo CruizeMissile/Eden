@@ -2,7 +2,7 @@
 #include "Application/Application.h"
 #include "Application/Window.h"
 #include "Application/Input.h"
-#include "glfw/glfw3.h"
+#include "GLFW/glfw3.h"
 
 using namespace std;
 

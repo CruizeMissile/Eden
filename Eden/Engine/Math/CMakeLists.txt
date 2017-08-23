@@ -1,3 +1,3 @@
 file(GLOB_RECURSE libsrc *.h *.cpp *.hpp *.c *.cc)
 
-add_library(math ${libsrc})
+target_sources(eden PUBLIC ${libsrc})

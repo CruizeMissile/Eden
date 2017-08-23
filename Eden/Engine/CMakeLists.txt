@@ -11,3 +11,10 @@ add_subdirectory_ex(Math)
 # Make sure the compiler can find include files for our library when
 # other libraries or exectuables link to it
 target_include_directories(eden PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# glfw
+target_include_directories(eden PUBLIC ${GLFW_INCLUDE_DIR})
+target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
+
+# cml
+target_include_directories(eden PUBLIC ${CML_INCLUDE_DIR})
