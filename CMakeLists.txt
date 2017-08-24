@@ -25,11 +25,13 @@ print_info()
 set_output_paths()
 
 add_subdirectory_ex(3rdparty)
-add_subdirectory_ex(Eden)
+add_subdirectory_ex(eden)
 
 # Building samples
 if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
     add_subdirectory_ex(samples)
 endif()
+
+add_subdirectory_ex(tests)
 
 set_project_custom_defines()

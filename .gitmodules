@@ -4,3 +4,6 @@
 [submodule "3rdparty/cml"]
 	path = 3rdparty/cml
 	url = https://github.com/cruizemissile/cml
+[submodule "3rdparty/Catch"]
+	path = 3rdparty/Catch
+	url = https://github.com/philsquared/Catch.git

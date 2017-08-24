@@ -9,19 +9,18 @@ file(GLOB_RECURSE _source_list
 )
 
 # adding the precompiled header and list of source files to the library eden
-add_library(eden Precompiled.h Precompiled.cpp ${_source_list})
+add_library(eden Precompiled.h Precompiled.cpp)
 
 # making sure that cmake knows that Precompiled is the precompiled header file
 add_precompiled_header(eden Precompiled.h SOURCE_CXX Precompiled.cpp FORCEINCLUDE)
 
+# for some reason it works when precompiled files are added and then the sources files after
+list(REMOVE_ITEM _source_list "Precompiled.cpp" "Precompiled.h") # not sure this is needed
+target_sources(eden PUBLIC ${_source_list})
+
 # looping though all source files and adding them to a source group. this will make sure
 # that when generating with msvc that the solution explorer looks like the source directory
-foreach(_source IN ITEMS ${_source_list})
-	get_filename_component(_source_path "${_source}" PATH)
-	file(RELATIVE_PATH _source_path_rel "${_src_root_path}" "${_source_path}")
-	string(REPLACE "/" "\\" _group_path "${_source_path_rel}")
-	source_group("${_group_path}" FILES "${_source}")
-endforeach()
+set_filter_groups("${_source_list}")
 
 # Make sure the compiler can find include files for our library when
 # other libraries or exectuables link to it
