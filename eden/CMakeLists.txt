@@ -36,3 +36,6 @@ target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
 
 # cml
 target_include_directories(eden PUBLIC ${CML_INCLUDE_DIR})
+
+# loguru
+target_link_libraries(eden PUBLIC loguru)

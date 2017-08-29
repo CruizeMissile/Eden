@@ -7,3 +7,6 @@
 [submodule "3rdparty/Catch"]
 	path = 3rdparty/Catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "3rdparty/loguru"]
+	path = 3rdparty/loguru
+	url = https://github.com/emilk/loguru
