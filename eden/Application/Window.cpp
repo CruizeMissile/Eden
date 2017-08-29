@@ -63,6 +63,20 @@ void cursor_enter_callback(GLFWwindow* window, int entered)
 		edn::EventQueue.push(std::make_unique<edn::evn::WindowExit>());
 }
 
+void drop_callback(GLFWwindow* window, int count, const char** paths)
+{
+    for (int i = 0; i < count; i++)
+        edn::EventQueue.push(std::make_unique<edn::evn::DragAndDrop>(paths[i]));
+}
+
+void joystick_callback(s32 joy_idx, s32 event)
+{
+    //if (event == GLFW_CONNECTED)
+    //    // joystick connected
+    //else if (event == GLFW_DISCONNECTED)
+    //    // joystick disconnected
+}
+
 
 namespace edn
 {
@@ -100,6 +114,10 @@ namespace edn
 		glfwSetScrollCallback(window_ptr, scroll_callback);
 		glfwSetCursorPosCallback(window_ptr, cursor_position_callback);
 		glfwSetCursorEnterCallback(window_ptr, cursor_enter_callback);
+        glfwSetDropCallback(window_ptr, drop_callback);
+        glfwSetJoystickCallback(joystick_callback);
+        //glfwSetCharCallback(window_ptr, character_callback); // text input
+        //glfwSetCharModsCallback(window_ptr, charmods_callback);
 
 		setFullscreen(info.fullscreen);
 	}

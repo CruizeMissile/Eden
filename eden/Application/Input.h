@@ -2,6 +2,7 @@
 #include "Application/Event.h"
 #include "Core/Singleton.h"
 #include "Core/Types.h"
+#include "Core/Path.h"
 #include "cml.hpp"
 
 namespace edn
@@ -103,6 +104,13 @@ namespace edn
 			MouseMovement(const u32 x, const u32 y) : x(x), y(y) {}
 			u32 x, y;
 		};
+
+        struct DragAndDrop : public Event<DragAndDrop>
+        {
+            DragAndDrop(const char* file) : file(file) {}
+            DragAndDrop(const String& file_path) : file(file_path) {}
+            Path file;
+        };
 	}
 
 }
