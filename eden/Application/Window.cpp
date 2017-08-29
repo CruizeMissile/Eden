@@ -18,9 +18,9 @@ void setup_glfw_window_hints()
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	// To make MacOS happy; should not be needed
-	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); 
+	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	// We don't want the old OpenGL 
+	// We don't want the old OpenGL
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
@@ -32,18 +32,16 @@ void key_callback(GLFWwindow* window, s32 key, s32 scancode, s32 action, s32 mod
 		edn::EventQueue.push(std::make_unique<edn::evn::KeyDown>(static_cast<edn::Key>(key)));
 	else
 		edn::EventQueue.push(std::make_unique<edn::evn::KeyUp>(static_cast<edn::Key>(key)));
-	//cout << key << " " << edn::Input.isDown(static_cast<edn::Key>(key)) << endl;
 }
 
 void mouse_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	if (action == GLFW_REPEAT) return;
-	edn::Input.setMouseBtnState(static_cast<edn::MouseButton>(button), action == GLFW_PRESS || action == GLFW_REPEAT);
+    edn::Input.setMouseBtnState(static_cast<edn::MouseButton>(button), action == GLFW_PRESS || action == GLFW_REPEAT);
 	if (action == GLFW_PRESS)
 		edn::EventQueue.push(std::make_unique<edn::evn::MouseButtonDown>(static_cast<edn::Key>(button)));
 	else
 		edn::EventQueue.push(std::make_unique<edn::evn::MouseButtonUp>(static_cast<edn::Key>(button)));
-	//cout << button << " " << edn::Input.isDown(static_cast<edn::MouseButton>(button)) << endl;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -55,7 +53,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	edn::Input.updateCursorPosition(static_cast<s32>(xpos), static_cast<s32>(ypos));
 	edn::EventQueue.push(std::make_unique<edn::evn::MouseMovement>(static_cast<u32>(xpos), static_cast<u32>(ypos)));
-	//cout << xpos << " " << ypos << endl;
 }
 
 void cursor_enter_callback(GLFWwindow* window, int entered)
@@ -64,6 +61,20 @@ void cursor_enter_callback(GLFWwindow* window, int entered)
 		edn::EventQueue.push(std::make_unique<edn::evn::WindowEntered>());
 	else
 		edn::EventQueue.push(std::make_unique<edn::evn::WindowExit>());
+}
+
+void drop_callback(GLFWwindow* window, int count, const char** paths)
+{
+    for (int i = 0; i < count; i++)
+        edn::EventQueue.push(std::make_unique<edn::evn::DragAndDrop>(paths[i]));
+}
+
+void joystick_callback(s32 joy_idx, s32 event)
+{
+    //if (event == GLFW_CONNECTED)
+    //    // joystick connected
+    //else if (event == GLFW_DISCONNECTED)
+    //    // joystick disconnected
 }
 
 
@@ -86,7 +97,7 @@ namespace edn
 		title = info.title;
 		width = info.width;
 		height = info.height;
-		
+
 		setup_glfw_window_hints();
 
 		window_ptr = glfwCreateWindow(width, height, title.c_str(), 0, 0);
@@ -103,6 +114,10 @@ namespace edn
 		glfwSetScrollCallback(window_ptr, scroll_callback);
 		glfwSetCursorPosCallback(window_ptr, cursor_position_callback);
 		glfwSetCursorEnterCallback(window_ptr, cursor_enter_callback);
+        glfwSetDropCallback(window_ptr, drop_callback);
+        glfwSetJoystickCallback(joystick_callback);
+        //glfwSetCharCallback(window_ptr, character_callback); // text input
+        //glfwSetCharModsCallback(window_ptr, charmods_callback);
 
 		setFullscreen(info.fullscreen);
 	}
@@ -149,5 +164,9 @@ namespace edn
 	bool Window::setResizable(bool bordered)
 	{
 		return true;
+	}
+	void Window::setCursorPosition(s32 x, s32 y)
+	{
+		glfwSetCursorPos(window_ptr, static_cast<f64>(x), static_cast<f64>(y));
 	}
 }

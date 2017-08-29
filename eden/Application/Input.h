@@ -2,7 +2,8 @@
 #include "Application/Event.h"
 #include "Core/Singleton.h"
 #include "Core/Types.h"
-#include "Math/Vector.h"
+#include "Core/Path.h"
+#include "cml.hpp"
 
 namespace edn
 {
@@ -56,17 +57,19 @@ namespace edn
 		bool isDown(const MouseButton button) const;
 		bool isUp(const MouseButton button) const;
 
+        cml::uvec2 getCursorPosition() const;
+
 		void setKeyState(const Key key, bool state) { keys[static_cast<u32>(key)] = state; }
 		void setMouseBtnState(const MouseButton btn, bool state) { keys[static_cast<u32>(btn)] = state; }
 
-		void updateCursorPosition(s32 x, s32 y);
+		void setCursorPosition(u32 x, u32 y);
+		void updateCursorPosition(u32 x, u32 y);
 
 	private:
 		void update();
 
 		bool keys[static_cast<u32>(Key::NUM_KEYS)] = { false };
-		s32 x = 0;
-		s32 y = 0;
+        cml::uvec2 cursor_position;
 	} &Input = Singleton<class Input>::instanceRef;
 
 
@@ -101,6 +104,13 @@ namespace edn
 			MouseMovement(const u32 x, const u32 y) : x(x), y(y) {}
 			u32 x, y;
 		};
+
+        struct DragAndDrop : public Event<DragAndDrop>
+        {
+            DragAndDrop(const char* file) : file(file) {}
+            DragAndDrop(const String& file_path) : file(file_path) {}
+            Path file;
+        };
 	}
 
 }

@@ -33,7 +33,6 @@
 #include "Core/Platform.h"
 #include "Core/ScopeGuard.h"
 #include "Core/Shareable.h"
-#include "Core/TypeInfo.h"
 #include "Core/Types.h"
 #include "Core/Utility.h"
 

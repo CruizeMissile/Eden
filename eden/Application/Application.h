@@ -9,6 +9,7 @@ namespace edn
 {
 	static class Application : public Singleton<class Application>
 	{
+		friend class Input;
 	public:
 		Application() {}
 		~Application() {}
@@ -20,5 +21,7 @@ namespace edn
 		bool running;
 		Window window;
 	private:
+		void getCursorPosition();
+		void setCursorPosition(s32 x, s32 y);
 	} &App = Singleton<class Application>::instanceRef;
 }

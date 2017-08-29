@@ -1,4 +1,5 @@
 #include "Precompiled.h"
+#include "Application/Application.h"
 #include "Application/Input.h"
 
 namespace edn
@@ -23,11 +24,21 @@ namespace edn
 		return !isDown(button);
 	}
 
-	void Input::updateCursorPosition(s32 xpos, s32 ypos)
+	void Input::updateCursorPosition(u32 xpos, u32 ypos)
 	{
-		x = xpos;
-		y = ypos;
+		cursor_position.x = xpos;
+		cursor_position.y = ypos;
 	}
+
+	void Input::setCursorPosition(u32 x, u32 y)
+	{
+		App.setCursorPosition(x, y);
+	}
+
+    cml::uvec2 Input::getCursorPosition() const
+    {
+        return cursor_position;
+    }
 
 	void Input::update()
 	{
