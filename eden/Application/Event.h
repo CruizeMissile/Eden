@@ -26,8 +26,10 @@ namespace edn
 	{
 		static_assert(std::is_base_of<EventBase, EventType>::value, "Template argument must inherit from Event.");
 	public:
+        using EventFunc = void(const EventType&);
 		Listener() { EventType::subscribe(*this); }
-		Listener(std::function<void(const EventType&)> callbackFunc) : callback(callbackFunc) { EventType::subscribe(*this); }
+        Listener(const std::function<EventFunc>& callbackFunc) : callback(callbackFunc) { EventType::subscribe(*this); }
+        Listener(std::function<EventFunc>&& callbackFunc) : callback(std::move(callbackFunc)) { EventType::subscribe(*this); }
 		~Listener() { EventType::unsubscribe(*this); }
 
 		std::function<void(const EventType&)> callback;

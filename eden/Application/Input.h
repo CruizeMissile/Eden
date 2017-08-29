@@ -56,6 +56,8 @@ namespace edn
 		bool isDown(const MouseButton button) const;
 		bool isUp(const MouseButton button) const;
 
+        cml::uvec2 getCursorPosition() const;
+
 		void setKeyState(const Key key, bool state) { keys[static_cast<u32>(key)] = state; }
 		void setMouseBtnState(const MouseButton btn, bool state) { keys[static_cast<u32>(btn)] = state; }
 
@@ -66,8 +68,7 @@ namespace edn
 		void update();
 
 		bool keys[static_cast<u32>(Key::NUM_KEYS)] = { false };
-		u32 x = 0;
-		u32 y = 0;
+        cml::uvec2 cursor_position;
 	} &Input = Singleton<class Input>::instanceRef;
 
 
