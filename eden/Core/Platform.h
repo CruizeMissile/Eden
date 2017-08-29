@@ -87,7 +87,7 @@
 	#endif
 #endif
 
-#if defined(EDN_COMPILER_GCC)
+#if defined(EDN_COMPILER_GCC) || defined(EDN_COMPILER_CLANG)
 	#if defined(__x86_64__) || defined(__LP64__) || defined(_i386_)
 		#define EDN_64_BIT
 	#else
