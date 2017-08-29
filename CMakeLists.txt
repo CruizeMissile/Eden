@@ -12,6 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 include(macros)
 include(enable_sanitizers)
 include(precompiled_header)
+include(flags)
 
 option(BUILD_SHARED_LIBS
     "Build package with shared libraries."
