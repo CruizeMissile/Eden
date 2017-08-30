@@ -1,6 +1,8 @@
 #include "Application/Application.h"
 #include "Application/Event.h"
 #include "Application/Input.h"
+#include "Rendering/CommandBuffer.h"
+#include "Rendering/Buffer.h"
 #include <iostream>
 
 // @Note: Not sure why the sample project has to include the engine dependencies in order to work.
