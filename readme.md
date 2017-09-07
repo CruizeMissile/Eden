@@ -6,14 +6,14 @@ Eden is a cross platform c++ game engine. It is archetected around Entity-Compon
 
 ### Windows
 ``` bash
-$ git submodule init ; git submodule update
+$ git submodule update --init --recursive
 $ cmake . -Bbuild -G "Visual Studio 15 2017 Win64"
 $ cmake --build build
 ```
 
 ### Linux
 ``` bash
-$ git submodule init ; git submodule update
+$ git submodule update --init --recursive
 $ cmake . -Bbuild
 $ cmake --build build
 ```
