@@ -7,17 +7,15 @@ Eden is a cross platform c++ game engine. It is archetected around Entity-Compon
 ### Windows
 ``` bash
 $ git submodule init ; git submodule update
-$ mkdir build ; cd build
-$ cmake -G "Visual Studio 15 2017" ..
-$ cmake --build .
+$ cmake . -Bbuild -G "Visual Studio 15 2017 Win64"
+$ cmake --build build
 ```
 
 ### Linux
 ``` bash
 $ git submodule init ; git submodule update
-$ mkdir build ; cd build
-$ cmake ..
-$ cmake --build .
+$ cmake . -Bbuild
+$ cmake --build build
 ```
 
 # In development
