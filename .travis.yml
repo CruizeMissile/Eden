@@ -63,31 +63,6 @@ matrix:
           sources: &sources
             - ubuntu-toolchain-r-test
 
-    ##
-    ## Osx clang
-    ##
-    - env: BUILD_TYPE=Debug
-      os: osx
-      osx_image: xcode9
-      compiler: clang
-    - env: BUILD_TYPE=Release
-      os: osx
-      osx_image: xcode9
-      compiler: clang
-
-    # - env: GCC_VERSION=7 BUILD_TYPE=Release
-    #   os: linux
-    #   addons: &gcc7
-    #     apt:
-    #       packages: g++-7
-    #       sources: &sources
-    # - env: GCC_VERSION=7 BUILD_TYPE=Release
-    #   os: linux
-    #   addons: &gcc7
-    #     apt:
-    #       packages: g++-7
-    #       sources: &sources
-
 before_install:
   - "git submodule update --init --recursive"
 
