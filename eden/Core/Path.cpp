@@ -6,15 +6,24 @@
 #include <cctype>
 #include <locale>
 
-#if defined(EDN_LINUX)
+#if defined(EDN_UNIX)
 #include <fts.h>
 #include <fcntl.h>
-#include <sys/sendfile.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
+#endif
+
+#if defined(EDN_LINUX)
+#include <sys/sendfile.h>
+#endif
+
+#if defined(EDN_MACOSX)
+#include <copyfile.h>
+#include <sys/socket.h>
+#include <sys/uio.h>
 #endif
 
 using StringList = std::vector<String>;
@@ -119,6 +128,11 @@ namespace edn
 	{
 #if defined(EDN_WINDOWS)
 		return CopyFile(oldpath.value.c_str(), newpath.value.c_str(), overwrite ? TRUE : FALSE) != 0;
+#elif defined(EDN_MACOSX)
+		copyfile_state_t s = copyfile_state_alloc();
+		auto result = copyfile(oldpath.value.c_str(), newpath.value.c_str(), s, COPYFILE_ALL);
+		copyfile_state_free(s);
+		return result == 0;
 #else
 		s32 read_fd;
 		s32 write_fd;
@@ -235,7 +249,7 @@ namespace edn
 		case ENOENT:
 			// parent does not exist, try to create it
 			pos = path.value.find_last_of(Seperator);
-			if (pos == String::npos)
+			if (pos == static_cast<u32>(String::npos))
 				return false;
 			if (!Makedir(path.value.substr(0, pos)))
 				return false;
@@ -255,6 +269,7 @@ namespace edn
 		return MoveFile(oldpath.value.c_str(), newpath.value.c_str()) != 0;
 #else
 /* #error Not Implemented */
+        return true;
 #endif
 	}
 

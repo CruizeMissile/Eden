@@ -33,6 +33,7 @@
 	//#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 
 #elif defined (__APPLE__) && defined(__MACH__)
+	#define EDN_UNIX
 	#define EDN_MACOSX
 #elif defined(__unix__)
 	#define EDN_UNIX
