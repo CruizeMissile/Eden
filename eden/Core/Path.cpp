@@ -268,8 +268,7 @@ namespace edn
 #if defined(EDN_WINDOWS)
 		return MoveFile(oldpath.value.c_str(), newpath.value.c_str()) != 0;
 #else
-/* #error Not Implemented */
-        return true;
+        return rename(oldpath.value.c_str(), newpath.value.c_str())== 0;
 #endif
 	}
 
