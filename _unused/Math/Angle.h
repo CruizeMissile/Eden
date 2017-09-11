@@ -3,110 +3,110 @@
 
 namespace Math
 {
-	class Radian;
-	class Degree;
+    class Radian;
+    class Degree;
 
-	// --------------------------------------------------------------------------------------------
-	// Radian
+    // --------------------------------------------------------------------------------------------
+    // Radian
 
-	class Radian
-	{
-		static const f32 pi;
-	public:
-		Radian();
-		Radian(Degree degree);
-		explicit Radian(f32 value);
+    class Radian
+    {
+        static const f32 pi;
+    public:
+        Radian();
+        Radian(Degree degree);
+        explicit Radian(f32 value);
 
-		Degree toDegree() const;
+        Degree toDegree() const;
 
-		f32 operator*(f32 rhs) const;
-		f32& operator()();
+        f32 operator*(f32 rhs) const;
+        f32& operator()();
 
-		f32 value;
-	};
+        f32 value;
+    };
 
-	// --------------------------------------------------------------------------------------------
-	// Degree
+    // --------------------------------------------------------------------------------------------
+    // Degree
 
-	class Degree
-	{
-		static const f32 pi;
-	public:
-		Degree();
-		Degree(Radian radian);
-		explicit Degree(f32 value);
+    class Degree
+    {
+        static const f32 pi;
+    public:
+        Degree();
+        Degree(Radian radian);
+        explicit Degree(f32 value);
 
-		Radian toRadian();
+        Radian toRadian();
 
-		f32 operator*(f32 rhs) const;
-		f32& operator()();
+        f32 operator*(f32 rhs) const;
+        f32& operator()();
 
-		f32 value;
-	};
+        f32 value;
+    };
 
-	// --------------------------------------------------------------------------------------------
-	// Radian
+    // --------------------------------------------------------------------------------------------
+    // Radian
 
-	inline Radian::Radian()
-		: value(0)
-	{
-	}
+    inline Radian::Radian()
+        : value(0)
+    {
+    }
 
-	inline Radian::Radian(Degree degree)
-	{
-		value = degree * pi / 180.f;
-	}
+    inline Radian::Radian(Degree degree)
+    {
+        value = degree * pi / 180.f;
+    }
 
-	inline Radian::Radian(f32 value)
-		: value(value)
-	{
-	}
+    inline Radian::Radian(f32 value)
+        : value(value)
+    {
+    }
 
-	inline Degree Radian::toDegree() const
-	{
-		return Degree(*this);
-	}
+    inline Degree Radian::toDegree() const
+    {
+        return Degree(*this);
+    }
 
-	inline f32 Radian::operator*(f32 rhs) const
-	{
-		return value * rhs;
-	}
+    inline f32 Radian::operator*(f32 rhs) const
+    {
+        return value * rhs;
+    }
 
-	inline f32& Radian::operator()()
-	{
-		return value;
-	}
+    inline f32& Radian::operator()()
+    {
+        return value;
+    }
 
-	// --------------------------------------------------------------------------------------------
-	// Degree
+    // --------------------------------------------------------------------------------------------
+    // Degree
 
-	inline Degree::Degree()
-		: value(0)
-	{
-	}
+    inline Degree::Degree()
+        : value(0)
+    {
+    }
 
-	inline Degree::Degree(Radian radian)
-	{
-		value = radian() * (pi * 180.f);
-	}
+    inline Degree::Degree(Radian radian)
+    {
+        value = radian() * (pi * 180.f);
+    }
 
-	inline Degree::Degree(f32 value)
-		: value(value)
-	{
-	}
+    inline Degree::Degree(f32 value)
+        : value(value)
+    {
+    }
 
-	inline Radian Degree::toRadian()
-	{
-		return Radian(*this);
-	}
+    inline Radian Degree::toRadian()
+    {
+        return Radian(*this);
+    }
 
-	inline f32 Degree::operator*(f32 rhs) const
-	{
-		return value * rhs;
-	}
+    inline f32 Degree::operator*(f32 rhs) const
+    {
+        return value * rhs;
+    }
 
-	inline f32& Degree::operator()()
-	{
-		return value;
-	}
+    inline f32& Degree::operator()()
+    {
+        return value;
+    }
 }

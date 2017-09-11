@@ -5,29 +5,29 @@
 
 namespace edn
 {
-	namespace Graphics
-	{
-		namespace Vk
-		{
-			class Instance;
-			class Surface;
-			class PhysicalDevice
-			{
-			public:
-				PhysicalDevice(Instance& instance, Surface& surface);
+    namespace Graphics
+    {
+        namespace Vk
+        {
+            class Instance;
+            class Surface;
+            class PhysicalDevice
+            {
+            public:
+                PhysicalDevice(Instance& instance, Surface& surface);
 
-				operator VkPhysicalDevice&() { return gpu; }
+                operator VkPhysicalDevice&() { return gpu; }
 
-				VkPhysicalDevice gpu = nullptr;
-				VkPhysicalDeviceProperties properties;
-				VkPhysicalDeviceMemoryProperties memory_properties;
-				VkPhysicalDeviceFeatures features;
+                VkPhysicalDevice gpu = nullptr;
+                VkPhysicalDeviceProperties properties;
+                VkPhysicalDeviceMemoryProperties memory_properties;
+                VkPhysicalDeviceFeatures features;
 
-				std::vector<VkQueueFamilyProperties> queues;
-				std::vector<VkExtensionProperties> extentions;
-				std::vector<VkLayerProperties> layers;
+                std::vector<VkQueueFamilyProperties> queues;
+                std::vector<VkExtensionProperties> extentions;
+                std::vector<VkLayerProperties> layers;
 
-			};
-		}
-	}
+            };
+        }
+    }
 }

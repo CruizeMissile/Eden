@@ -12,36 +12,36 @@
 
 namespace edn
 {
-	namespace Graphics
-	{
-		namespace Vk
-		{
-			class Context
-			{
-			public:
-				Context(Window& window)
-					: instance()
-					, debug(instance)
-					, surface(instance, window)
-					, gpu(instance, surface)
-					, device(instance, gpu, surface)
-					, swapchain(gpu, device, surface, window)
-				{
-				}
+    namespace Graphics
+    {
+        namespace Vk
+        {
+            class Context
+            {
+            public:
+                Context(Window& window)
+                    : instance()
+                    , debug(instance)
+                    , surface(instance, window)
+                    , gpu(instance, surface)
+                    , device(instance, gpu, surface)
+                    , swapchain(gpu, device, surface, window)
+                {
+                }
 
-				static void SetupVk()
-				{
-					Surface::SetupLayerExtentions();
-					Debug::SetupLayerExtentions();
-				}
+                static void SetupVk()
+                {
+                    Surface::SetupLayerExtentions();
+                    Debug::SetupLayerExtentions();
+                }
 
-				Instance instance;
-				Surface surface;
-				PhysicalDevice gpu;
-				Device device;
-				Debug debug;
-				Swapchain swapchain;
-			};
-		}
-	}
+                Instance instance;
+                Surface surface;
+                PhysicalDevice gpu;
+                Device device;
+                Debug debug;
+                Swapchain swapchain;
+            };
+        }
+    }
 }

@@ -13,10 +13,10 @@
 
 int main(int argc, char* const argv[])
 {
-	int result = Catch::Session().run(argc, argv);
+    int result = Catch::Session().run(argc, argv);
 
 #if defined(EDN_WINDOWS)
-	system("pause");
+    system("pause");
 #endif
-	return result;
+    return result;
 }

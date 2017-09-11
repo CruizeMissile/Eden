@@ -3,30 +3,30 @@
 
 namespace edn
 {
-	Application app;
+    Application app;
 
-	Application::Application(const WindowCreateInfo& info)
-	{
-		initialize(info);
-	}
+    Application::Application(const WindowCreateInfo& info)
+    {
+        initialize(info);
+    }
 
-	void Application::initialize(const WindowCreateInfo& info)
-	{
-		window.initialize(info);
-	}
+    void Application::initialize(const WindowCreateInfo& info)
+    {
+        window.initialize(info);
+    }
 
-	Application::~Application()
-	{
-		cleanup();
-	}
+    Application::~Application()
+    {
+        cleanup();
+    }
 
-	void Application::cleanup()
-	{
-		window.cleanup();
-	}
+    void Application::cleanup()
+    {
+        window.cleanup();
+    }
 
-	void Application::update()
-	{
-		window.update();
-	}
+    void Application::update()
+    {
+        window.update();
+    }
 }

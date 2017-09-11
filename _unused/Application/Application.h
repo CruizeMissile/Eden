@@ -5,36 +5,36 @@
 #include "WindowStyles.h"
 
 #if defined(EDN_WINDOWS)
-	#include "Windows/Window.h"
+    #include "Windows/Window.h"
 #endif
 
 namespace edn
 {
 #if defined(EDN_WINDOWS)
-	using Window = Win32::Window;
-	using WindowCreateInfo = Win32::WindowCreateInfo;
+    using Window = Win32::Window;
+    using WindowCreateInfo = Win32::WindowCreateInfo;
 #endif
 
-	class Application
-	{
-	public:
-		Application() = default;
-		Application(const WindowCreateInfo& info);
-		~Application();
+    class Application
+    {
+    public:
+        Application() = default;
+        Application(const WindowCreateInfo& info);
+        ~Application();
 
-		void initialize(const WindowCreateInfo& info = WindowCreateInfo::Default);
-		void cleanup();
+        void initialize(const WindowCreateInfo& info = WindowCreateInfo::Default);
+        void cleanup();
 
-		void run();
-		void update();
-		
-		void setWindowStyle(WindowStyleFlag style);
+        void run();
+        void update();
 
-		bool isRunning() { return window.isRunning(); }
-		Window& getWindow() { return window; }
+        void setWindowStyle(WindowStyleFlag style);
 
-	private:
-		Window window;
-	};
-	extern Application app;
+        bool isRunning() { return window.isRunning(); }
+        Window& getWindow() { return window; }
+
+    private:
+        Window window;
+    };
+    extern Application app;
 }

@@ -8,104 +8,104 @@
 
 namespace edn
 {
-	class Entity;
+    class Entity;
 
-	class ComponentBase
-	{
-	public:
-		ComponentBase() { }
-		ComponentBase(const ComponentBase&) = delete;
-		ComponentBase(ComponentBase&&) = default;
-		virtual ~ComponentBase() { }
-	};
+    class ComponentBase
+    {
+    public:
+        ComponentBase() { }
+        ComponentBase(const ComponentBase&) = delete;
+        ComponentBase(ComponentBase&&) = default;
+        virtual ~ComponentBase() { }
+    };
 
-	template<typename Type>
-	class Component : public ComponentBase
-	{
-	public:
-		typedef Type Template;
+    template<typename Type>
+    class Component : public ComponentBase
+    {
+    public:
+        typedef Type Template;
 
-		Component(Entity& e);
-		Component(const Component&) = delete;
-		Component(Component&&) = default;
-		~Component() = default;
+        Component(Entity& e);
+        Component(const Component&) = delete;
+        Component(Component&&) = default;
+        ~Component() = default;
 
-		static Guid GetType();
+        static Guid GetType();
 
-		virtual String toString() = 0;
+        virtual String toString() = 0;
 
-		// The owner will never be null to it can be a reference
-		Entity& owner;
-	private:
-		static Guid type_id;
-	};
-	
-	template<typename Type>
-	Guid Component<Type>::type_id = get_guid<Type>();
+        // The owner will never be null to it can be a reference
+        Entity& owner;
+    private:
+        static Guid type_id;
+    };
 
-	template<typename Type>
-	Guid Component<Type>::GetType()
-	{
-		return type_id;
-	}
+    template<typename Type>
+    Guid Component<Type>::type_id = get_guid<Type>();
 
-	template<typename Type>
-	Component<Type>::Component(Entity& e)
-		: owner(e)
-	{
-	}
+    template<typename Type>
+    Guid Component<Type>::GetType()
+    {
+        return type_id;
+    }
 
-	template<typename Type>
-	inline String Component<Type>::toString()
-	{
-		return "Component";
-	}
+    template<typename Type>
+    Component<Type>::Component(Entity& e)
+        : owner(e)
+    {
+    }
 
-	// -----------------------------------------------------------------------------------------------
-	// Component Tag
+    template<typename Type>
+    inline String Component<Type>::toString()
+    {
+        return "Component";
+    }
 
-	class ComponentTagType
-	{
-	public:
-		template<typename Type>
-		static Guid get_type();
+    // -----------------------------------------------------------------------------------------------
+    // Component Tag
 
-	private:
-		static Guid& inst_guid();
-		static Guid next_guid();
-	};
+    class ComponentTagType
+    {
+    public:
+        template<typename Type>
+        static Guid get_type();
 
-	template<typename Type>
-	inline Guid ComponentTagType::get_type()
-	{
-		static Guid guid = next_guid();
-		return guid;
-	}
+    private:
+        static Guid& inst_guid();
+        static Guid next_guid();
+    };
 
-	inline Guid& ComponentTagType::inst_guid()
-	{
-		static Guid guid = 0;
-		return guid;
-	}
+    template<typename Type>
+    inline Guid ComponentTagType::get_type()
+    {
+        static Guid guid = next_guid();
+        return guid;
+    }
 
-	inline Guid ComponentTagType::next_guid()
-	{
-		Guid next = ++inst_guid();
-		if (next == std::numeric_limits<Guid>::max())
-			throw std::out_of_range("Component Guid hit max u32");
-		return next;
-	}
+    inline Guid& ComponentTagType::inst_guid()
+    {
+        static Guid guid = 0;
+        return guid;
+    }
 
-	template<typename Type>
-	struct ComponentTag
-	{
-		static Guid type;
-	};
+    inline Guid ComponentTagType::next_guid()
+    {
+        Guid next = ++inst_guid();
+        if (next == std::numeric_limits<Guid>::max())
+            throw std::out_of_range("Component Guid hit max u32");
+        return next;
+    }
 
-	template<typename Type>
-	Guid ComponentTag<Type>::type = ComponentTagType::get_type<Type>();
+    template<typename Type>
+    struct ComponentTag
+    {
+        static Guid type;
+    };
+
+    template<typename Type>
+    Guid ComponentTag<Type>::type = ComponentTagType::get_type<Type>();
 
 #define CREATE_TAG(tag_name) \
-	struct EDN_PASTE(tag_name, TagName) : public ComponentTag<EDN_PASTE(tag_name, TagName)> {}; \
-	typedef EDN_PASTE(tag_name, TagName) tag_name
+    struct EDN_PASTE(tag_name, TagName) : public ComponentTag<EDN_PASTE(tag_name, TagName)> {}; \
+    typedef EDN_PASTE(tag_name, TagName) tag_name
 }

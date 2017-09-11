@@ -6,29 +6,29 @@
 
 namespace Hidden
 {
-	static const u32 FRONT_SIZE = sizeof("Hidden::GetTypeNameHelper<");
-	static const u32 BACK_SIZE = sizeof(">::GetTypeName");
-	template<class T>
-	struct GetTypeNameHelper
-	{
-		static String GetTypeName()
-		{
-			String func(__FUNCTION__);
-			u32 size = sizeof(__FUNCTION__) - FRONT_SIZE - BACK_SIZE;
-			String result = func.substr(FRONT_SIZE - 1, size + 1);
-			u32 space = static_cast<u32>(result.find(' '));
-			if (space == String::npos)
-				return result;
-			result = result.substr(space + 1);
-			return result;
-		}
-	};
+    static const u32 FRONT_SIZE = sizeof("Hidden::GetTypeNameHelper<");
+    static const u32 BACK_SIZE = sizeof(">::GetTypeName");
+    template<class T>
+    struct GetTypeNameHelper
+    {
+        static String GetTypeName()
+        {
+            String func(__FUNCTION__);
+            u32 size = sizeof(__FUNCTION__) - FRONT_SIZE - BACK_SIZE;
+            String result = func.substr(FRONT_SIZE - 1, size + 1);
+            u32 space = static_cast<u32>(result.find(' '));
+            if (space == String::npos)
+                return result;
+            result = result.substr(space + 1);
+            return result;
+        }
+    };
 }
 
 template<class T>
 struct TypeInfo
 {
-	static const String name;
+    static const String name;
 };
 
 template<class T>

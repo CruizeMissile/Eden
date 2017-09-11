@@ -5,85 +5,85 @@
 
 namespace edn
 {
-	class Asset;
+    class Asset;
 
-	class AssetPoolInterface
-	{
-	protected:
-		AssetPoolInterface() { }
+    class AssetPoolInterface
+    {
+    protected:
+        AssetPoolInterface() { }
 
-	public:
-		virtual ~AssetPoolInterface() { }
-		virtual void Remove(String filename) = 0;
-	};
+    public:
+        virtual ~AssetPoolInterface() { }
+        virtual void Remove(String filename) = 0;
+    };
 
-	template<typename Type>
-	class AssetPool : public AssetPoolInterface
-	{
-	public:
-		static_assert(std::is_base_of<Asset, Type>::value, "Not a Asset type");
-		typedef std::unordered_map<String, Type> AssetList;
-		typedef typename AssetList::iterator AssetIterator;
+    template<typename Type>
+    class AssetPool : public AssetPoolInterface
+    {
+    public:
+        static_assert(std::is_base_of<Asset, Type>::value, "Not a Asset type");
+        typedef std::unordered_map<String, Type> AssetList;
+        typedef typename AssetList::iterator AssetIterator;
 
-	public:
-		AssetPool()
-		{
+    public:
+        AssetPool()
+        {
 
-		}
+        }
 
-		~AssetPool()
-		{
-			Cleanup();
-		}
+        ~AssetPool()
+        {
+            Cleanup();
+        }
 
-		void Cleanup()
-		{
-			ClearContainer(m_assets);
-		}
+        void Cleanup()
+        {
+            ClearContainer(m_assets);
+        }
 
-		Type * Create(String file)
-		{
-			auto result = m_assets.emplace(std::make_pair(file, Type()));
+        Type * Create(String file)
+        {
+            auto result = m_assets.emplace(std::make_pair(file, Type()));
 
-			if (result.second == false)
-				return	nullptr;
+            if (result.second == false)
+                return  nullptr;
 
-			return &result.first->second;
-		}
+            return &result.first->second;
+        }
 
-		Type * Lookup(String name)
-		{
-			auto result = m_assets.find(name);
+        Type * Lookup(String name)
+        {
+            auto result = m_assets.find(name);
 
-			if (result == m_assets.end())
-				return nullptr;
+            if (result == m_assets.end())
+                return nullptr;
 
-			return &result->second;
-		}
+            return &result->second;
+        }
 
-		void Remove(String name)
-		{
-			m_assets.erase(name);
-		}
+        void Remove(String name)
+        {
+            m_assets.erase(name);
+        }
 
-		void Clear()
-		{
-			m_assets.clear();
-		}
+        void Clear()
+        {
+            m_assets.clear();
+        }
 
-		void Begin()
-		{
-			return m_assets.begin();
-		}
+        void Begin()
+        {
+            return m_assets.begin();
+        }
 
-		void End()
-		{
-			return m_assets.end();
-		}
+        void End()
+        {
+            return m_assets.end();
+        }
 
-	private:
-		AssetList m_assets;
-	};
+    private:
+        AssetList m_assets;
+    };
 }
 
 #endif

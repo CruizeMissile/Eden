@@ -9,11 +9,11 @@
 
 namespace edn
 {
-	namespace Logging
-	{
-		void init(int argc, char** argv)
-		{
-			loguru::init(argc, argv);
-		}
-	}
+    namespace Logging
+    {
+        void init(int argc, char** argv)
+        {
+            loguru::init(argc, argv);
+        }
+    }
 }
