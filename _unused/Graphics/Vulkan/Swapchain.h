@@ -6,35 +6,35 @@
 
 namespace edn
 {
-	namespace Graphics
-	{
-		namespace Vk
-		{
-			class Device;
-			class PhysicalDevice;
-			class Surface;
+    namespace Graphics
+    {
+        namespace Vk
+        {
+            class Device;
+            class PhysicalDevice;
+            class Surface;
 
 
-			class Swapchain
-			{
-			public:
-				class Buffer
-				{
-					VkImage image;
-					VkImageView view;
-				};
+            class Swapchain
+            {
+            public:
+                class Buffer
+                {
+                    VkImage image;
+                    VkImageView view;
+                };
 
-				Swapchain(PhysicalDevice& gpu, Device& device, Surface& surface, Window& window);
-				~Swapchain();
+                Swapchain(PhysicalDevice& gpu, Device& device, Surface& surface, Window& window);
+                ~Swapchain();
 
-				VkSwapchainKHR swapchain;
-				VkFormat format;
-				VkExtent2D extent;
-				std::vector<VkImage> images;
+                VkSwapchainKHR swapchain;
+                VkFormat format;
+                VkExtent2D extent;
+                std::vector<VkImage> images;
 
-			private:
-				Device& device;
-			};
-		}
-	}
+            private:
+                Device& device;
+            };
+        }
+    }
 }

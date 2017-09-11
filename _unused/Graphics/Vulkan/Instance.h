@@ -6,26 +6,26 @@
 
 namespace edn
 {
-	namespace Graphics
-	{
-		namespace Vk
-		{
-			class Instance
-			{
-			public:
-				struct CreateInfo
-				{
-					String application_name;
-					String engine_name;
-				};
+    namespace Graphics
+    {
+        namespace Vk
+        {
+            class Instance
+            {
+            public:
+                struct CreateInfo
+                {
+                    String application_name;
+                    String engine_name;
+                };
 
-				Instance();
-				~Instance();
+                Instance();
+                ~Instance();
 
-				operator VkInstance&() { return instance; }
+                operator VkInstance&() { return instance; }
 
-				VkInstance instance = nullptr;
-			};
-		}
-	}
+                VkInstance instance = nullptr;
+            };
+        }
+    }
 }

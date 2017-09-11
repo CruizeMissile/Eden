@@ -3,16 +3,16 @@
 
 namespace edn
 {
-	struct WindowInfo
-	{
-		// A default version of windowinfo
-		static const WindowInfo Default;
+    struct WindowInfo
+    {
+        // A default version of windowinfo
+        static const WindowInfo Default;
 
-		u32 width;
-		u32 height;
-		String title;
-		bool fullscreen;
-		bool bordered;
-		bool resizable;
-	};
+        u32 width;
+        u32 height;
+        String title;
+        bool fullscreen;
+        bool bordered;
+        bool resizable;
+    };
 }

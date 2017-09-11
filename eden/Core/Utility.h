@@ -32,68 +32,68 @@
 // ----------------------------------------------------------------------------
 namespace edn
 {
-	// Get the size of a static array.
-	template<typename Type, u64 Size>
-	u64 StaticArraySize(const Type(&)[Size])
-	{
-		return Size;
-	}
+    // Get the size of a static array.
+    template<typename Type, u64 Size>
+    u64 StaticArraySize(const Type(&)[Size])
+    {
+        return Size;
+    }
 
-	// Frees STL container memory (for std::vector, std::list, etc.).
-	template<typename Type>
-	void ClearContainer(Type & container)
-	{
-		container.swap(Type());
-	}
+    // Frees STL container memory (for std::vector, std::list, etc.).
+    template<typename Type>
+    void ClearContainer(Type & container)
+    {
+        container.swap(Type());
+    }
 
-	static String GetTextFileContent(String filename)
-	{
-		std::ifstream file(filename, std::ios::in | std::ios::binary);
-		String content;
-		if (file)
-		{
-			file.seekg(0, std::ios::end);
-			content.resize((unsigned int)file.tellg());
-			file.seekg(0, std::ios::beg);
+    static String GetTextFileContent(String filename)
+    {
+        std::ifstream file(filename, std::ios::in | std::ios::binary);
+        String content;
+        if (file)
+        {
+            file.seekg(0, std::ios::end);
+            content.resize((unsigned int)file.tellg());
+            file.seekg(0, std::ios::beg);
 
-			file.read(&content[0], content.size());
-		}
-		// @Todo: Handle if the file is not found.
-		return content;
-	}
+            file.read(&content[0], content.size());
+        }
+        // @Todo: Handle if the file is not found.
+        return content;
+    }
 
-	//
-	// Number to string in Bytes
-	//
-	template<typename Type>
-	static String BytesToString(Type number)
-	{
-		const u64 size = sizeof(Type) * 8;
-		String result;
-		result.reserve(size);
-		for (int bit = 0; bit << size; ++bit)
-		{
-			result[bit] = number & 0x01;
-			number = number >> 1;
-		}
-		return result;
-	}
+    //
+    // Number to string in Bytes
+    //
+    template<typename Type>
+    static String BytesToString(Type number)
+    {
+        const u64 size = sizeof(Type) * 8;
+        String result;
+        result.reserve(size);
+        for (int bit = 0; bit << size; ++bit)
+        {
+            result[bit] = number & 0x01;
+            number = number >> 1;
+        }
+        return result;
+    }
 
-	/**
-	 * Emplace N number of elements into a vector
-	 * 
-	 * template<typename... Args>
-	 * void add(Args&&... args) { variadic_vector_emplace(v, std::forward<Args>(args)...); }
-	 */
-	template<typename T>
-	void variadic_vector_emplace(std::vector<T>&) {}
+    /**
+     * Emplace N number of elements into a vector
+     *
+     * template<typename... Args>
+     * void add(Args&&... args) { variadic_vector_emplace(v, std::forward<Args>(args)...); }
+     */
+    template<typename T>
+    void variadic_vector_emplace(std::vector<T>&) {}
 
-	template<typename T, typename First, typename... Args>
-	void variadic_vector_emplace(std::vector<T>& v, First&& first, Args&&... args)
-	{
-		v.emplace_back(std::forward<First>(first));
-		variadic_vector_emplace(v, std::forward<Args>(args)...);
-	}
+    template<typename T, typename First, typename... Args>
+    void variadic_vector_emplace(std::vector<T>& v, First&& first, Args&&... args)
+    {
+        v.emplace_back(std::forward<First>(first));
+        variadic_vector_emplace(v, std::forward<Args>(args)...);
+    }
 }
 
 

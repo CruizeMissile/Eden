@@ -91,8 +91,8 @@
 
 namespace edn
 {
-	namespace Logging
-	{
-		void init(int argc, char** argv);
-	}
+    namespace Logging
+    {
+        void init(int argc, char** argv);
+    }
 }

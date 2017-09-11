@@ -5,27 +5,27 @@
 
 namespace edn
 {
-	namespace Graphics
-	{
-		namespace Vk
-		{
-			class Instance;
-			class Surface
-			{
+    namespace Graphics
+    {
+        namespace Vk
+        {
+            class Instance;
+            class Surface
+            {
 
-			public:
-				Surface(Instance& instance, Window& window);
-				~Surface();
+            public:
+                Surface(Instance& instance, Window& window);
+                ~Surface();
 
-				static void SetupLayerExtentions();
+                static void SetupLayerExtentions();
 
-				operator VkSurfaceKHR&() { return surface; }
+                operator VkSurfaceKHR&() { return surface; }
 
-				VkSurfaceKHR surface;
+                VkSurfaceKHR surface;
 
-			private:
-				Instance& instance;
-			};
-		}
-	}
+            private:
+                Instance& instance;
+            };
+        }
+    }
 }

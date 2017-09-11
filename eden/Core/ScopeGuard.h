@@ -7,15 +7,15 @@
 // Executes a function when the scope guard goes out of it's scope and at it destruction
 //
 // Creating a scope guard:
-//		int * array = new int[10];
-//		auto cleanup = MakeScopeGuard([&]()
-//		{
-//			delete[] array;
-//		});
+//      int * array = new int[10];
+//      auto cleanup = MakeScopeGuard([&]()
+//      {
+//          delete[] array;
+//      });
 //
-//	Using a scope guard macro:
-//		int array = new int[10];
-//		SCOPE_GUARD(delete[] array);
+//  Using a scope guard macro:
+//      int array = new int[10];
+//      SCOPE_GUARD(delete[] array);
 //
 //  Using a conditional scope guard macro:
 //      bool cleanup = true;
@@ -42,35 +42,35 @@ template<typename Type>
 class ScopeGuard
 {
 public:
-	ScopeGuard(Type function)
-		: m_function(function)
-		, m_enabled(true)
-	{ }
+    ScopeGuard(Type function)
+        : m_function(function)
+        , m_enabled(true)
+    { }
 
-	~ScopeGuard()
-	{
-		if (m_enabled)
-			m_function();
-	}
+    ~ScopeGuard()
+    {
+        if (m_enabled)
+            m_function();
+    }
 
-	void Enable()
-	{
-		m_enabled = true;
-	}
+    void Enable()
+    {
+        m_enabled = true;
+    }
 
-	void Disable()
-	{
-		m_enabled = false;
-	}
+    void Disable()
+    {
+        m_enabled = false;
+    }
 
-	bool IsEnabled() const
-	{
-		return m_enabled;
-	}
+    bool IsEnabled() const
+    {
+        return m_enabled;
+    }
 
 private:
-	Type m_function;
-	bool m_enabled;
+    Type m_function;
+    bool m_enabled;
 };
 
 //
@@ -79,7 +79,7 @@ private:
 template<typename Type>
 ScopeGuard<Type> MakeScopeGuard(Type function)
 {
-	return ScopeGuard<Type>(function);
+    return ScopeGuard<Type>(function);
 }
 
 //
@@ -88,26 +88,26 @@ ScopeGuard<Type> MakeScopeGuard(Type function)
 class ScopeGuardCondition
 {
 public:
-	ScopeGuardCondition()
-		: m_condition(true)
-	{ }
+    ScopeGuardCondition()
+        : m_condition(true)
+    { }
 
-	ScopeGuardCondition(bool condition)
-		: m_condition(condition)
-	{ }
+    ScopeGuardCondition(bool condition)
+        : m_condition(condition)
+    { }
 
-	explicit operator bool()
-	{
-		return m_condition;
-	}
+    explicit operator bool()
+    {
+        return m_condition;
+    }
 private:
-	bool m_condition;
+    bool m_condition;
 };
 
 //
 // Macro defintions
 //
-#define SCOPE_GUARD_BEGIN(...) auto SCOPE_GUARD_NAME(__LINE__) = MakeScopeGuard([&]() { if(ScopeGuardCondition(__VA_ARGS__)) { 
+#define SCOPE_GUARD_BEGIN(...) auto SCOPE_GUARD_NAME(__LINE__) = MakeScopeGuard([&]() { if(ScopeGuardCondition(__VA_ARGS__)) {
 #define SCOPE_GUARD_END() } });
 
 #define SCOPE_GUARD(code) auto SCOPE_GUARD_NAME(__LINE__) = SCOPE_GUARD_MAKE(code)

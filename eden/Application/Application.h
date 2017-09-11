@@ -7,21 +7,21 @@
 
 namespace edn
 {
-	static class Application : public Singleton<class Application>
-	{
-		friend class Input;
-	public:
-		Application() {}
-		~Application() {}
+    static class Application : public Singleton<class Application>
+    {
+        friend class Input;
+    public:
+        Application() {}
+        ~Application() {}
 
-		void createWindow(const WindowInfo& info = WindowInfo::Default);
-		void update();
-		void shutdown() { running = false; }
+        void createWindow(const WindowInfo& info = WindowInfo::Default);
+        void update();
+        void shutdown() { running = false; }
 
-		bool running;
-		Window window;
-	private:
-		void getCursorPosition();
-		void setCursorPosition(s32 x, s32 y);
-	} &App = Singleton<class Application>::instanceRef;
+        bool running;
+        Window window;
+    private:
+        void getCursorPosition();
+        void setCursorPosition(s32 x, s32 y);
+    } &App = Singleton<class Application>::instanceRef;
 }

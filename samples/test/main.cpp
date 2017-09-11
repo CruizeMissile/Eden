@@ -11,13 +11,13 @@ using namespace std;
 
 struct Something
 {
-	Listener<evn::MouseMovement> on_mouse_move;
-	Listener<evn::MouseButtonDown> on_mouse_down;
-	Listener<evn::MouseButtonUp> on_mouse_up;
-	Listener<evn::KeyDown> on_key_down;
-	Listener<evn::KeyUp> on_key_up;
-	Listener<evn::WindowEntered> on_window_enter;
-	Listener<evn::WindowExit> on_window_exit;
+    Listener<evn::MouseMovement> on_mouse_move;
+    Listener<evn::MouseButtonDown> on_mouse_down;
+    Listener<evn::MouseButtonUp> on_mouse_up;
+    Listener<evn::KeyDown> on_key_down;
+    Listener<evn::KeyUp> on_key_up;
+    Listener<evn::WindowEntered> on_window_enter;
+    Listener<evn::WindowExit> on_window_exit;
     Listener<evn::DragAndDrop> on_drag_and_drop;
 
     Something()
@@ -30,26 +30,26 @@ struct Something
         on_window_enter.callback = [](auto& e) { cout << "Entered" << '\n'; };
         on_window_exit.callback = [](auto& e) { cout << "Exit" << '\n'; };
         on_drag_and_drop.callback = [](auto& e) { cout << e.file << '\n'; };
-	}
+    }
 };
 
 int engine()
 {
-	App.createWindow();
+    App.createWindow();
 
-	Something something;
+    Something something;
 
-	while (App.running)
-	{
-		App.update();
-		EventQueue.dispatch();
-	}
+    while (App.running)
+    {
+        App.update();
+        EventQueue.dispatch();
+    }
 
-	App.shutdown();
-	return 0;
+    App.shutdown();
+    return 0;
 }
 
 int main(int argc, char** argv)
 {
-	return engine();
+    return engine();
 }

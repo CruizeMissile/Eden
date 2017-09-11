@@ -5,28 +5,28 @@
 
 namespace edn
 {
-	//
-	// NonCopyable
-	//
-	class NonCopyable
-	{
-	public:
-		NonCopyable() { }
-		NonCopyable(const NonCopyable&) = delete;
-		NonCopyable& operator=(const NonCopyable&) = delete;
-	};
+    //
+    // NonCopyable
+    //
+    class NonCopyable
+    {
+    public:
+        NonCopyable() { }
+        NonCopyable(const NonCopyable&) = delete;
+        NonCopyable& operator=(const NonCopyable&) = delete;
+    };
 
-	struct IRect
-	{
-		u32 width;
-		u32 height;
-	};
+    struct IRect
+    {
+        u32 width;
+        u32 height;
+    };
 
-	struct IPoint
-	{
-		u32 x;
-		u32 y;
-	};
+    struct IPoint
+    {
+        u32 x;
+        u32 y;
+    };
 
 }
 

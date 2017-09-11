@@ -7,137 +7,137 @@
 
 namespace edn
 {
-	class AssetManager;
+    class AssetManager;
 
-	class Asset
-	{
-		friend class AssetManager;
-	public:
-		void Load(String filename);
+    class Asset
+    {
+        friend class AssetManager;
+    public:
+        void Load(String filename);
 
-		//protected:
-		virtual void loadFromFile(String filename) = 0;
-		virtual void loadFromCashe(String filename) = 0;
-		virtual void writeCacheFile(String filename) = 0;
+        //protected:
+        virtual void loadFromFile(String filename) = 0;
+        virtual void loadFromCashe(String filename) = 0;
+        virtual void writeCacheFile(String filename) = 0;
 
-		String m_name;
-		String m_subDir;
-	};
+        String m_name;
+        String m_subDir;
+    };
 
-	static class AssetManager : public Singleton<class AssetManager>
-	{
-		typedef std::unique_ptr<AssetPoolInterface> AssetPoolPtr;
-		typedef std::unordered_map<std::type_index, AssetPoolPtr> AssetPoolList;
-		typedef AssetPoolList::value_type AssetPoolPair;
+    static class AssetManager : public Singleton<class AssetManager>
+    {
+        typedef std::unique_ptr<AssetPoolInterface> AssetPoolPtr;
+        typedef std::unordered_map<std::type_index, AssetPoolPtr> AssetPoolList;
+        typedef AssetPoolList::value_type AssetPoolPair;
 
-	public:
-		template<typename Type>
-		void Register();
+    public:
+        template<typename Type>
+        void Register();
 
-		template<typename Type>
-		Type * Load(String file);
+        template<typename Type>
+        Type * Load(String file);
 
-		//Texture * texture = AssetManager::Load<Texture>(filename);
+        //Texture * texture = AssetManager::Load<Texture>(filename);
 
-		String & AssetPath() { return m_rootAssetPath; }
-		String & CachePath() { return m_rootCachePath; }
+        String & AssetPath() { return m_rootAssetPath; }
+        String & CachePath() { return m_rootCachePath; }
 
-		void SetAssetPath(String path) { m_rootAssetPath = path; }
-		void SetCachePath(String path) { m_rootCachePath = path; }
+        void SetAssetPath(String path) { m_rootAssetPath = path; }
+        void SetCachePath(String path) { m_rootCachePath = path; }
 
-	private:
-		template<typename Type>
-		Type * create(String file);
-		template<typename Type>
-		Type * lookup(String file);
+    private:
+        template<typename Type>
+        Type * create(String file);
+        template<typename Type>
+        Type * lookup(String file);
 
-		template<typename Type>
-		AssetPool<Type> * getAssetPool();
+        template<typename Type>
+        AssetPool<Type> * getAssetPool();
 
-		AssetPoolList m_assets;
-		String m_rootAssetPath;
-		String m_rootCachePath;
-	} &AssetManager = Singleton<class AssetManager>::instanceRef;
+        AssetPoolList m_assets;
+        String m_rootAssetPath;
+        String m_rootCachePath;
+    } &AssetManager = Singleton<class AssetManager>::instanceRef;
 
-	//
-	// Asset
-	//
+    //
+    // Asset
+    //
 
 
-	//
-	// AssetManager
-	//
-	template<typename Type>
-	void AssetManager::Register()
-	{
-		// Validate Asset type
-		static_assert(std::is_base_of<Asset, Type>::value, "Not a asset type");
+    //
+    // AssetManager
+    //
+    template<typename Type>
+    void AssetManager::Register()
+    {
+        // Validate Asset type
+        static_assert(std::is_base_of<Asset, Type>::value, "Not a asset type");
 
-		// Check if Asset type is registered
-		auto it = AssetManager.m_assets.find(typeid(Type));
+        // Check if Asset type is registered
+        auto it = AssetManager.m_assets.find(typeid(Type));
 
-		if (it != AssetManager.m_assets.end())
-			return;
+        if (it != AssetManager.m_assets.end())
+            return;
 
-		std::type_index index = typeid(Type);
+        std::type_index index = typeid(Type);
 
-		auto poolPtr = std::make_unique<AssetPool<Type>>();
+        auto poolPtr = std::make_unique<AssetPool<Type>>();
 
-		auto pair = std::make_pair(index, std::move(poolPtr));
-		auto result = AssetManager.m_assets.insert(std::move(pair));
-	}
+        auto pair = std::make_pair(index, std::move(poolPtr));
+        auto result = AssetManager.m_assets.insert(std::move(pair));
+    }
 
-	template<typename Type>
-	Type * AssetManager::Load(String file)
-	{
-		// Validate component type
-		static_assert(std::is_base_of<Asset, Type>::value, "Not a Asset type");
+    template<typename Type>
+    Type * AssetManager::Load(String file)
+    {
+        // Validate component type
+        static_assert(std::is_base_of<Asset, Type>::value, "Not a Asset type");
 
-		// Getting the Type asset list
-		Type * value = lookup<Type>(file);
+        // Getting the Type asset list
+        Type * value = lookup<Type>(file);
 
-		// could not find the
-		if (value == nullptr)
-		{
-			value = create<Type>(file);
-			value->Load(file);
-			return value;
-		}
-		return value;
-	}
+        // could not find the
+        if (value == nullptr)
+        {
+            value = create<Type>(file);
+            value->Load(file);
+            return value;
+        }
+        return value;
+    }
 
-	template<typename Type>
-	Type * AssetManager::create(String file)
-	{
-		AssetPool<Type> * pool = getAssetPool<Type>();
+    template<typename Type>
+    Type * AssetManager::create(String file)
+    {
+        AssetPool<Type> * pool = getAssetPool<Type>();
 
-		if (pool == nullptr)
-			return nullptr;
+        if (pool == nullptr)
+            return nullptr;
 
-		return pool->Create(file);
-	}
+        return pool->Create(file);
+    }
 
-	template<typename Type>
-	Type * AssetManager::lookup(String file)
-	{
-		AssetPool<Type> * pool = getAssetPool<Type>();
+    template<typename Type>
+    Type * AssetManager::lookup(String file)
+    {
+        AssetPool<Type> * pool = getAssetPool<Type>();
 
-		if (pool == nullptr)
-			return nullptr;
+        if (pool == nullptr)
+            return nullptr;
 
-		return pool->Lookup(file);
-	}
+        return pool->Lookup(file);
+    }
 
-	template<typename Type>
-	AssetPool<Type> * AssetManager::getAssetPool()
-	{
-		auto it = m_assets.find(typeid(Type));
-		if (it == m_assets.end())
-			return nullptr;
+    template<typename Type>
+    AssetPool<Type> * AssetManager::getAssetPool()
+    {
+        auto it = m_assets.find(typeid(Type));
+        if (it == m_assets.end())
+            return nullptr;
 
-		AssetPool<Type> * pool = reinterpret_cast<AssetPool<Type>*>(it->second.get());
-		return pool;
-	}
+        AssetPool<Type> * pool = reinterpret_cast<AssetPool<Type>*>(it->second.get());
+        return pool;
+    }
 }
 
 #endif
