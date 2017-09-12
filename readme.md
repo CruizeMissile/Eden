@@ -1,4 +1,5 @@
-# Eden [![Build Status](https://travis-ci.org/CruizeMissile/Eden.svg?branch=master)](https://travis-ci.org/CruizeMissile/Eden)
+# Eden [![Build Status](https://travis-ci.org/CruizeMissile/Eden.svg?branch=master)](https://travis-ci.org/CruizeMissile/Eden) [![Build status](https://ci.appveyor.com/api/projects/status/99dlxhm5tfkie1ik/branch/master?svg=true)](https://ci.appveyor.com/project/CruizeMissile/eden/branch/master)
+
 Eden is a cross platform c++ game engine. It is archetected around Entity-Component-System and a multi api renderer.
 
 # Quick start
