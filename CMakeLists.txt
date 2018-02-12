@@ -1,38 +1,29 @@
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.0)
 
-project(eden)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENTIONS OFF)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-
-include(macros)
-include(enable_sanitizers)
-include(precompiled_header)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(filter_group)
 include(flags)
 
-option(BUILD_SHARED_LIBS
-    "Build package with shared libraries."
-    OFF
-)
+project(eden)
+include(build_problems)
 
-# list(APPEND SANITIZERS "custom")
-enable_sanitizers("${SANITIZERS}")
-detect_platform()
-print_info()
-set_output_paths()
-
-add_subdirectory_ex(3rdparty)
-add_subdirectory_ex(eden)
-
-# Building samples
-if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
-    add_subdirectory_ex(samples)
+# Checking if we are the master project or have been submoduled as a dependency
+set(MASTER_PROJECT OFF)
+if (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+  set(MASTER_PROJECT ON)
 endif()
 
-add_subdirectory_ex(tests)
+option(EDEN_ENABLE_SAMPLES "Enable to build the samples" ${MASTER_PROJECT})
+option(EDEN_ENABLE_TESTS "Enable to build the unit tests" ${MASTER_PROJECT})
 
-set_project_custom_defines()
+add_subdirectory(3rdparty)
+add_subdirectory(eden)
+
+if (EDEN_ENABLE_SAMPLES)
+  add_subdirectory(samples)
+endif()
+
+if (EDEN_ENABLE_TESTS)
+  add_subdirectory(tests)
+endif()

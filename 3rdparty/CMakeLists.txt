@@ -13,11 +13,12 @@ add_subdirectory("glfw/")
 ##
 ## Cml
 ##
-get_filename_component(CML_DIR "./cml/" ABSOLUTE)
-set(CML_INCLUDE_DIR ${CML_DIR}/cml PARENT_SCOPE)
-add_library(cml INTERFACE)
-target_include_directories(cml INTERFACE ${CML_INCLUDE_DIR})
-add_subdirectory("cml/")
+add_subdirectory(cml)
+# get_filename_component(CML_DIR "./cml/" ABSOLUTE)
+# set(CML_INCLUDE_DIR ${CML_DIR}/cml PARENT_SCOPE)
+# add_library(cml INTERFACE)
+# target_include_directories(cml INTERFACE ${CML_INCLUDE_DIR})
+# add_subdirectory("cml/")
 
 ##
 ## Catch

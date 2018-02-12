@@ -1,3 +1,5 @@
+include(precompiled_header)
+
 # setting the current directory as the root path of eden
 set(_src_root_path "${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -20,7 +22,7 @@ target_sources(eden PUBLIC ${_source_list})
 
 # looping though all source files and adding them to a source group. this will make sure
 # that when generating with msvc that the solution explorer looks like the source directory
-set_filter_groups("${_source_list}")
+add_filter_group("${_source_list}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Make sure the compiler can find include files for our library when
 # other libraries or exectuables link to it
@@ -35,7 +37,7 @@ target_include_directories(eden PUBLIC ${GLFW_INCLUDE_DIR})
 target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
 
 # cml
-target_include_directories(eden PUBLIC ${CML_INCLUDE_DIR})
+target_link_libraries(eden PUBLIC libcml)
 
 # loguru
 target_link_libraries(eden PUBLIC loguru)

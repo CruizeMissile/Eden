@@ -3,7 +3,7 @@
 #include "Core/Singleton.h"
 #include "Core/Types.h"
 #include "Core/Path.h"
-#include "cml.hpp"
+#include "cml/cml.hpp"
 
 namespace edn
 {

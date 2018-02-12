@@ -1,6 +1,5 @@
 #include "UnitTest.h"
 #include "Entity/Database.h"
-#include "Core/TypeInfo.h"
 #include <string>
 
 using namespace edn;
