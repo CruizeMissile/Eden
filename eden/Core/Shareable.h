@@ -10,7 +10,7 @@ namespace edn
         using std::enable_shared_from_this<Derived>::shared_from_this;
 
     protected:
-        using ShareableAlloc = std::_Ref_count_obj<Derived>;
+        // using ShareableAlloc = std::_Ref_count_obj<Derived>;
 
     public:
         using Ptr = std::shared_ptr<Derived>;

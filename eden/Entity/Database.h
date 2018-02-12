@@ -57,7 +57,7 @@ namespace edn
     class Entity : public Shareable<Entity>
     {
         friend class Database;
-        friend ShareableAlloc;
+        // friend ShareableAlloc;
     public:
 
         // Tuple is used to store the type information with the base pointer
@@ -497,7 +497,9 @@ namespace edn
 
     Entity::Ptr Database::create()
     {
-        auto handle = Entity::MakeNew();
+        // Todo: figure out how to use make_shared with entity as it has
+        // a private constructor. Has to work on all platforms.
+        auto handle = Entity::Ptr(new Entity());
         auto position = std::lower_bound(entities.begin(), entities.end(), handle.get());
         entities.insert(position, handle.get());
         return handle;
