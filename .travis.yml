@@ -1,128 +1,144 @@
-dist: trusty
-sudo: false
-language: cpp
 
-branches:
-  only:
-    - master
+#
+# Configuration
+#
+language: cpp
+dist: trusty
+
+#
+# Build Dependencies
+#
+before_script:
+
+  #
+  # Build Folder
+  #
+  - mkdir build
+  - cd build
+
+  #
+  # Update / Install CMake
+  #
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      mkdir -p external/cmake
+      pushd external/cmake
+      wget https://cmake.org/files/v3.8/cmake-3.8.0-Linux-x86_64.sh
+      chmod +x cmake-*-Linux-x86_64.sh
+      ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
+      export PATH="${PWD}/bin:$PATH"
+      popd
+    else
+      if ! brew ls --version cmake &>/dev/null; then brew update; brew install cmake; fi
+    fi
 
 addons:
   apt:
     sources:
-      - llvm-toolchain-trusty-4.0
       - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-4.0
     packages:
       - xorg-dev
       - libglu1-mesa-dev
 
+#
+# Build Matrix
+#
 matrix:
   include:
-    ##
-    ## linux clang
-    ##
-    - env: CLANG_VERSION=4.0 BUILD_TYPE=Release
-      os: linux
-      addons: &clang40
-        apt:
-          packages:
-            - clang-4.0
-            - xorg-dev           # used for glfw
-            - libglu1-mesa-dev   # used for glfw
-          sources: &sources
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-    - env: CLANG_VERSION=4.0 BUILD_TYPE=Debug
-      os: linux
-      addons: &clang40
-        apt:
-          packages:
-            - clang-4.0
-            - xorg-dev           # used for glfw
-            - libglu1-mesa-dev   # used for glfw
-          sources: &sources
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
 
-    ##
-    ## linux gcc
-    ##
-    - env: GCC_VERSION=7 BUILD_TYPE=Debug
-      os: linux
-      addons:
-        apt:
-          packages:
-            - g++-7
-            - xorg-dev           # used for glfw
-            - libglu1-mesa-dev   # used for glfw
-          sources: &sources
-            - ubuntu-toolchain-r-test
-    - env: GCC_VERSION=7 BUILD_TYPE=Release
-      os: linux
-      addons:
-        apt:
-          packages:
-            - g++-7
-            - xorg-dev           # used for glfw
-            - libglu1-mesa-dev   # used for glfw
-          sources: &sources
-            - ubuntu-toolchain-r-test
-
-before_install:
-  - "git submodule update --init --recursive"
-
-install:
-  - if [[ -n "$CLANG_VERSION" ]]; then export CXX=clang++-$CLANG_VERSION CC=clang-$CLANG_VERSION; fi
-  - if [[ -n "$GCC_VERSION" ]]; then export CXX=g++-$GCC_VERSION CC=gcc-$GCC_VERSION; fi
-  - JOBS=2
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir -p "${DEPS_DIR}" && cd "${DEPS_DIR}"
-
-  ##
-  # Install a recent cmake version
-  ##
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin)" ]]; then
-        CMAKE_URL="https://cmake.org/files/v3.9/cmake-3.9.1-Linux-x86_64.tar.gz"
-        mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
-      fi
-      export PATH="${DEPS_DIR}/cmake/bin:${PATH}"
-    else
-      if !brew ls --version cmake &>/dev/null; then brew install cmake; fi
-    fi
-
-  - |
-      if [[ -n "$CLANG_VERSION" && "${TRAVIS_OS_NAME}" == "linux" && "${STDLIB}" != "libstdc++" ]]; then
-        if [[ "$CLANG_VERSION" == "3.5" ]]; then LLVM_VERSION="3.5.2"; fi
-        if [[ "$CLANG_VERSION" == "3.6" ]]; then LLVM_VERSION="3.6.2"; fi
-        if [[ "$CLANG_VERSION" == "3.7" ]]; then LLVM_VERSION="3.7.1"; fi
-        if [[ "$CLANG_VERSION" == "3.8" ]]; then LLVM_VERSION="3.8.1"; fi
-        if [[ "$CLANG_VERSION" == "3.9" ]]; then LLVM_VERSION="3.9.1"; fi
-        if [[ "$CLANG_VERSION" == "4.0" ]]; then LLVM_VERSION="4.0.1"; fi
-        LLVM_ROOT="${DEPS_DIR}/llvm-${LLVM_VERSION}"
-        LLVM_URL="http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
-        LIBCXX_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxx-${LLVM_VERSION}.src.tar.xz"
-        LIBCXXABI_URL="http://llvm.org/releases/${LLVM_VERSION}/libcxxabi-${LLVM_VERSION}.src.tar.xz"
-        if [[ -z "$(ls -A ${LLVM_ROOT}/install/include)" ]]; then
-          mkdir -p "${LLVM_ROOT}" "${LLVM_ROOT}/build" "${LLVM_ROOT}/projects/libcxx" "${LLVM_ROOT}/projects/libcxxabi"
-          travis_retry wget --quiet -O - "${LLVM_URL}" | tar --strip-components=1 -xJ -C "${LLVM_ROOT}"
-          travis_retry wget --quiet -O - "${LIBCXX_URL}" | tar --strip-components=1 -xJ -C "${LLVM_ROOT}/projects/libcxx"
-          travis_retry wget --quiet -O - "${LIBCXXABI_URL}" | tar --strip-components=1 -xJ -C "${LLVM_ROOT}/projects/libcxxabi"
-          (cd "${LLVM_ROOT}/build" && cmake .. -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_C_COMPILER="$CC" -DCMAKE_INSTALL_PREFIX="${LLVM_ROOT}/install" -DCMAKE_BUILD_TYPE=$BUILD_TYPE)
-          (cd "${LLVM_ROOT}/build/projects/libcxx" && make install -j$JOBS)
-          (cd "${LLVM_ROOT}/build/projects/libcxxabi" && make install -j$JOBS)
+  #
+  # Git Check
+  #
+  - os: linux
+    env:
+      - TEST="Git Check"
+    script:
+      - |
+        if [[ -n $(git diff --check HEAD^) ]]; then
+          echo "You must remove whitespace before submitting a pull request"
+          echo ""
+          git diff --check HEAD^
+          exit -1
         fi
-        export CXXFLAGS="-I ${LLVM_ROOT}/install/include/c++/v1"
-        export LDFLAGS="-L ${LLVM_ROOT}/install/lib -lc++ -lc++abi"
-        export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${LLVM_ROOT}/install/lib"
-      fi
+  #
+  # Astyle Format
+  #
+  # - os: linux
+  #   env:
+  #     - TEST="Astyle Format"
+  #   addons:
+  #     apt:
+  #       sources:
+  #         - ubuntu-toolchain-r-test
+  #         - llvm-toolchain-trusty-4.0
+  #       packages:
+  #         - gcc-7
+  #         - g++-7
+  #   script:
+  #     - cmake -DENABLE_ASTYLE=ON -DCMAKE_CXX_COMPILER="g++-7" ..
+  #     - make
+  #     - make format
+  #     - |
+  #       if [[ -n $(git diff) ]]; then
+  #         echo "You must run make format before submitting a pull request"
+  #         echo ""
+  #         git diff
+  #         exit -1
+  #       fi
 
-before_script:
-  - cd "${TRAVIS_BUILD_DIR}"
-  - cmake . -Bbuild -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_C_COMPILER="$CC" -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  #
+  # G++ 7.1
+  #
+  - os: linux
+    env:
+      - TEST="G++ 7.1"
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+        packages:
+          - gcc-7
+          - g++-7
+          - xorg-dev
+          - libglu1-mesa-dev
+    script:
+      - cmake -DCMAKE_CXX_COMPILER="g++-7" ..
+      - make
+      - make test
 
-script:
-  - cmake --build build -- -j$JOBS
+  #
+  # Clang 4.0
+  #
+  - os: linux
+    env:
+      - TEST="Clang 4.0"
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+        packages:
+          - clang-4.0
+          - xorg-dev
+          - libglu1-mesa-dev
+    script:
+      - cmake -DCMAKE_C_COMPILER=clang-4.0 -DCMAKE_CXX_COMPILER=clang++-4.0 ..
+      - make
+      - make test
+
+  #
+  # XCode 9.1
+  #
+  - os: osx
+    env:
+      - TEST="XCode 9.1"
+    osx_image: xcode9.1
+    script:
+      - cmake ..
+      - make
+      - make test
 
 notifications:
   email: false
@@ -130,3 +146,5 @@ notifications:
 # examples
 # https://github.com/Microsoft/GSL/blob/master/.travis.yml
 # https://github.com/paulmenzel/brotli/blob/master/.travis.yml
+# https://github.com/ainfosec/ci_helloworld/blob/master/.travis.yml
+# https://github.com/neovim/neovim/blob/master/.travis.yml
