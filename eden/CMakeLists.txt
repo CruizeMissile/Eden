@@ -27,6 +27,7 @@ add_filter_group("${_source_list}" "${CMAKE_CURRENT_SOURCE_DIR}")
 # Make sure the compiler can find include files for our library when
 # other libraries or exectuables link to it
 target_include_directories(eden PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set_compile_flags(eden PUBLIC)
 
 ##
 ## Dependencies
