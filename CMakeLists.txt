@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.0)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(filter_group)
-include(flags)
 
 project(eden)
+include(flags)
 include(build_problems)
 
 # Checking if we are the master project or have been submoduled as a dependency
