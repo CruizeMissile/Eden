@@ -8,9 +8,15 @@ namespace edn
         struct base_operator {};
 
         template<typename Iterator1, typename Iterator2, typename Operation>
-        class range_operation_const_iterator : public std::iterator<std::forward_iterator_tag, typename Iterator1::value_type>
+        class range_operation_const_iterator
         {
         public:
+            using iterator_category = std::forward_iterator_tag;
+            using value_type = typename Iterator1::value_type;
+            using difference_type = typename Iterator1::difference_type;
+            using pointer = typename Iterator1::pointer;
+            using reference = typename Iterator1::reference;
+
             typedef range_operation_const_iterator<Iterator1, Iterator2, Operation> this_type;
             friend Operation;
 

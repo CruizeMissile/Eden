@@ -136,8 +136,14 @@ namespace edn
         static EntityList emptyList;
 
     public:
-        struct entity_iterator : std::iterator<std::forward_iterator_tag, Entity*>
+        struct entity_iterator //: std::iterator<std::forward_iterator_tag, Entity*>
         {
+            using iterator_category = std::forward_iterator_tag;
+            using value_type = Entity*;
+            using difference_type = ptrdiff_t;
+            using pointer = value_type*;
+            using reference = value_type&;
+
             typedef EntityList::const_iterator iterator;
             typedef EntityList::const_iterator const_iterator;
             inline entity_iterator(iterator iter);
