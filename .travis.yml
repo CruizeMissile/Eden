@@ -131,14 +131,14 @@ matrix:
   #
   # XCode 9.1
   #
-  - os: osx
-    env:
-      - TEST="XCode 9.1"
-    osx_image: xcode9.1
-    script:
-      - cmake ..
-      - make
-      - make test
+  # - os: osx
+  #   env:
+  #     - TEST="XCode 9.1"
+  #   osx_image: xcode9.1
+  #   script:
+  #     - cmake ..
+  #     - make
+  #     - make test
 
 notifications:
   email: false
