@@ -286,7 +286,7 @@ namespace edn
                 return const_iterator(l1, l1, l2, l2);
             }
 
-            inline RangeOperation(Iterator1 f1, Iterator1 l1, Iterator2 f2, Iterator2 l2)
+            inline RangeOperation(const Iterator1& f1, const Iterator1& l1, const Iterator2& f2, const Iterator2& l2)
                 : f1(f1)
                 , l1(l1)
                 , f2(f2)
@@ -313,56 +313,56 @@ namespace edn
         // Helper functions to add the operator template
         template<class Iterator1, class Iterator2>
         inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Intersection>
-            make_intersection_range(Iterator1& one, Iterator2& two)
+            make_intersection_range(const Iterator1& one, const Iterator2& two)
         {
             return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Intersection>(one, two);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<Iterator1, Iterator2, Intersection>
-            make_intersection_range(Iterator1 &f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
+            make_intersection_range(const Iterator1 &f1, const Iterator1& l1, const Iterator2& f2, const Iterator2& l2)
         {
             return RangeOperation<Iterator1, Iterator2, Intersection>(f1, l1, f2, l2);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Difference>
-            make_difference_range(Iterator1& one, Iterator2& two)
+            make_difference_range(const Iterator1& one, const Iterator2& two)
         {
             return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Difference>(one, two);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<Iterator1, Iterator2, Difference>
-            make_difference_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
+            make_difference_range(const Iterator1& f1, const Iterator1& l1, const Iterator2& f2, const Iterator2& l2)
         {
             return RangeOperation<Iterator1, Iterator2, Difference>(f1, l1, f2, l2);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Union>
-            make_union_range(Iterator1& one, Iterator2& two)
+            make_union_range(const Iterator1& one, const Iterator2& two)
         {
             return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Union>(one, two);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<Iterator1, Iterator2, Union>
-            make_union_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
+            make_union_range(const Iterator1& f1, const Iterator1& l1, const Iterator2& f2, const Iterator2& l2)
         {
             return RangeOperation<Iterator1, Iterator2, Union>(f1, l1, f2, l2);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Exclusive>
-            make_exclusive_range(Iterator1& one, Iterator2& two)
+            make_exclusive_range(const Iterator1& one, const Iterator2& two)
         {
             return RangeOperation<typename Iterator1::const_iterator, typename Iterator2::const_iterator, Exclusive>(one, two);
         }
 
         template<class Iterator1, class Iterator2>
         inline RangeOperation<Iterator1, Iterator2, Exclusive>
-            make_exclusive_range(Iterator1& f1, Iterator1& l1, Iterator2& f2, Iterator2& l2)
+            make_exclusive_range(const Iterator1& f1, const Iterator1& l1, const Iterator2& f2, const Iterator2& l2)
         {
             return RangeOperation<Iterator1, Iterator2, Exclusive>(f1, l1, f2, l2);
         }

@@ -873,10 +873,7 @@ namespace edn
                 return IntersectionQuery<LeftQuery, RightQuery>(*static_cast<const LeftQuery*>(this), rhs);
             }
 
-            DifferenceQuery<AllQuery, LeftQuery> operator!() const
-            {
-                return DifferenceQuery<AllQuery, LeftQuery>(AllQuery(), *static_cast<const LeftQuery*>(this));
-            }
+            DifferenceQuery<AllQuery, LeftQuery> operator!() const;
 
             template<class RightQuery>
             UnionQuery<LeftQuery, RightQuery> operator||(const RightQuery& rhs) const
@@ -891,6 +888,23 @@ namespace edn
             }
         };
 
+        struct AllQuery : public BaseQuery<AllQuery>
+        {
+            typedef typename Database::RangeAll RangeType;
+            AllQuery() { }
+
+            RangeType toRange() const
+            {
+                return RangeType();
+            }
+        };
+
+        template<class LeftQuery>
+        DifferenceQuery<AllQuery, LeftQuery> BaseQuery<LeftQuery>::operator!() const
+        {
+            return DifferenceQuery<AllQuery, LeftQuery>(AllQuery(), *static_cast<const LeftQuery*>(this));
+        }
+
         template<class LeftQuery, class RightQuery>
         struct IntersectionQuery : public BaseQuery<IntersectionQuery<LeftQuery, RightQuery>>
         {
@@ -904,7 +918,7 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return make_intersection_range(left.toRange(), right.toRange());
             }
@@ -926,7 +940,7 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return make_difference_range(left.toRange(), right.toRange());
             }
@@ -948,7 +962,7 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return make_union_range(left.toRange(), right.toRange());
             }
@@ -970,24 +984,13 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return make_exclusive_range(left.toRange(), right.toRange());
             }
 
             LeftQuery left;
             RightQuery right;
-        };
-
-        struct AllQuery : public BaseQuery<AllQuery>
-        {
-            typedef typename Database::RangeAll RangeType;
-            AllQuery() { }
-
-            RangeType toRange()
-            {
-                return RangeType();
-            }
         };
 
         struct TypeQuery : public BaseQuery<TypeQuery>
@@ -999,7 +1002,7 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return RangeType(type);
             }
@@ -1016,7 +1019,7 @@ namespace edn
             {
             }
 
-            RangeType toRange()
+            RangeType toRange() const
             {
                 return Database::RangeTag(tag);
             }
