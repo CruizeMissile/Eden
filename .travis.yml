@@ -105,28 +105,27 @@ matrix:
           - libglu1-mesa-dev
     script:
       - cmake -DCMAKE_CXX_COMPILER="g++-7" ..
-      - make
-      - make test
+      - cmake --build . --config Release
 
   #
   # Clang 4.0
   #
-  - os: linux
-    env:
-      - TEST="Clang 4.0"
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-4.0
-        packages:
-          - clang-4.0
-          - xorg-dev
-          - libglu1-mesa-dev
-    script:
-      - cmake -DCMAKE_C_COMPILER=clang-4.0 -DCMAKE_CXX_COMPILER=clang++-4.0 ..
-      - make
-      - make test
+  # - os: linux
+  #   env:
+  #     - TEST="Clang 4.0"
+  #   addons:
+  #     apt:
+  #       sources:
+  #         - ubuntu-toolchain-r-test
+  #         - llvm-toolchain-trusty-4.0
+  #       packages:
+  #         - clang-4.0
+  #         - xorg-dev
+  #         - libglu1-mesa-dev
+  #   script:
+  #     - cmake -DCMAKE_C_COMPILER=clang-4.0 -DCMAKE_CXX_COMPILER=clang++-4.0 ..
+  #     - make
+  #     - make test
 
   #
   # XCode 9.1
