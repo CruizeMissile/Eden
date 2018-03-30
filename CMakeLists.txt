@@ -9,6 +9,7 @@ check_master_project(EDEN_MASTER_PROJECT)
 option(EDEN_ENABLE_SAMPLES "Enable building of samples for eden" ${EDEN_MASTER_PROJECT})
 option(EDEN_ENABLE_TESTS "Enable building of unit tests for eden" ${EDEN_MASTER_PROJECT})
 
+add_subdirectory(external)
 add_subdirectory(eden)
 
 if(EDEN_ENABLE_SAMPLES)
