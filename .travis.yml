@@ -1,0 +1,13 @@
+#
+# Configuration
+#
+language: cpp
+dist: trusty
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
+
