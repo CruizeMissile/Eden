@@ -15,3 +15,7 @@ add_subdirectory(eden)
 if(EDEN_ENABLE_SAMPLES)
   add_subdirectory(samples)
 endif()
+
+if(EDEN_ENABLE_TESTS)
+  add_subdirectory(tests)
+endif()

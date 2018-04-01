@@ -55,3 +55,9 @@ build-clang/
 .kdev4/
 .vs/
 .vscode/
+
+#
+# Testing and benchmark libraries
+#
+external/catch
+external/celero
