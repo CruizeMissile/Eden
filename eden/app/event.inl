@@ -1,4 +1,6 @@
 
+#include <algorithm>
+
 namespace eden
 {
     template<typename Derived>

@@ -45,7 +45,7 @@ TEST_CASE("Event")
     {
         std::vector<int> list;
 
-        auto compare = [](auto& one, auto& two)
+        auto compare = [](auto& one, auto& two) -> bool
         {
             return std::equal(one.begin(), one.end(), two.begin());
         };

@@ -17,7 +17,7 @@ namespace eden
     public:
         struct info_t
         {
-            static const info_t default;
+            static const info_t default_config;
             std::string title;
             u32 width;
             u32 height;
@@ -29,7 +29,7 @@ namespace eden
         window_t() = default;
         ~window_t();
 
-        void create_window(const info_t& info = info_t::default);
+        void create_window(const info_t& info = info_t::default_config);
 
         bool check_running_status();
 

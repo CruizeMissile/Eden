@@ -85,7 +85,7 @@ void joystick_callback(s32 joy_idx, s32 event)
 
 namespace eden
 {
-    const window_t::info_t window_t::info_t::default =
+    const window_t::info_t window_t::info_t::default_config =
     {
         "Eden Engine", 1280, 720, false, true, true
     };

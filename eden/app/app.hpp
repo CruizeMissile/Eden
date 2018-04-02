@@ -16,7 +16,7 @@ namespace eden
         app_t() = default;
         ~app_t() = default;
 
-        void create_window(const window_t::info_t& info = window_t::info_t::default);
+        void create_window(const window_t::info_t& info = window_t::info_t::default_config);
         void update();
         void shutdown();
 
