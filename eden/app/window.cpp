@@ -1,8 +1,9 @@
 
 #include "window.hpp"
+#include "input.hpp"
 
-#include <GLFW/glfw3.h>
 #include <pride/assert.hpp>
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
 
@@ -27,6 +28,59 @@ void setup_glfw_window_hints()
 void error_callback(int error, const char* description)
 {
     std::cout << "Error(" << error << "): " << description << '\n';
+}
+
+void key_callback(GLFWwindow* window, s32 key, s32 scancode, s32 action, s32 mods)
+{
+    if (action == GLFW_REPEAT) return;
+    eden::input_t::instance().set_key_state(static_cast<eden::key_t>(key), action == GLFW_PRESS);
+    if (action == GLFW_PRESS)
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::key_down_t>(static_cast<eden::key_t>(key)));
+    else
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::key_up_t>(static_cast<eden::key_t>(key)));
+}
+
+void mouse_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (action == GLFW_REPEAT) return;
+    eden::input_t::instance().set_mouse_btn_state(static_cast<eden::mouse_button_t>(button), action == GLFW_PRESS || action == GLFW_REPEAT);
+    if (action == GLFW_PRESS)
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::mouse_button_down_t>(static_cast<eden::mouse_button_t>(button)));
+    else
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::mouse_button_up_t>(static_cast<eden::mouse_button_t>(button)));
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    std::cout << xoffset << " " << yoffset << '\n';
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    eden::input_t::instance().update_cursor_position(static_cast<s32>(xpos), static_cast<s32>(ypos));
+    eden::event_queue_t::instance().push(std::make_unique<eden::events::mouse_movement_t>(static_cast<u32>(xpos), static_cast<u32>(ypos)));
+}
+
+void cursor_enter_callback(GLFWwindow* window, int entered)
+{
+    if (entered)
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::window_entered_t>());
+    else
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::window_exited_t>());
+}
+
+void drop_callback(GLFWwindow* window, int count, const char** paths)
+{
+    for (int i = 0; i < count; i++)
+        eden::event_queue_t::instance().push(std::make_unique<eden::events::drag_and_drop_t>(paths[i]));
+}
+
+void joystick_callback(s32 joy_idx, s32 event)
+{
+    //if (event == GLFW_CONNECTED)
+    //    // joystick connected
+    //else if (event == GLFW_DISCONNECTED)
+    //    // joystick disconnected
 }
 
 namespace eden
@@ -61,13 +115,13 @@ namespace eden
         glfwMakeContextCurrent(window_ptr);
 
         // Setting input events and callbacks
-        //glfwSetKeyCallback(window_ptr, key_callback);
-        //glfwSetMouseButtonCallback(window_ptr, mouse_callback);
-        //glfwSetScrollCallback(window_ptr, scroll_callback);
-        //glfwSetCursorPosCallback(window_ptr, cursor_position_callback);
-        //glfwSetCursorEnterCallback(window_ptr, cursor_enter_callback);
-        //glfwSetDropCallback(window_ptr, drop_callback);
-        //glfwSetJoystickCallback(joystick_callback);
+        glfwSetKeyCallback(window_ptr, key_callback);
+        glfwSetMouseButtonCallback(window_ptr, mouse_callback);
+        glfwSetScrollCallback(window_ptr, scroll_callback);
+        glfwSetCursorPosCallback(window_ptr, cursor_position_callback);
+        glfwSetCursorEnterCallback(window_ptr, cursor_enter_callback);
+        glfwSetDropCallback(window_ptr, drop_callback);
+        glfwSetJoystickCallback(joystick_callback);
         //glfwSetCharCallback(window_ptr, character_callback); // text input
         //glfwSetCharModsCallback(window_ptr, charmods_callback);
     }

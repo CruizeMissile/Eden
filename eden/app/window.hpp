@@ -63,7 +63,7 @@ namespace eden
 
     namespace events
     {
-        struct window_enter_t : public event_t<window_enter_t> {};
-        struct window_exit_t : public event_t<window_exit_t> {};
+        struct window_entered_t : public event_t<window_entered_t> {};
+        struct window_exited_t : public event_t<window_exited_t> {};
     }
 }

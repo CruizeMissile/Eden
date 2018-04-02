@@ -4,6 +4,8 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/app/app.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/event.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/event.inl"
+  "${CMAKE_CURRENT_LIST_DIR}/app/input.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/input.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/window.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 )

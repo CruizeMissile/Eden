@@ -2,6 +2,7 @@
 #pragma once
 
 #include "window.hpp"
+#include "input.hpp"
 #include <pride/types.hpp>
 #include <pride/utility/singleton.hpp>
 
