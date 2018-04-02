@@ -5,7 +5,6 @@ file(GLOB_RECURSE eden_files
   "${CMAKE_CURRENT_LIST_DIR}/*.cpp"
 )
 add_library(eden "${eden_files}")
-target_link_libraries(eden libpride)
 target_common_compiler_flags(eden)
 target_source_group(eden)
 target_include_directories(eden PUBLIC
@@ -13,3 +12,13 @@ target_include_directories(eden PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
+#
+# Dependencies
+#
+
+# glfw
+target_include_directories(eden PUBLIC ${GLFW_INCLUDE_DIR})
+target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
+
+# pride
+target_link_libraries(eden PUBLIC libpride)

@@ -73,18 +73,18 @@ namespace eden
     // ---------------------------------------------------------------------------------------------
     // event_queue_t
 
-    void event_queue_t::push(std::unique_ptr<event_base_t> e)
+    inline void event_queue_t::push(std::unique_ptr<event_base_t> e)
     {
         if (e->has_listeners())
             _queue.push(std::move(e));
     }
 
-    void event_queue_t::dispatch(const event_base_t& e) const
+    inline void event_queue_t::dispatch(const event_base_t& e) const
     {
         e.raise();
     }
 
-    void event_queue_t::dispatch()
+    inline void event_queue_t::dispatch()
     {
         while (!_queue.empty())
         {

@@ -1,1 +1,1 @@
-setup_samples()
+setup_samples(TARGET_DEPENDENCIES eden)
