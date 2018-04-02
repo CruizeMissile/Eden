@@ -4,6 +4,7 @@
 #include "event.hpp"
 
 #include <pride/types.hpp>
+#include <string>
 
 namespace eden
 {

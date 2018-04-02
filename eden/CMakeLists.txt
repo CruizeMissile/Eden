@@ -1,9 +1,13 @@
 
-file(GLOB_RECURSE eden_files
-  "${CMAKE_CURRENT_LIST_DIR}/*.hpp"
-  "${CMAKE_CURRENT_LIST_DIR}/*.inl"
-  "${CMAKE_CURRENT_LIST_DIR}/*.cpp"
+list(APPEND eden_files
+  "${CMAKE_CURRENT_LIST_DIR}/app/app.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/app.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/event.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/event.inl"
+  "${CMAKE_CURRENT_LIST_DIR}/app/window.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 )
+
 add_library(eden "${eden_files}")
 target_common_compiler_flags(eden)
 target_source_group(eden)

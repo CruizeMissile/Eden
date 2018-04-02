@@ -1,14 +1,17 @@
 
-#include <eden/app/window.hpp>
+#include <eden/app/app.hpp>
 
 int main()
 {
-    eden::window_t window;
-    window.create_window();
-    bool running = true;
-    while (running)
+    using namespace eden;
+    app_t::instance().create_window();
+
+    while (app_t::instance().running)
     {
-        window.process_os_events();
-        running = window.check_running_status();
+        app_t::instance().update();
+        event_queue_t::instance().dispatch();
     }
+    
+    app_t::instance().shutdown();
+    return 0;
 }
