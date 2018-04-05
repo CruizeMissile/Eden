@@ -12,8 +12,7 @@ list(APPEND eden_files
 
 add_library(eden "${eden_files}")
 target_common_compiler_flags(eden)
-target_set_cxx(eden 17)
-gcc_clang_compile_flags(eden PUBLIC FLAGS "-std=c++1z")
+target_compile_features(eden PUBLIC cxx_std_17)
 target_source_group(eden)
 target_include_directories(eden PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
