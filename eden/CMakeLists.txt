@@ -10,10 +10,7 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 )
 
-add_library(eden "${eden_files}")
-target_common_compiler_flags(eden)
-target_compile_features(eden PUBLIC cxx_std_17)
-target_source_group(eden)
+create_library(eden SOURCE_LIST ${eden_files} CXX_VERSION 17)
 target_include_directories(eden PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:include>
