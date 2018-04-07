@@ -83,27 +83,6 @@ matrix:
     # Clang 5.0
     #
     - os: linux
-      env: TEST="Clang 4.0"
-      compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - clang-4.0
-            - gcc-7
-            - g++-7
-            - xorg-dev
-            - libglu1-mesa-dev
-      script:
-        - cmake -DCMAKE_C_COMPILER=clang-4.0 -DCMAKE_CXX_COMPILER=clang++-4.0 -DCMAKE_BUILD_TYPE=Release ..
-        - cmake --build . --config Release
-
-    #
-    # Clang 5.0
-    #
-    - os: linux
       env: TEST="Clang 5.0"
       compiler: clang
       addons:
