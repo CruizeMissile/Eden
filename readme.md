@@ -2,6 +2,9 @@
 
 > **A modern cross platform c++ game engine built with vulkan, opengl and c++17.**
 
+[![Build Status](https://travis-ci.org/CruizeMissile/Eden.svg?branch=master)](https://travis-ci.org/CruizeMissile/Eden)
+[![Build status](https://ci.appveyor.com/api/projects/status/99dlxhm5tfkie1ik/branch/master?svg=true)](https://ci.appveyor.com/project/CruizeMissile/eden/branch/master)
+
 ## Building
 
 Eden uses cmake as it's build system. With this it can be compiled on Windows, Mac and Linux. Eden uses C++17 so a 
@@ -33,3 +36,5 @@ All Dependencies used under their respective licenses. Copyright is held by thei
 | Compiler     | Operating System              | Architecture | Version String |
 | -------------|-------------------------------|--------------|----------------|
 | Clang 4.0    | Arch linux                    | x64          | gcc version ...|
+
+[Eden]: https://github.com/cruizemissile/eden
