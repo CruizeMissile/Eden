@@ -7,7 +7,7 @@
 
 ## Building
 
-Eden uses cmake as it's build system. With this it can be compiled on Windows, Mac and Linux. Eden uses C++17 so a 
+Eden uses cmake as it's build system. With this it can be compiled on Windows, Mac and Linux. Eden uses C++17 so a
 compiler with C++17 features is required (see [tested toolchains](#tested-toolchains) for more details). For external dependencies
 Eden has them as git submodules. Make sure that you initialize and update your git submodules before trying to use Eden.
 
@@ -19,7 +19,7 @@ $ cmake --build build
 
 ## Development
 
-Eden is currently in development and is not feature complete. The design and structure of eden is being tested so big 
+Eden is currently in development and is not feature complete. The design and structure of eden is being tested so big
 refactoring changes happen quite frequently. This is a side project that I work on in my free time so developement
 is scattered and not structured.
 

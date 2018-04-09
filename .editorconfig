@@ -13,6 +13,3 @@ trim_trailing_whitespace = true
 [{*.cmake,CMakeLists.txt,*.yaml,*.yml}]
 indent_size = 2
 tab_width = 2
-
-[*.md]
-trim_trailing_whitespace = false
