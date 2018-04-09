@@ -1,12 +1,9 @@
-[submodule "3rdparty/glfw"]
-	path = 3rdparty/glfw
+[submodule "external/scaffold"]
+	path = external/scaffold
+	url = https://github.com/cruizemissile/scaffold.git
+[submodule "external/pride"]
+	path = external/pride
+	url = https://github.com/cruizemissile/pride.git
+[submodule "external/glfw"]
+	path = external/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "3rdparty/cml"]
-	path = 3rdparty/cml
-	url = https://github.com/cruizemissile/cml
-[submodule "3rdparty/Catch"]
-	path = 3rdparty/Catch
-	url = https://github.com/philsquared/Catch.git
-[submodule "3rdparty/loguru"]
-	path = 3rdparty/loguru
-	url = https://github.com/emilk/loguru

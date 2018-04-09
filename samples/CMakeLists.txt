@@ -1,1 +1,1 @@
-add_subdirectory(test)
+setup_samples(TARGET_DEPENDENCIES eden)

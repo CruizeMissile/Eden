@@ -5,17 +5,10 @@ branches:
   only:
     - master
     - appveyor
+    - refactor
 
 environment:
   matrix:
-    - BUILD_SYSTEM: CMake
-      GENERATOR: Visual Studio 15 2017 Win64
-      CONFIG_TYPE: Debug
-
-    - BUILD_SYSTEM: CMake
-      GENERATOR: Visual Studio 15 2017
-      CONFIG_TYPE: Debug
-
     - BUILD_SYSTEM: CMake
       GENERATOR: Visual Studio 15 2017 Win64
       CONFIG_TYPE: Release
@@ -28,8 +21,6 @@ before_build:
   - ps: |
       git submodule update --init --recursive
       cmake . -Bbuild -G "$env:GENERATOR"
-
 build_script:
   - ps: |
       cmake --build build --config $env:CONFIG_TYPE -- /m /v:minimal
-

@@ -1,44 +1,28 @@
-include(precompiled_header)
 
-# setting the current directory as the root path of eden
-set(_src_root_path "${CMAKE_CURRENT_SOURCE_DIR}")
-
-# searching all source files recursivly and adding it to the list of source files
-file(GLOB_RECURSE _source_list
-	LIST_DIRECTORIES false
-	"${_src_root_path}/*.cpp"
-	"${_src_root_path}/*.h"
+list(APPEND eden_files
+  "${CMAKE_CURRENT_LIST_DIR}/app/app.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/app.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/event.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/event.inl"
+  "${CMAKE_CURRENT_LIST_DIR}/app/input.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/input.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/window.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 )
 
-# adding the precompiled header and list of source files to the library eden
-add_library(eden Precompiled.h Precompiled.cpp)
+create_library(eden SOURCE_LIST ${eden_files} CXX_VERSION 17)
+target_include_directories(eden PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:include>
+)
 
-# making sure that cmake knows that Precompiled is the precompiled header file
-add_precompiled_header(eden Precompiled.h SOURCE_CXX Precompiled.cpp FORCEINCLUDE)
-
-# for some reason it works when precompiled files are added and then the sources files after
-list(REMOVE_ITEM _source_list "Precompiled.cpp" "Precompiled.h") # not sure this is needed
-target_sources(eden PUBLIC ${_source_list})
-
-# looping though all source files and adding them to a source group. this will make sure
-# that when generating with msvc that the solution explorer looks like the source directory
-add_filter_group("${_source_list}" "${CMAKE_CURRENT_SOURCE_DIR}")
-
-# Make sure the compiler can find include files for our library when
-# other libraries or exectuables link to it
-target_include_directories(eden PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-set_compile_flags(eden PUBLIC)
-
-##
-## Dependencies
-##
+#
+# Dependencies
+#
 
 # glfw
 target_include_directories(eden PUBLIC ${GLFW_INCLUDE_DIR})
 target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
 
-# cml
-target_link_libraries(eden PUBLIC libcml)
-
-# loguru
-target_link_libraries(eden PUBLIC loguru)
+# pride
+target_link_libraries(eden PUBLIC libpride)

@@ -56,21 +56,8 @@ build-clang/
 .vs/
 .vscode/
 
-# .vs/
-# [Bb]in/
-# [Bb]uild/
-# [Bb]inary/
-# [Dd]ebug*/
-# [Rr]elease*/
-# [Ii]mid/
-# /[Oo]bj/
-# /Include/
-# /ipch/
-# *.sdf
-# *.opensdf
-# *.log
-# *.user
-# *.opendb
-# *.ipch
-# *.VC.db
-# *.kdev4
+#
+# Testing and benchmark libraries
+#
+external/catch
+external/celero

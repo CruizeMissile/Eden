@@ -1,29 +1,21 @@
-
-cmake_minimum_required(VERSION 3.0)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(filter_group)
+cmake_minimum_required(VERSION 3.8)
 
 project(eden)
-include(flags)
-include(build_problems)
 
-# Checking if we are the master project or have been submoduled as a dependency
-set(MASTER_PROJECT OFF)
-if (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
-  set(MASTER_PROJECT ON)
-endif()
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/scaffold")
+include(scaffold)
 
-option(EDEN_ENABLE_SAMPLES "Enable to build the samples" ${MASTER_PROJECT})
-option(EDEN_ENABLE_TESTS "Enable to build the unit tests" ${MASTER_PROJECT})
+check_master_project(EDEN_MASTER_PROJECT)
+option(EDEN_ENABLE_SAMPLES "Enable building of samples for eden" ${EDEN_MASTER_PROJECT})
+option(EDEN_ENABLE_TESTS "Enable building of unit tests for eden" ${EDEN_MASTER_PROJECT})
 
-add_subdirectory(3rdparty)
+add_subdirectory(external)
 add_subdirectory(eden)
 
-if (EDEN_ENABLE_SAMPLES)
+if(EDEN_ENABLE_SAMPLES)
   add_subdirectory(samples)
 endif()
 
-if (EDEN_ENABLE_TESTS)
+if(EDEN_ENABLE_TESTS)
   add_subdirectory(tests)
 endif()
