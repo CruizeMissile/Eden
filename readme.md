@@ -33,8 +33,10 @@ All Dependencies used under their respective licenses. Copyright is held by thei
 * Scaffold : A template/scaffolding/helper library for cmake files in your project
 
 ## Tested toolchains
-| Compiler     | Operating System              | Architecture | Version String |
-| -------------|-------------------------------|--------------|----------------|
-| Clang 4.0    | Arch linux                    | x64          | gcc version ...|
+| Compiler           | Operating System              | Architecture | Version String                               |
+| -------------------|-------------------------------|--------------|----------------------------------------------|
+| Clang 5.0.1        | Arch linux                    | x64          | clang version 5.0.1 (tags/RELEASE_501/final) |
+| Gcc 7.1            | Arch linux                    | x64          | g++ (GCC) 7.3.0                              |
+| Visual Studio 2017 | Windows 10                    | x86_x64      | MSVC 15.5.6                                  |
 
 [Eden]: https://github.com/cruizemissile/eden
