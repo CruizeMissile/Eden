@@ -9,10 +9,10 @@ set(GLFW_LIBRARY "glfw" PARENT_SCOPE)
 get_filename_component(GLFW_DIR "./glfw/" ABSOLUTE)
 set(GLFW_INCLUDE_DIR ${GLFW_DIR}/include PARENT_SCOPE)
 add_subdirectory(glfw)
-target_set_folder("glfw" external)
+sf_target_set_folder("glfw" external)
 
 #
 # Pride
 #
 add_subdirectory(pride)
-target_set_folder(pride external)
+sf_target_set_folder(pride external)

@@ -5,7 +5,7 @@ project(eden)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/scaffold")
 include(scaffold)
 
-check_master_project(EDEN_MASTER_PROJECT)
+sf_check_master_project(EDEN_MASTER_PROJECT)
 option(EDEN_ENABLE_SAMPLES "Enable building of samples for eden" ${EDEN_MASTER_PROJECT})
 option(EDEN_ENABLE_TESTS "Enable building of unit tests for eden" ${EDEN_MASTER_PROJECT})
 

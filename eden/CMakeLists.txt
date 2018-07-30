@@ -10,19 +10,9 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 )
 
-create_library(eden SOURCE_LIST ${eden_files} CXX_VERSION 17)
-target_include_directories(eden PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include>
+sf_create_library(eden
+  SOURCE_LIST ${eden_files}
+  CXX_VERSION 17
+  INCLUDE_DIR ${PROJECT_SOURCE_DIR} ${GLFW_INCLUDE_DIR}
+  DEPENDS ${GLFW_LIBRARY} ${PRIDE_LIB}
 )
-
-#
-# Dependencies
-#
-
-# glfw
-target_include_directories(eden PUBLIC ${GLFW_INCLUDE_DIR})
-target_link_libraries(eden PUBLIC ${GLFW_LIBRARY})
-
-# pride
-target_link_libraries(eden PUBLIC libpride)
