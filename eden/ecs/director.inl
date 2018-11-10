@@ -1,6 +1,7 @@
 
 #include "entity.hpp"
 #include "store.hpp"
+#include <type_traits>
 
 namespace eden::ecs
 {
@@ -91,6 +92,12 @@ Component& director_t::create_component(entity_t& entity, Args&&... args)
     return component;
 }
 
+template<typename Component, typename... Args>
+Component director_t::create_temp_component(Args&&... args)
+{
+    return Component(std::forward<Args>(args)...);
+}
+
 template<typename Component>
 void director_t::remove_component(entity_t& entity)
 {
@@ -107,25 +114,25 @@ template<typename Component, typename... Args>
 Component& director_t::set_component(entity_t& entity, Args&&... args)
 {
     if (entity.has<Component>())
-        return get_component_fast<Component>(entity) = create_tmp_component<Component>(std::forward<Args>(args)...);
+        return get_component_fast<Component>(entity) = create_temp_component<Component>(std::forward<Args>(args)...);
     return create_component<Component>(entity, std::forward<Args>(args)...);
 }
 
 template<typename Component, typename... Args>
 Component& director_t::set_component_fast(entity_t& entity, Args&&... args)
 {
-    return get_component_fast<Component>(entity) = create_tmp_component<Component>(std::forward<Args>(args)...);
+    return get_component_fast<Component>(entity) = create_temp_component<Component>(std::forward<Args>(args)...);
 }
 
 template<typename... Components>
 bool director_t::has_component(entity_t& entity)
 {
-    return has_component(entity, details::component_mask<Components...>());
+    return has_component(entity, internal::component_mask<Components...>());
 }
 
 template<typename... Components>
 bool director_t::has_component(const entity_t& entity) const
 {
-    return has_component(entity, details::component_mask<Components...>());
+    return has_component(entity, internal::component_mask<Components...>());
 }
 } // namespace eden::ecs

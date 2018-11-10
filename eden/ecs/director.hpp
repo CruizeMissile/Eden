@@ -62,6 +62,9 @@ private:
     template<typename Component, typename... Args>
     Component& create_component(entity_t& entity, Args&&... args);
 
+    template<typename Component, typename... Args>
+    Component create_temp_component(Args&&... args);
+
     template<typename Component>
     void remove_component(entity_t& entity);
 

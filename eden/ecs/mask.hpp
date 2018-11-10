@@ -87,5 +87,3 @@ namespace internal
     mask_t component_mask();
 } // namespace internal
 } // namespace eden::ecs
-
-#include "mask.inl"

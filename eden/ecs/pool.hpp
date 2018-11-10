@@ -15,11 +15,11 @@ public:
     base_pool(const base_pool&) = delete;
     base_pool& operator=(const base_pool&) = delete;
 
-    inline index_t size() const noexcept;
-    inline index_t capacity() const noexcept;
-    inline size_t chunks() const noexcept;
-    inline void ensure_min_size(size_t min_size);
-    inline void ensure_min_capacity(size_t min_size);
+    index_t size() const noexcept;
+    index_t capacity() const noexcept;
+    size_t chunks() const noexcept;
+    void ensure_min_size(size_t min_size);
+    void ensure_min_capacity(size_t min_size);
 
     virtual void destroy(index_t index) = 0;
 

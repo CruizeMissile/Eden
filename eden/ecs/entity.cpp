@@ -17,4 +17,4 @@ const mask_t& entity_t::mask() const
 {
     return director_->mask(*this);
 }
-}
+} // namespace eden::ecs

@@ -27,8 +27,8 @@ struct entity_t
     mask_t& mask();
     const mask_t& mask() const;
 
-    id_t id_;
     director_t* director_;
+    id_t id_;
 
 private:
     friend class director_t;

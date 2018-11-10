@@ -2,6 +2,7 @@
 #include "mask.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <sstream>
 
 namespace eden::ecs
@@ -134,11 +135,13 @@ mask_t::data_type mask_t::num_bits() const
 
 mask_t::data_type mask_t::used_words() const
 {
-    for (data_type word = data.size() - 1; word >= 0ull; --word)
+    size_t word = data.size();
+    while (word != 0)
     {
         uint64_t at_word = data[static_cast<size_t>(word)];
         if (at_word != 0)
             return word + 1;
+        --word;
     }
 
     return 0;
@@ -146,17 +149,21 @@ mask_t::data_type mask_t::used_words() const
 
 mask_t::data_type mask_t::length() const
 {
-    for (data_type word = data.size() - 1; word >= 0; --word)
+    auto word = data.size() - 1;
+    while (word != 0)
     {
         uint64_t at_word = data[static_cast<size_t>(word)];
         if (at_word != 0)
         {
-            for (data_type bit = 63; bit >= 0; --bit)
+            data_type bit = 63;
+            while (bit != 0)
             {
                 if ((at_word & (1ull << (bit & 0x3F))) != 0ull)
                     return (word << 6) + bit;
+                --bit;
             }
         }
+        --word;
     }
 
     return 0;
@@ -315,10 +322,12 @@ mask_t& mask_t::operator^=(const mask_t& other)
 
 bool mask_t::intersects(const mask_t& other) const
 {
-    for (data_type i = std::min(data.size(), other.data.size()) - 1; i >= 0; i--)
+    data_type i = std::min(data.size(), other.data.size()) - 1;
+    while (i != 0)
     {
         if ((data[static_cast<size_t>(i)] & other.data[static_cast<size_t>(i)]) != 0)
             return true;
+        --i;
     }
 
     return false;
@@ -332,11 +341,14 @@ bool mask_t::contains_all(const mask_t& other) const
             return false;
     }
 
-    for (data_type i = std::min(data.size(), other.data.size()) - 1; i >= 0; i--)
+    data_type i = std::min(data.size(), other.data.size()) - 1;
+    while (i != 0)
     {
         if ((data[static_cast<size_t>(i)] & other.data[static_cast<size_t>(i)]) != other.data[static_cast<size_t>(i)])
             return false;
+        --i;
     }
+
     return true;
 }
 

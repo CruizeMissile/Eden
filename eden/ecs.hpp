@@ -10,3 +10,4 @@
 #include "ecs/pool.hpp"
 #include "ecs/store.hpp"
 #include "ecs/system.hpp"
+#include "ecs/utils.hpp"
