@@ -22,7 +22,7 @@ template<typename Component>
 class store : public base_store_t
 {
 public:
-    store(director_t& director, size_t chunk_size = 64);
+    store(director_t& director, size_t chunk_size = EDEN_DEFAULT_CHUNK_SIZE);
 
     template<typename... Args>
     Component& create(uint32_t index, Args&&... args);

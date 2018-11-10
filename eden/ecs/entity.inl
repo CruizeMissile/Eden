@@ -27,19 +27,4 @@ bool entity_t::has() const
 {
     return director_->has_component<C>(*this);
 }
-
-void entity_t::destroy()
-{
-    director_->destroy(*this);
-}
-
-mask_t& entity_t::mask()
-{
-    return director_->mask(*this);
-}
-
-const mask_t& entity_t::mask() const
-{
-    return director_->mask(*this);
-}
 } // namespace eden::ecs

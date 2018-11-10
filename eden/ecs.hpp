@@ -2,9 +2,11 @@
 #pragma once
 
 #include "ecs/defines.hpp"
-#include "ecs/director.cpp"
+#include "ecs/director.hpp"
+#include "ecs/dispatcher.hpp"
 #include "ecs/entity.hpp"
 #include "ecs/id.hpp"
 #include "ecs/mask.hpp"
-#include "ecs/pool.cpp"
+#include "ecs/pool.hpp"
 #include "ecs/store.hpp"
+#include "ecs/system.hpp"

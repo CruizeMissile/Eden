@@ -13,6 +13,9 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/ecs/director.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/director.inl"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/director.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/dispatcher.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/dispatcher.inl"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/dispatcher.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/entity.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/entity.inl"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/entity.cpp"
@@ -25,6 +28,8 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/ecs/pool.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/store.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/store.inl"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/system.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/system.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs.hpp"
 )
 
