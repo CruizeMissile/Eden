@@ -8,6 +8,10 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/app/input.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/window.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
+
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/defines.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/id.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs.hpp"
 )
 
 sf_create_library(eden
