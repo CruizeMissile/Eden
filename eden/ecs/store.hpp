@@ -10,7 +10,7 @@ class director_t;
 
 struct base_store_t
 {
-    virtual ~base_store_t() {};
+    virtual ~base_store_t(){};
     virtual void remove(uint32_t index) = 0;
     virtual void* get_void_ptr(uint32_t index) = 0;
     virtual const void* get_void_ptr(uint32_t index) const = 0;

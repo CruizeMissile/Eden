@@ -4,16 +4,19 @@
 
 int main()
 {
-    eden::ecs::internal::pool<int> pool(8192);
-    eden::ecs::mask_t mask(256);
-    mask.set(200);
+    using namespace eden::ecs;
 
-    for (int i = 0; i < mask.length(); ++i)
+    director_t d;
+    auto ent = d.create();
+    auto ents = d.create(100);
+
+    for (int i = 0; i < ents.size(); ++i)
     {
-        if (i % 2 == 0)
-            mask.set(i);
+        if (i % 2 == 0 )
+            ents[i].destroy();
     }
 
-    std::cout << mask.to_string() << '\n';
+    std::cout << d.count() << '\n';
+
     return 0;
 }

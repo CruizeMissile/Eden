@@ -77,4 +77,15 @@ public:
     bool operator==(const mask_t& other) const { return equals(other); }
     bool operator!=(const mask_t& other) const { return !equals(other); }
 };
+
+namespace internal
+{
+    template<typename Type>
+    mask_t component_mask();
+
+    template<typename Type1, typename Type2, typename... Types>
+    mask_t component_mask();
+} // namespace internal
 } // namespace eden::ecs
+
+#include "mask.inl"
