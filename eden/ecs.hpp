@@ -5,3 +5,4 @@
 #include "ecs/id.hpp"
 #include "ecs/mask.hpp"
 #include "ecs/pool.cpp"
+#include "ecs/store.hpp"
