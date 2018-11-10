@@ -4,6 +4,7 @@
 
 int main()
 {
+    eden::ecs::internal::pool<int> pool(8192);
     eden::ecs::mask_t mask(256);
     mask.set(200);
 
