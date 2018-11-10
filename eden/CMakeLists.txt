@@ -11,6 +11,8 @@ list(APPEND eden_files
 
   "${CMAKE_CURRENT_LIST_DIR}/ecs/defines.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/id.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/mask.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/mask.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs.hpp"
 )
 
