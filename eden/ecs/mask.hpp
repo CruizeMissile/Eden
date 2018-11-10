@@ -18,7 +18,7 @@ public:
     ~mask_t();
     mask_t(const mask_t&);
     mask_t(mask_t&& other);
-    explicit mask_t(data_type n_bits);
+    explicit mask_t(data_type set_bit);
     mask_t& operator=(const mask_t&);
     mask_t& operator=(mask_t&&);
 

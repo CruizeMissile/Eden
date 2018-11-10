@@ -22,11 +22,17 @@ struct entity_t
     template<typename C>
     bool has() const;
 
+    bool has(mask_t mask) const;
+
     void destroy();
 
     mask_t& mask();
     const mask_t& mask() const;
 
+    id_t& id();
+    const id_t& id() const;
+
+private:
     director_t* director_;
     id_t id_;
 

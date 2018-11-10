@@ -6,20 +6,23 @@
 
 namespace eden::ecs
 {
+namespace internal
+{
+    struct base_store_t
+    {
+        virtual ~base_store_t(){};
+        virtual void remove(uint32_t index) = 0;
+        virtual void* get_void_ptr(uint32_t index) = 0;
+        virtual const void* get_void_ptr(uint32_t index) const = 0;
+        virtual void ensure_min_size(uint32_t size) = 0;
+        virtual mask_t mask() const = 0;
+    };
+}
+
 class director_t;
 
-struct base_store_t
-{
-    virtual ~base_store_t(){};
-    virtual void remove(uint32_t index) = 0;
-    virtual void* get_void_ptr(uint32_t index) = 0;
-    virtual const void* get_void_ptr(uint32_t index) const = 0;
-    virtual void ensure_min_size(uint32_t size) = 0;
-    virtual mask_t mask() const = 0;
-};
-
 template<typename Component>
-class store : public base_store_t
+class store : public internal::base_store_t
 {
 public:
     store(director_t& director, size_t chunk_size = EDEN_DEFAULT_CHUNK_SIZE);

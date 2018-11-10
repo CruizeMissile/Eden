@@ -2,9 +2,38 @@
 #include "entity.hpp"
 #include "store.hpp"
 #include <type_traits>
+#include <cassert>
 
 namespace eden::ecs
 {
+
+template<typename Archetype, typename... Args>
+auto director_t::create(Args&&... args) -> typename std::enable_if_t<
+    std::is_base_of_v<internal::base_archetype_t, Archetype> ||
+    std::is_base_of_v<entity_t, Archetype>, Archetype&
+>
+{
+    auto mask = Archetype::static_mask();
+    entity_t ent = create();
+
+    // If the Archetype is constructable with args the call the constructor
+    if constexpr(std::is_constructible<Archetype, Args...>::value)
+    {
+        Archetype* arch = new(&ent) Archetype(std::forward<Args>(args)...);
+        assert(ent.has(mask));
+        return *arch;
+    }
+    else
+    {
+        // If the Archetype is not constructable with Args then try calling the init
+        // function and then cast to the passed in Archetype type
+        using arch_type = typename Archetype::this_type;
+        arch_type* arch = new(&ent) arch_type();
+        arch->init(std::forward<Args>(args)...);
+        return *reinterpret_cast<Archetype*>(arch);
+    }
+}
+
 template<typename Component, typename... Args>
 store<Component>& director_t::create_store(Args&&... args)
 {

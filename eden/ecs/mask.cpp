@@ -28,11 +28,11 @@ mask_t::mask_t(mask_t&& rhs)
     data.swap(rhs.data);
 }
 
-mask_t::mask_t(data_type n_bits)
+mask_t::mask_t(data_type index)
 {
-    data_type reserve = 1 + (n_bits >> 6);
-    data.reserve(static_cast<size_t>(reserve));
-    clear();
+    data_type word = (index >> 6);
+    check_capacity(word);
+    data[static_cast<size_t>(word)] |= 1ull << (index & 0x3F);
 }
 
 mask_t& mask_t::operator=(const mask_t& rhs)

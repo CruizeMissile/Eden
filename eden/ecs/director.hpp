@@ -4,15 +4,22 @@
 #include "defines.hpp"
 #include "id.hpp"
 #include "mask.hpp"
+#include <type_traits>
 #include <vector>
 
 namespace eden::ecs
 {
-struct entity_t;
+namespace internal
+{
+    struct base_store_t;
+    struct base_archetype_t;
+}
 
+struct entity_t;
 template<typename T>
 class store;
-struct base_store_t;
+template<typename... Components>
+class archetype;
 
 class director_t
 {
@@ -22,6 +29,13 @@ public:
 
     entity_t create();
     std::vector<entity_t> create(const size_t num_of_entities);
+
+    // Create an archetype
+    template<typename Archetype, typename... Args>
+    auto create(Args&&... args) -> typename std::enable_if_t<
+        std::is_base_of_v<internal::base_archetype_t, Archetype> ||
+        std::is_base_of_v<entity_t, Archetype>, Archetype&
+    >;
 
     size_t count();
 
@@ -42,8 +56,8 @@ private:
     template<typename Component>
     const store<Component>& get_store() const;
 
-    base_store_t& get_store(size_t component_index);
-    const base_store_t& get_store(size_t component_index) const;
+    internal::base_store_t& get_store(size_t component_index);
+    const internal::base_store_t& get_store(size_t component_index) const;
 
     template<typename Component>
     Component& get_component(entity_t& entity);
@@ -102,7 +116,7 @@ private:
     // Gey how many entities the director_t can handle atm
     size_t capacity() const;
 
-    std::vector<base_store_t*> stores_;
+    std::vector<internal::base_store_t*> stores_;
     std::vector<index_t> block_index_;
     std::vector<index_t> free_list_;
     std::vector<index_t> next_free_indexes_;

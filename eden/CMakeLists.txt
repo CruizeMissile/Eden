@@ -9,6 +9,8 @@ list(APPEND eden_files
   "${CMAKE_CURRENT_LIST_DIR}/app/window.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/app/window.cpp"
 
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/archetype.hpp"
+  "${CMAKE_CURRENT_LIST_DIR}/ecs/archetype.inl"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/defines.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/director.hpp"
   "${CMAKE_CURRENT_LIST_DIR}/ecs/director.inl"

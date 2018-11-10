@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "ecs/archetype.hpp"
 #include "ecs/defines.hpp"
 #include "ecs/director.hpp"
 #include "ecs/dispatcher.hpp"

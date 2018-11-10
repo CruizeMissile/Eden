@@ -11,7 +11,7 @@ director_t::director_t(size_t chunk_size)
 
 director_t::~director_t()
 {
-    for (base_store_t* base : stores_)
+    for (internal::base_store_t* base : stores_)
     {
         if (base)
             delete base;
@@ -125,11 +125,11 @@ void director_t::create_new_block(index_t next_free_index)
     next_free_indexes_[block_count_] = next_free_index;
 }
 
-base_store_t& director_t::get_store(size_t component_index)
+internal::base_store_t& director_t::get_store(size_t component_index)
 {
     return *stores_[component_index];
 }
-const base_store_t& director_t::get_store(size_t component_index) const
+const internal::base_store_t& director_t::get_store(size_t component_index) const
 {
     return *stores_[component_index];
 }
