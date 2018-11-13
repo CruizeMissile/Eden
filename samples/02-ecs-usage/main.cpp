@@ -15,7 +15,10 @@ int main()
     using namespace eden::ecs;
 
     director_t d;
-    entity_t ent = d.create<caster_t>();
+    entity_t ent = d.create<caster_t>(100u, 10u,  std::string("bob"));
+
+    std::string name = ent.get<name_t>();
+    std::cout << name << '\n';
 
     return 0;
 }

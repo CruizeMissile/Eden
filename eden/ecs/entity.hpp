@@ -17,7 +17,10 @@ struct entity_t
     C& set(Args&&... args);
 
     template<typename C>
-    C& get() const;
+    C& get();
+
+    template<typename C>
+    const C& get() const;
 
     template<typename C>
     bool has() const;

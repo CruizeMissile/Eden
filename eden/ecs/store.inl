@@ -7,7 +7,14 @@ template<typename Component>
 template<typename... Args>
 Component* store<Component>::create_component(void* ptr, Args&&... args)
 {
-    return new (ptr) Component(std::forward<Args>(args)...);
+    if constexpr (std::is_constructible_v<Component, Args...>)
+        return new (ptr) Component(std::forward<Args>(args)...);
+
+    if constexpr (std::is_base_of_v<internal::base_property_t, Component>)
+        return reinterpret_cast<Component*>(new (ptr)
+                typename Component::value_type(std::forward<Args>(args)...));
+
+    return new (ptr) Component{ std::forward<Args>(args)... };
 }
 
 template<typename Component>

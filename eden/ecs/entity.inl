@@ -17,10 +17,17 @@ C& entity_t::set(Args&&... args)
 }
 
 template<typename C>
-C& entity_t::get() const
+C& entity_t::get()
 {
     return director_->get_component<C>(*this);
 }
+
+template<typename C>
+const C& entity_t::get() const
+{
+    return director_->get_component<C>(*this);
+}
+
 
 template<typename C>
 bool entity_t::has() const
