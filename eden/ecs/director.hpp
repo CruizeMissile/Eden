@@ -13,7 +13,8 @@ namespace internal
 {
     struct base_store_t;
     struct base_archetype_t;
-}
+    struct base_property_t;
+} // namespace internal
 
 struct entity_t;
 template<typename T>
@@ -33,9 +34,10 @@ public:
     // Create an archetype
     template<typename Archetype, typename... Args>
     auto create(Args&&... args) -> typename std::enable_if_t<
-        std::is_base_of_v<internal::base_archetype_t, Archetype> ||
-        std::is_base_of_v<entity_t, Archetype>, Archetype&
-    >;
+        std::is_base_of_v<internal::base_archetype_t, Archetype> || std::is_base_of_v<entity_t, Archetype>, Archetype&>;
+
+    entity_t operator[](index_t index);
+    entity_t operator[](id_t id);
 
     size_t count();
 
@@ -127,6 +129,8 @@ private:
     index_t block_count_ = 0;
     index_t count_ = 0;
 
+    template<typename... Components>
+    friend class archetype;
     friend struct entity_t;
 };
 } // namespace eden::ecs

@@ -9,6 +9,7 @@
 #include "ecs/id.hpp"
 #include "ecs/mask.hpp"
 #include "ecs/pool.hpp"
+#include "ecs/property.hpp"
 #include "ecs/store.hpp"
 #include "ecs/system.hpp"
 #include "ecs/utils.hpp"

@@ -60,35 +60,35 @@ template<typename... Components>
 template<typename Component>
 Component& archetype<Components...>::get()
 {
-    return director().get_component<Component>(entity_);
+    return director_->get_component<Component>(entity_);
 }
 
 template<typename... Components>
 template<typename Component>
 bool archetype<Components...>::has()
 {
-    return director().has_component<Component>(entity_);
+    return director_->has_component<Component>(entity_);
 }
 
 template<typename... Components>
 template<typename Component, typename... Args>
 Component& archetype<Components...>::set(Args&&... args)
 {
-    return director().set_component<Component>(entity_, std::forward<Args...>(args)...);
+    return director_->set_component<Component>(entity_, std::forward<Args...>(args)...);
 }
 
 template<typename... Components>
 template<typename Component, typename... Args>
 Component& archetype<Components...>::add(Args&&... args)
 {
-    return director().set_component<Component>(entity_, std::forward<Args...>(args)...);
+    return director_->set_component<Component>(entity_, std::forward<Args...>(args)...);
 }
 
 template<typename... Components>
 template<typename Component>
 void archetype<Components...>::remove()
 {
-    director().remove<Component>(entity_);
+    director_->remove_component<Component>(entity_);
 }
 
 template<typename... Components>
@@ -106,19 +106,19 @@ void archetype<Components...>::destroy()
 template<typename... Components>
 bool archetype<Components...>::operator==(const entity_t& rhs) const
 {
-    return true;
+    return entity() == rhs;
 }
 
 template<typename... Components>
 bool archetype<Components...>::operator!=(const entity_t& rhs) const
 {
-    return true;
+    return entity() != rhs;
 }
 
 template<typename... Components>
 id_t archetype<Components...>::id()
 {
-    return entity_.;
+    return entity().id();
 }
 
 template<typename... Components>
@@ -130,34 +130,34 @@ const id_t archetype<Components...>::id() const
 template<typename... Components>
 bool archetype<Components...>::is_valid() const
 {
-    return entity_.id();
+    return entity_.is_valid();
 }
 
 template<typename... Components>
-template<typename Component, typename Argument>
-void archetype<Components...>::init_components(Argument arg)
+template<typename C0, typename Arg>
+inline void archetype<Components...>::init_components(Arg arg)
 {
-    add<Component>(arg);
+    add<C0>(arg);
 }
 
 template<typename... Components>
 template<typename C0, typename C1, typename... Cs, typename Arg0, typename Arg1, typename... Args>
-void archetype<Components...>::init_components(Arg0 arg0, Arg1 arg1, Args... Args)
+inline void archetype<Components...>::init_components(Arg0 arg0, Arg1 arg1, Args... args)
 {
     init_components<C0>(arg0);
     init_components<C1, Cs...>(arg1, args...);
 }
-
+// Recursion init components without argument
 template<typename... Components>
-template<typename Component>
-void archetype<Components...>::init_components()
+template<typename C>
+inline void archetype<Components...>::init_components()
 {
-    add<Component>();
+    add<C>();
 }
 
 template<typename... Components>
 template<typename C0, typename C1, typename... Cs>
-void archetype<Components...>::init_components()
+inline void archetype<Components...>::init_components()
 {
     init_components<C0>();
     init_components<C1, Cs...>();
@@ -165,7 +165,7 @@ void archetype<Components...>::init_components()
 
 template<typename... Components>
 template<typename... Args>
-void archetype<Components...>::init(Args... args)
+inline void archetype<Components...>::init(Args... args)
 {
     init_components<Components...>(args...);
 }
@@ -179,13 +179,13 @@ constexpr mask_t archetype<Components...>::static_mask()
 template<typename... Components>
 director_t& archetype<Components...>::director()
 {
-    return director_;
+    return *director_;
 }
 
 template<typename... Components>
 const director_t& archetype<Components...>::director() const
 {
-    return director_;
+    return *director_;
 }
 
 template<typename... Components>

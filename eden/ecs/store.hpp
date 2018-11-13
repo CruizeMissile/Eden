@@ -17,7 +17,7 @@ namespace internal
         virtual void ensure_min_size(uint32_t size) = 0;
         virtual mask_t mask() const = 0;
     };
-}
+} // namespace internal
 
 class director_t;
 

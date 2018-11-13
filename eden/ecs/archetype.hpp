@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "entity.hpp"
 #include "id.hpp"
 #include "mask.hpp"
 
@@ -20,7 +21,6 @@ namespace internal
 } // namespace internal
 
 class director_t;
-struct entity_t;
 
 template<typename... Components>
 class archetype : public internal::base_archetype_t
@@ -71,16 +71,14 @@ protected:
     const entity_t& entity() const;
 
 private:
-
-    // Recurse init components with argument
-    template<typename Component, typename Argument>
-    void init_components(Argument arg);
+    template<typename C0, typename Arg>
+    void init_components(Arg arg);
 
     template<typename C0, typename C1, typename... Cs, typename Arg0, typename Arg1, typename... Args>
-    void init_components(Arg0 arg0, Arg1 arg1, Args... Args);
+    void init_components(Arg0 arg0, Arg1 arg1, Args... args);
 
-    // Recurse init components with argument
-    template<typename Component>
+    // Recursion init components without argument
+    template<typename C>
     void init_components();
 
     template<typename C0, typename C1, typename... Cs>

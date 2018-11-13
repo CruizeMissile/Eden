@@ -32,6 +32,9 @@ struct entity_t
     id_t& id();
     const id_t& id() const;
 
+    bool is_valid();
+    bool is_valid() const;
+
 private:
     director_t* director_;
     id_t id_;

@@ -32,4 +32,14 @@ const id_t& entity_t::id() const
 {
     return id_;
 }
+
+bool entity_t::is_valid()
+{
+    return director_->is_valid(*this);
+}
+
+bool entity_t::is_valid() const
+{
+    return director_->is_valid(*this);
+}
 } // namespace eden::ecs
