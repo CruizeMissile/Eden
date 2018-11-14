@@ -23,7 +23,7 @@ using version_t = uint8_t;
 namespace internal
 {
     template<typename T>
-    uint32_t get_unique_type_id()
+    constexpr uint32_t get_unique_type_id()
     {
         static uint32_t type = 0;
         return type++;
@@ -36,28 +36,28 @@ namespace internal
 } // namespace internal
 
 template<typename T>
-uint32_t get_store_id()
+constexpr uint32_t get_store_id()
 {
     static uint32_t type = internal::get_unique_type_id<internal::store_marker>();
     return type;
 }
 
 template<typename T>
-uint32_t get_component_id()
+constexpr uint32_t get_component_id()
 {
     static uint32_t type = internal::get_unique_type_id<internal::component_marker>();
     return type;
 }
 
 template<typename T>
-uint32_t get_system_id()
+constexpr uint32_t get_system_id()
 {
     static uint32_t type = internal::get_unique_type_id<internal::system_marker>();
     return type;
 }
 
 template<typename T>
-uint32_t get_entity_id()
+constexpr uint32_t get_entity_id()
 {
     static uint32_t type = internal::get_unique_type_id<internal::entity_marker>();
     return type;

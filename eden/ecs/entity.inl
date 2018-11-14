@@ -34,4 +34,10 @@ bool entity_t::has() const
 {
     return director_->has_component<C>(*this);
 }
+
+template<typename C>
+void entity_t::remove()
+{
+    director_->remove_component<C>(*this);
+}
 } // namespace eden::ecs

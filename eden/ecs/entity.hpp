@@ -25,6 +25,9 @@ struct entity_t
     template<typename C>
     bool has() const;
 
+    template<typename C>
+    void remove();
+
     bool has(mask_t mask) const;
 
     void destroy();

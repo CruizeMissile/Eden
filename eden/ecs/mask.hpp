@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -31,6 +32,8 @@ public:
 
     // return All uint64_t's as string, comma separated
     std::string to_string() const;
+
+    buffer_type& get_data();
 
 private:
     void check_capacity(data_type len);
@@ -76,6 +79,8 @@ public:
 
     bool operator==(const mask_t& other) const { return equals(other); }
     bool operator!=(const mask_t& other) const { return !equals(other); }
+
+    std::ostream& operator<<(std::ostream& os);
 };
 
 namespace internal

@@ -9,7 +9,7 @@ namespace eden::ecs
 {
 mask_t::mask_t()
 {
-    data.reserve(1);
+    check_capacity(0);
     clear();
 }
 
@@ -105,6 +105,11 @@ std::string mask_t::to_string() const
     return ss.str();
 }
 
+mask_t::buffer_type& mask_t::get_data()
+{
+    return data;
+}
+
 void mask_t::check_capacity(data_type len)
 {
     if (len >= data.size())
@@ -149,6 +154,9 @@ mask_t::data_type mask_t::used_words() const
 
 mask_t::data_type mask_t::length() const
 {
+    if (data.size() == 0)
+        return 0;
+
     auto word = data.size() - 1;
     while (word != 0)
     {
@@ -264,7 +272,7 @@ mask_t mask_t::operator^(const mask_t& other) const
 mask_t& mask_t::operator&=(const mask_t& other)
 {
     data_type common_words = std::min(data.size(), other.data.size());
-    for (data_type i = 0; common_words > i; i++)
+    for (data_type i = 0; i < common_words; i++)
         data[static_cast<size_t>(i)] &= other.data[static_cast<size_t>(i)];
 
     if (data.size() > common_words)
@@ -368,5 +376,10 @@ bool mask_t::equals(const mask_t& other) const
         return true;
 
     return length() == other.length();
+}
+
+std::ostream& mask_t::operator<<(std::ostream& os)
+{
+    return os << "Data: " << to_string();
 }
 } // namespace eden::ecs
