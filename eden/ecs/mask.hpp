@@ -4,6 +4,78 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <bitset>
+
+namespace eden::ecs
+{
+    template<size_t BlockSize = 32>
+    class bitmask
+    {
+        using size_type = size_t;
+        using block_type = std::bitset<BlockSize>;
+        using buffer_type = std::vector<block_type>;
+        using reference = typename buffer_type::reference;
+
+        buffer_type bits_;
+        size_type size_;
+
+    public:
+        bitmask() noexcept;
+
+        // An integral value whose bits are copied to the bitset positions.
+        // If the value is less then the size of the chunk then the leading
+        // positions will be set to zero.
+        bitmask(size_type value) noexcept;
+        ~bitmask();
+
+        // bitset accessors
+        bool operator[](size_type index) const;
+        reference operator[](size_type index);
+        size_type count() const noexcept;
+        size_type size() noexcept;
+        bool test(size_type index) const;
+        bool any() const noexcept;
+        bool none() const noexcept;
+        bool all() const noexcept;
+
+        // sets one to all the bits
+        bitmask& set() noexcept;
+
+        // sets the bit in the index to the value
+        bitmask& set(size_type index, bool value = true);
+
+        // reset all the bits to zero
+        bitmask& reset() noexcept;
+
+        // reset bit at index to zero
+        bitmask& reset(size_type index);
+
+        // flip all bits
+        bitmask& flip() noexcept;
+
+        // flip bit at index
+        bitmask& flip(size_type index);
+
+        std::string to_String(char zero = '0', char one = '1');
+
+        bitmask operator&(const bitmask& rhs);
+        bitmask operator|(const bitmask& rhs);
+        bitmask operator^(const bitmask& rhs);
+
+        bitmask& operator&=(const bitmask& rhs);
+        bitmask& operator|=(const bitmask& rhs);
+        bitmask& operator^=(const bitmask& rhs);
+
+        bool operator==(const bitmask& rhs);
+        bool operator!=(const bitmask& rhs);
+
+        static constexpr uint64_t hamming_weight(size_t value);
+
+    private:
+        void check_capacity(size_t n);
+        constexpr size_t get_highest_bit_count(size_t value);
+    };
+}
 
 namespace eden::ecs
 {
@@ -92,3 +164,5 @@ namespace internal
     mask_t component_mask();
 } // namespace internal
 } // namespace eden::ecs
+
+#include "mask.inl"
