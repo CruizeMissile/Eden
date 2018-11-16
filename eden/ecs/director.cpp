@@ -145,7 +145,7 @@ void director_t::remove_all_components(entity_t& entity)
 
 void director_t::clear_mask(entity_t& entity)
 {
-    masks_[entity.id_.index].clear();
+    masks_[entity.id_.index].reset();
 }
 
 bool director_t::has_component(entity_t& entity, mask_t component_mask)

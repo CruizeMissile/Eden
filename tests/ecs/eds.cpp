@@ -66,8 +66,6 @@ TEST_CASE("Ecs system")
         auto ent = director.create();
 
         auto health = ent.add<health_t>();
-        auto mask = ent.mask();
-        auto cmask = internal::component_mask<health_t>();
         CHECK(ent.has<health_t>());
         CHECK(health == 0);
 

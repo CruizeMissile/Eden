@@ -37,6 +37,7 @@ template<typename Component>
 void store<Component>::remove(index_t index)
 {
     pool.destroy(index);
+    director.mask(index).reset(get_component_id<Component>());
 }
 
 template<typename Component>

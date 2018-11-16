@@ -131,6 +131,8 @@ private:
 
     template<typename... Components>
     friend class archetype;
+    template<typename Component>
+    friend class store;
     friend struct entity_t;
 };
 } // namespace eden::ecs

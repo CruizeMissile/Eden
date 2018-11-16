@@ -80,7 +80,7 @@ TEST_CASE("Dynamic Bitset")
         CHECK(cp == bs);
 
         bs.flip();
-        CHECK(cp != bs);    
+        CHECK(cp != bs);
         for (size_t i = 0 ; i < bs.size(); ++i)
             CHECK(bs[i] != cp[i]);
 
@@ -97,12 +97,30 @@ TEST_CASE("Dynamic Bitset")
         SECTION("And")
         {
             {
-                dynamic_bitset<bit_size> bs1(1);
-                dynamic_bitset<bit_size> bs2(2);
-                dynamic_bitset<bit_size> bs3(4);
-                dynamic_bitset<bit_size> answer(7);
+                dynamic_bitset<bit_size> bs1(204);
+                dynamic_bitset<bit_size> bs2(136);
+                dynamic_bitset<bit_size> answer(136);
 
-                auto result = bs1 & bs2 & bs3;
+                auto result = bs1 & bs2;
+                CHECK(result == answer);
+            }
+            {
+                dynamic_bitset<bit_size> bs1(65535);
+                dynamic_bitset<bit_size> bs2(18835);
+
+                auto result = bs1 & bs2;
+                CHECK(result == bs2);
+            }
+        }
+
+        SECTION("Or")
+        {
+            {
+                dynamic_bitset<bit_size> bs1(10);
+                dynamic_bitset<bit_size> bs2(160);
+                dynamic_bitset<bit_size> answer(170);
+
+                auto result = bs1 | bs2;
                 CHECK(result == answer);
             }
         }

@@ -16,26 +16,30 @@ template<size_t BlockSize>
 dynamic_bitset<BlockSize>::dynamic_bitset(size_type value) noexcept
 {
    // https://stackoverflow.com/a/2249738
-   auto n_bits_index = get_highest_bit_count(value);
-   if (n_bits_index == 0)
+   auto index = get_highest_bit_count(value);
+   if (index == 0)
    {
        check_capacity(0);
        return;
    }
 
-   --n_bits_index;
-   auto index = n_bits_index / BlockSize;
-   check_capacity(index);
+   // As this is an index into the array move from a count to an index starting at 0
+   --index;
+   auto chunk = index / BlockSize;
+   check_capacity(chunk);
    while (true)
    {
-       auto r = (value >> n_bits_index) & 1;
+       auto r = (value >> index) & 1;
        if (r == 1)
-           bits_[0].set(n_bits_index);
+       {
+           chunk = index / BlockSize;
+           bits_[chunk].set(index - (chunk * BlockSize));
+       }
 
-       if (n_bits_index == 0)
+       if (index == 0)
            return;
 
-       --n_bits_index;
+       --index;
    }
 }
 
@@ -205,27 +209,6 @@ constexpr size_t dynamic_bitset<BlockSize>::get_highest_bit_count(size_t value)
 }
 
 template<size_t BlockSize>
-dynamic_bitset<BlockSize> dynamic_bitset<BlockSize>::operator&(const dynamic_bitset<BlockSize>& rhs)
-{
-    dynamic_bitset<BlockSize> copy = *this;
-    return (copy &= rhs);
-}
-
-template<size_t BlockSize>
-dynamic_bitset<BlockSize> dynamic_bitset<BlockSize>::operator|(const dynamic_bitset<BlockSize>& rhs)
-{
-    dynamic_bitset<BlockSize> copy = *this;
-    return (copy |= rhs);
-}
-
-template<size_t BlockSize>
-dynamic_bitset<BlockSize> dynamic_bitset<BlockSize>::operator^(const dynamic_bitset<BlockSize>& rhs)
-{
-    dynamic_bitset<BlockSize> copy = *this;
-    return (copy ^= rhs);
-}
-
-template<size_t BlockSize>
 dynamic_bitset<BlockSize>& dynamic_bitset<BlockSize>::operator&=(const dynamic_bitset<BlockSize>& rhs)
 {
     auto min = std::min(bits_.size(), rhs.bits_.size());
@@ -274,5 +257,26 @@ template<size_t BlockSize>
 bool dynamic_bitset<BlockSize>::operator!=(const dynamic_bitset<BlockSize>& rhs) const noexcept
 {
     return !(*this == rhs);
+}
+
+template<size_t BlockSize>
+dynamic_bitset<BlockSize> operator&(const dynamic_bitset<BlockSize>& lhs, const dynamic_bitset<BlockSize>& rhs)
+{
+    dynamic_bitset<BlockSize> copy = lhs;
+    return (copy &= rhs);
+}
+
+template<size_t BlockSize>
+dynamic_bitset<BlockSize> operator|(const dynamic_bitset<BlockSize>& lhs, const dynamic_bitset<BlockSize>& rhs)
+{
+    dynamic_bitset<BlockSize> copy = lhs;
+    return (copy |= rhs);
+}
+
+template<size_t BlockSize>
+dynamic_bitset<BlockSize> operator^(const dynamic_bitset<BlockSize>& lhs, const dynamic_bitset<BlockSize>& rhs)
+{
+    dynamic_bitset<BlockSize> copy = lhs;
+    return (copy ^= rhs);
 }
 }
