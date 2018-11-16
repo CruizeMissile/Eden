@@ -5,48 +5,106 @@
 
 using namespace eden::ecs;
 
-TEST_CASE("Mask")
+TEST_CASE("Dynamic Bitset")
 {
-    SECTION("Mask set")
+    SECTION("Construct")
     {
-        mask_t mask;
-        mask.set(2);
-        mask.set(4);
-        mask.set(8);
-        mask.set(16);
+        SECTION("Default")
+        {
+            constexpr size_t bit_size = 16;
+            dynamic_bitset<bit_size> bs;
+            CHECK(bs.count() == 0);
+            CHECK(bs.size() == bit_size);
+            CHECK(!bs.all());
+            CHECK(!bs.any());
+            CHECK(bs.none());
+        }
 
-        std::bitset<64> bitset;
-        bitset.set(2);
-        bitset.set(4);
-        bitset.set(8);
-        bitset.set(16);
-
-        CHECK(bitset.to_ullong() == mask.get_data()[0]);
+        SECTION("Value")
+        {
+            constexpr size_t bit_size = 8;
+            dynamic_bitset<bit_size> bs(21);
+            CHECK(bs.count() == 3);
+            CHECK(bs.size() == bit_size);
+            CHECK(!bs.all());
+            CHECK(bs.any());
+            CHECK(!bs.none());
+            CHECK(bs.test(0));
+            CHECK(!bs.test(1));
+            CHECK(bs.test(2));
+            CHECK(!bs.test(3));
+            CHECK(bs.test(4));
+            CHECK(bs.to_string() == "00010101");
+        }
     }
 
-    SECTION("And operator")
+    SECTION("Accessors")
     {
-        mask_t one;
-        one.set(1);
-        one.set(5);
-        one.set(10);
+        constexpr size_t bit_size = 32;
+        constexpr size_t bit_value = 1234;
+        dynamic_bitset<bit_size> bs(bit_value);
+        CHECK(!bs[0]);
+        CHECK(bs[1]);
+        CHECK(!bs[2]);
+        CHECK(!bs[3]);
+        CHECK(bs[4]);
+        CHECK(!bs[5]);
+        CHECK(bs.test(6));
+        CHECK(bs.test(7));
+        CHECK(!bs.test(8));
+        CHECK(!bs.test(9));
+        CHECK(bs.test(10));
+        CHECK(!bs.test(11));
+        CHECK(!bs.test(12));
 
-        mask_t two;
-        two.set(0);
-        two.set(2);
-        two.set(4);
+        CHECK(bs.count() == 5);
+        CHECK(bs.size() == bit_size);
 
-        mask_t three;
-        three.set(1);
-        three.set(3);
-        three.set(5);
+        CHECK_THROWS_AS(bs.test(32), std::out_of_range);
+    }
 
-        mask_t four;
+    SECTION("Setting Values")
+    {
+        constexpr size_t bit_size = 32;
+        dynamic_bitset<bit_size> bs;
+        bs.set(0);
+        bs.set(bit_size + 1);
 
-        auto result = two & three;
+        CHECK(bs[0]);
+        CHECK(!bs[1]);
+        CHECK(!bs[32]);
+        CHECK(bs[33]);
+        CHECK(!bs[34]);
 
-        CHECK((one & one) == one);
-        CHECK((one & two) != one);
-        CHECK((two & three) == four);
+        auto cp = bs;
+        CHECK(cp == bs);
+
+        bs.flip();
+        CHECK(cp != bs);    
+        for (size_t i = 0 ; i < bs.size(); ++i)
+            CHECK(bs[i] != cp[i]);
+
+        bs.reset();
+        CHECK(bs.none());
+
+        cp.set();
+        CHECK(cp.all());
+    }
+
+    SECTION("Logical Operators")
+    {
+        constexpr size_t bit_size = 8;
+        SECTION("And")
+        {
+            {
+                dynamic_bitset<bit_size> bs1(1);
+                dynamic_bitset<bit_size> bs2(2);
+                dynamic_bitset<bit_size> bs3(4);
+                dynamic_bitset<bit_size> answer(7);
+
+                auto result = bs1 & bs2 & bs3;
+                CHECK(result == answer);
+            }
+        }
     }
 }
