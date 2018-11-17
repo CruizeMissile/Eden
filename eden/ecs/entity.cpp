@@ -3,9 +3,19 @@
 
 namespace eden::ecs
 {
+entity_t::entity_t(director_t* director, id_t id)
+    : director_(director)
+    , id_(id)
+{}
+
 bool entity_t::has(mask_t mask) const
 {
     return director_->mask(*this) == mask;
+}
+
+void entity_t::remove_all()
+{
+    director_->remove_all_components(*this);
 }
 
 void entity_t::destroy()

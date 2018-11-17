@@ -10,26 +10,26 @@ class director_t;
 
 struct entity_t
 {
-    template<typename C, typename... Args>
-    C& add(Args&&... args);
+    template<typename Component, typename... Args>
+    Component& add(Args&&... args);
 
-    template<typename C, typename... Args>
-    C& set(Args&&... args);
+    template<typename Component, typename... Args>
+    Component& set(Args&&... args);
 
-    template<typename C>
-    C& get();
+    template<typename Component>
+    Component& get();
 
-    template<typename C>
-    const C& get() const;
+    template<typename Component>
+    const Component& get() const;
 
-    template<typename C>
+    template<typename... Component>
     bool has() const;
-
-    template<typename C>
-    void remove();
-
     bool has(mask_t mask) const;
 
+    template<typename Component>
+    void remove();
+
+    void remove_all();
     void destroy();
 
     mask_t& mask();
@@ -47,10 +47,7 @@ private:
 
 private:
     friend class director_t;
-    entity_t(director_t* director, id_t id)
-        : director_(director)
-        , id_(id)
-    {}
+    entity_t(director_t* director, id_t id);
 };
 
 } // namespace eden::ecs

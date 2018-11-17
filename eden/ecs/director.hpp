@@ -33,8 +33,18 @@ public:
 
     // Create an archetype
     template<typename Archetype, typename... Args>
-    auto create(Args&&... args) -> typename std::enable_if_t<
-        std::is_base_of_v<internal::base_archetype_t, Archetype> || std::is_base_of_v<entity_t, Archetype>, Archetype&>;
+    auto create(Args&&... args) ->
+        typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> ||
+            std::is_base_of_v<entity_t, Archetype>, Archetype&>;
+
+    // Create an entity with components assigned
+    template<typename... Components, typename... Args>
+    auto create_with(Args&&... args) ->
+        typename std::conditional<(sizeof...(Components) > 0), archetype<Components...>, archetype<Args...>>::type;
+
+    // Create an entiyt with components assigned, using default values
+    template<typename... Components>
+    archetype<Components...> create_with();
 
     entity_t operator[](index_t index);
     entity_t operator[](id_t id);

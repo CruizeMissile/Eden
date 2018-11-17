@@ -9,6 +9,16 @@ struct health_t : property<uint32_t> {};
 struct mana_t : property<uint32_t> {};
 struct name_t : property<std::string> {};
 
+struct wizard_t : archetype<name_t, health_t, mana_t> {};
+struct baddy_t : archetype<health_t, mana_t>
+{
+    baddy_t()
+    {
+        get<health_t>().value = 10u;
+        get<mana_t>().value = 20u;
+    }
+};
+
 TEST_CASE("Ecs system")
 {
     director_t director;
@@ -61,7 +71,7 @@ TEST_CASE("Ecs system")
         CHECK(director.count() == 50);
     }
 
-    SECTION("Add and remove entity")
+    SECTION("Add and remove components")
     {
         auto ent = director.create();
 
@@ -76,5 +86,32 @@ TEST_CASE("Ecs system")
         CHECK(!ent.has<health_t>());
 
         ent.add<health_t>();
+        ent.add<mana_t>();
+        CHECK(ent.has<health_t, mana_t>());
+
+        ent.remove_all();
+        CHECK(ent.mask().none());
+
+        {
+            auto arch = director.create<wizard_t>("alice", 50u, 30u);
+            CHECK(arch.has<name_t>());
+            CHECK(arch.has<health_t>());
+            CHECK(arch.has<mana_t>());
+            arch.destroy();
+        }
+        {
+            auto arch = director.create_with<name_t, health_t, mana_t>("alice", 50u, 30u);
+            CHECK(arch.has<name_t>());
+            CHECK(arch.has<health_t>());
+            CHECK(arch.has<mana_t>());
+            arch.destroy();
+        }
+        {
+            auto arch = director.create_with<name_t, health_t, mana_t>();
+            CHECK(arch.has<name_t>());
+            CHECK(arch.has<health_t>());
+            CHECK(arch.has<mana_t>());
+            arch.destroy();
+        }
     }
 }

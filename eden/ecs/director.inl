@@ -8,8 +8,9 @@
 namespace eden::ecs
 {
 template<typename Archetype, typename... Args>
-auto director_t::create(Args&&... args) -> typename std::enable_if_t<
-    std::is_base_of_v<internal::base_archetype_t, Archetype> || std::is_base_of_v<entity_t, Archetype>, Archetype&>
+auto director_t::create(Args&&... args) ->
+    typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> ||
+        std::is_base_of_v<entity_t, Archetype>, Archetype&>
 {
     auto mask = Archetype::static_mask();
     entity_t ent = create();
@@ -30,6 +31,27 @@ auto director_t::create(Args&&... args) -> typename std::enable_if_t<
         arch->init(std::forward<Args>(args)...);
         return *reinterpret_cast<Archetype*>(arch);
     }
+}
+
+template<typename... Components, typename... Args>
+auto director_t::create_with(Args&&... args) ->
+    typename std::conditional<(sizeof...(Components) > 0), archetype<Components...>, archetype<Args...>>::type
+{
+    using return_type = typename std::conditional<(sizeof...(Components) > 0), archetype<Components...>, archetype<Args...>>::type;
+    entity_t e = create();
+    return_type* arch = new(&e) return_type();
+    arch->init(std::forward<Args>(args)...);
+    return *arch;
+}
+
+template<typename... Components>
+archetype<Components...> director_t::create_with()
+{
+    using return_type = archetype<Components...>;
+    entity_t e = create();
+    return_type* arch = new(&e) return_type();
+    arch->init();
+    return *arch;
 }
 
 template<typename Component, typename... Args>
