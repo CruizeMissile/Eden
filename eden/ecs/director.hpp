@@ -22,6 +22,8 @@ namespace internal
 template<typename...>
 class archetype;
 template<typename>
+class entity_iterator;
+template<typename>
 class store;
 template<typename>
 class view;
@@ -165,6 +167,8 @@ private:
 
     template<typename... Components>
     friend class archetype;
+    template<typename>
+    friend class entity_iterator;
     template<typename Component>
     friend class store;
     friend struct entity_t;

@@ -24,13 +24,13 @@ typename view<Type>::iterator view<Type>::end()
 }
 
 template<typename Type>
-typename view<Type>::const_iterator view<Type>::begin()
+typename view<Type>::const_iterator view<Type>::begin() const
 {
     return view<Type>::iterator(director_, mask_, true);
 }
 
 template<typename Type>
-typename view<Type>::const_iterator view<Type>::end()
+typename view<Type>::const_iterator view<Type>::end() const
 {
     return view<Type>::iterator(director_, mask_, false);
 }

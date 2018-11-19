@@ -117,11 +117,33 @@ TEST_CASE("Ecs system")
 
     SECTION("with")
     {
-        CHECK(director.count() == 0);
-        auto e1 = director.create(50);
-        for (auto i = 0; i < e1.size(); ++i)
-            CHECK(director[i].id().index == i);
-        director.create(50);
-        CHECK(director.count() == 100);
+        director.create(25, [](entity_t& ent) {
+            ent.add<health_t>(20u);
+            ent.add<mana_t>(100u);
+        });
+
+        director.create(15, [](entity_t& ent) {
+            ent.add<name_t>("bobby");
+            ent.add<health_t>(50u);
+            ent.add<mana_t>(20u);
+        });
+
+        uint32_t count = 0u;
+        for (entity_t ent : director.with<name_t, health_t>())
+        {
+            CHECK(ent.get<health_t>() == 50u);
+            ++count;
+        }
+        CHECK(count == 15);
+
+        count = 0u;
+        // Note: make sure that you dont forget the reference
+        director.with([&count](health_t& health, mana_t& mana) {
+            CHECK(health == 20u);
+            CHECK(mana == 100u);
+            ++count;
+        });
+        CHECK(count == 25u);
+
     }
 }

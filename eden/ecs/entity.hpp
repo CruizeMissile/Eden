@@ -6,6 +6,8 @@
 
 namespace eden::ecs
 {
+template<typename...>
+class archetype;
 class director_t;
 
 struct entity_t
@@ -18,13 +20,22 @@ struct entity_t
 
     template<typename Component>
     Component& get();
-
     template<typename Component>
     const Component& get() const;
 
     template<typename... Component>
     bool has() const;
     bool has(mask_t mask) const;
+
+    template<typename Archetype>
+    Archetype& as();
+    template<typename Archetype>
+    const Archetype& as() const;
+
+    template<typename... Components>
+    archetype<Components...>& assume();
+    template<typename... Components>
+    const archetype<Components...>& assume() const;
 
     template<typename Component>
     void remove();
