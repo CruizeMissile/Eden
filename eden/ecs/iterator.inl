@@ -5,9 +5,9 @@ namespace eden::ecs
 {
 template<typename Type>
 entity_iterator<Type>::entity_iterator(director_t* director, mask_t mask, bool begin)
-: director_(director)
-, mask_(mask)
-, cursor_(0)
+    : director_(director)
+    , mask_(mask)
+    , cursor_(0)
 {
     size_ = director_->versions_.size();
     if (!begin)
@@ -17,7 +17,7 @@ entity_iterator<Type>::entity_iterator(director_t* director, mask_t mask, bool b
 
 template<typename Type>
 entity_iterator<Type>::entity_iterator(const entity_iterator& it)
-: entity_iterator(it.director_, it.cursor_)
+    : entity_iterator(it.director_, it.cursor_)
 {
 }
 
@@ -55,26 +55,26 @@ void entity_iterator<Type>::find_next()
 }
 
 template<typename Type>
-bool operator==(entity_iterator<Type> const &lhs, entity_iterator<Type> const &rhs)
+bool operator==(entity_iterator<Type> const& lhs, entity_iterator<Type> const& rhs)
 {
     return lhs.index() == rhs.index();
 }
 
 template<typename Type>
-bool operator!=(entity_iterator<Type> const &lhs, entity_iterator<Type> const &rhs)
+bool operator!=(entity_iterator<Type> const& lhs, entity_iterator<Type> const& rhs)
 {
     return !(lhs == rhs);
 }
 
 template<typename Type>
-inline Type operator*(entity_iterator<Type> &lhs)
+inline Type operator*(entity_iterator<Type>& lhs)
 {
     return lhs.entity();
 }
 
 template<typename Type>
-inline Type const &operator*(entity_iterator<Type> const &lhs)
+inline Type const& operator*(entity_iterator<Type> const& lhs)
 {
     return lhs.entity();
 }
-}
+} // namespace eden::ecs

@@ -2,8 +2,8 @@
 #include "entity.hpp"
 #include "iterator.hpp"
 #include "store.hpp"
-#include "view.hpp"
 #include "utils.hpp"
+#include "view.hpp"
 #include <cassert>
 #include <type_traits>
 #include <utility>
@@ -13,12 +13,10 @@ namespace eden::ecs
 namespace internal
 {
     template<size_t N, typename Lambda, typename... Args>
-    struct with_t<N, Lambda, Args...> :
-        with_t<N - 1, Lambda,
-            typename internal::function_traits<Lambda>::template arg_remove_ref<N - 1>, Args...>
+    struct with_t<N, Lambda, Args...> : with_t<N - 1, Lambda,
+                                            typename internal::function_traits<Lambda>::template arg_remove_ref<N - 1>, Args...>
     {
     };
-
 
     template<typename Lambda, typename... Args>
     struct with_t<0, Lambda, Args...>
@@ -37,7 +35,7 @@ namespace internal
 
         template<typename Type>
         static auto get_arg(director_t& director, index_t index) ->
-            typename std::enable_if<!std::is_same<Type, entity_t>::value, Type &>::type
+            typename std::enable_if<!std::is_same<Type, entity_t>::value, Type&>::type
         {
             return director.get_component_fast<Type>(index);
         }
@@ -52,7 +50,7 @@ namespace internal
 
     template<typename Lambda>
     using with_ = with_t<internal::function_traits<Lambda>::arg_count, Lambda>;
-}
+} // namespace internal
 
 template<typename Lambda>
 void director_t::create(const size_t n, Lambda lambda)
@@ -64,11 +62,9 @@ void director_t::create(const size_t n, Lambda lambda)
     }
 }
 
-
 template<typename Archetype, typename... Args>
 auto director_t::create(Args&&... args) ->
-    typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> ||
-        std::is_base_of_v<entity_t, Archetype>, Archetype&>
+    typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> || std::is_base_of_v<entity_t, Archetype>, Archetype&>
 {
     auto mask = Archetype::static_mask();
     entity_t ent = create();
@@ -97,7 +93,7 @@ auto director_t::create_with(Args&&... args) ->
 {
     using return_type = typename std::conditional<(sizeof...(Components) > 0), archetype<Components...>, archetype<Args...>>::type;
     entity_t e = create();
-    return_type* arch = new(&e) return_type();
+    return_type* arch = new (&e) return_type();
     arch->init(std::forward<Args>(args)...);
     return *arch;
 }
@@ -107,7 +103,7 @@ archetype<Components...> director_t::create_with()
 {
     using return_type = archetype<Components...>;
     entity_t e = create();
-    return_type* arch = new(&e) return_type();
+    return_type* arch = new (&e) return_type();
     arch->init();
     return *arch;
 }

@@ -33,6 +33,6 @@ private:
 
     friend class director_t;
 };
-}
+} // namespace eden::ecs
 
 #include "view.inl"

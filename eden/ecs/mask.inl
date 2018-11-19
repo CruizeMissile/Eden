@@ -15,32 +15,32 @@ dynamic_bitset<BlockSize>::dynamic_bitset() noexcept
 template<size_t BlockSize>
 dynamic_bitset<BlockSize>::dynamic_bitset(size_type value) noexcept
 {
-   // https://stackoverflow.com/a/2249738
-   auto index = get_highest_bit_count(value);
-   if (index == 0)
-   {
-       check_capacity(0);
-       return;
-   }
+    // https://stackoverflow.com/a/2249738
+    auto index = get_highest_bit_count(value);
+    if (index == 0)
+    {
+        check_capacity(0);
+        return;
+    }
 
-   // As this is an index into the array move from a count to an index starting at 0
-   --index;
-   auto chunk = index / BlockSize;
-   check_capacity(chunk);
-   while (true)
-   {
-       auto r = (value >> index) & 1;
-       if (r == 1)
-       {
-           chunk = index / BlockSize;
-           bits_[chunk].set(index - (chunk * BlockSize));
-       }
+    // As this is an index into the array move from a count to an index starting at 0
+    --index;
+    auto chunk = index / BlockSize;
+    check_capacity(chunk);
+    while (true)
+    {
+        auto r = (value >> index) & 1;
+        if (r == 1)
+        {
+            chunk = index / BlockSize;
+            bits_[chunk].set(index - (chunk * BlockSize));
+        }
 
-       if (index == 0)
-           return;
+        if (index == 0)
+            return;
 
-       --index;
-   }
+        --index;
+    }
 }
 
 template<size_t BlockSize>
@@ -212,7 +212,7 @@ template<size_t BlockSize>
 dynamic_bitset<BlockSize>& dynamic_bitset<BlockSize>::operator&=(const dynamic_bitset<BlockSize>& rhs)
 {
     auto min = std::min(bits_.size(), rhs.bits_.size());
-    for (size_t i = 0 ; i < min; ++i)
+    for (size_t i = 0; i < min; ++i)
         bits_[i] &= rhs.bits_[i];
 
     return *this;
@@ -222,7 +222,7 @@ template<size_t BlockSize>
 dynamic_bitset<BlockSize>& dynamic_bitset<BlockSize>::operator|=(const dynamic_bitset<BlockSize>& rhs)
 {
     auto min = std::min(bits_.size(), rhs.bits_.size());
-    for (size_t i = 0 ; i < min; ++i)
+    for (size_t i = 0; i < min; ++i)
         bits_[i] |= rhs.bits_[i];
 
     return *this;
@@ -232,7 +232,7 @@ template<size_t BlockSize>
 dynamic_bitset<BlockSize>& dynamic_bitset<BlockSize>::operator^=(const dynamic_bitset<BlockSize>& rhs)
 {
     auto min = std::min(bits_.size(), rhs.bits_.size());
-    for (size_t i = 0 ; i < min; ++i)
+    for (size_t i = 0; i < min; ++i)
         bits_[i] ^= rhs.bits_[i];
 
     return *this;
@@ -244,7 +244,7 @@ bool dynamic_bitset<BlockSize>::operator==(const dynamic_bitset<BlockSize>& rhs)
     if (bits_.size() != rhs.bits_.size())
         return false;
 
-    for (size_t i = 0 ; i < bits_.size(); ++i)
+    for (size_t i = 0; i < bits_.size(); ++i)
     {
         if (bits_[i] != rhs.bits_[i])
             return false;
@@ -279,4 +279,4 @@ dynamic_bitset<BlockSize> operator^(const dynamic_bitset<BlockSize>& lhs, const 
     dynamic_bitset<BlockSize> copy = lhs;
     return (copy ^= rhs);
 }
-}
+} // namespace eden::ecs

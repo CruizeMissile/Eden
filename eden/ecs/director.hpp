@@ -44,8 +44,7 @@ public:
     // Create an archetype
     template<typename Archetype, typename... Args>
     auto create(Args&&... args) ->
-        typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> ||
-            std::is_base_of_v<entity_t, Archetype>, Archetype&>;
+        typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> || std::is_base_of_v<entity_t, Archetype>, Archetype&>;
 
     // Create an entity with components assigned
     template<typename... Components, typename... Args>

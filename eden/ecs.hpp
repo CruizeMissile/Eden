@@ -13,5 +13,5 @@
 #include "ecs/property.hpp"
 #include "ecs/store.hpp"
 #include "ecs/system.hpp"
-#include "ecs/view.hpp"
 #include "ecs/utils.hpp"
+#include "ecs/view.hpp"

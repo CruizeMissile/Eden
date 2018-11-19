@@ -6,8 +6,8 @@ namespace eden::ecs
 {
 template<typename Type>
 view<Type>::view(director_t* director, mask_t mask)
-: director_(director)
-, mask_(mask)
+    : director_(director)
+    , mask_(mask)
 {
 }
 
@@ -52,4 +52,4 @@ index_t view<Type>::count()
 
     return count;
 }
-}
+} // namespace eden::ecs

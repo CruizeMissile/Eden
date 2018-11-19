@@ -11,9 +11,8 @@ class director_t;
 
 template<typename Type>
 class entity_iterator : public std::iterator<
-    std::input_iterator_tag,
-    typename std::remove_reference<Type>::type
->
+                            std::input_iterator_tag,
+                            typename std::remove_reference<Type>::type>
 {
     using ref_remove = typename std::remove_reference<typename std::remove_const<Type>::type>::type;
 
@@ -38,17 +37,17 @@ private:
 };
 
 template<typename Type>
-bool operator==(entity_iterator<Type> const &lhs, entity_iterator<Type> const &rhs);
+bool operator==(entity_iterator<Type> const& lhs, entity_iterator<Type> const& rhs);
 
 template<typename Type>
-bool operator!=(entity_iterator<Type> const &lhs, entity_iterator<Type> const &rhs);
+bool operator!=(entity_iterator<Type> const& lhs, entity_iterator<Type> const& rhs);
 
 template<typename Type>
-inline Type operator*(entity_iterator<Type> &lhs);
+inline Type operator*(entity_iterator<Type>& lhs);
 
 template<typename Type>
-inline Type const &operator*(entity_iterator<Type> const &lhs);
+inline Type const& operator*(entity_iterator<Type> const& lhs);
 
-}
+} // namespace eden::ecs
 
 #include "iterator.inl"

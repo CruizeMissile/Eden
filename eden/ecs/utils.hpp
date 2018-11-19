@@ -17,7 +17,7 @@ namespace internal
     };
 
     template<typename ClassType, typename ReturnType, typename... Args>
-    struct function_traits<ReturnType(ClassType::*)(Args...) const>
+    struct function_traits<ReturnType (ClassType::*)(Args...) const>
     {
         enum
         {
@@ -60,5 +60,5 @@ namespace internal
         mask_t mask = component_mask<Type1>() | component_mask<Type2, Types...>();
         return mask;
     }
-}
-}
+} // namespace internal
+} // namespace eden::ecs

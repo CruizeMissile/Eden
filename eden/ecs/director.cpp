@@ -93,7 +93,6 @@ std::vector<entity_t> director_t::create(const size_t num_of_entities)
     return new_entities;
 }
 
-
 entity_t director_t::operator[](index_t index)
 {
     return get_entity(index);
