@@ -93,14 +93,14 @@ TEST_CASE("Ecs system")
         CHECK(ent.mask().none());
 
         {
-            auto arch = director.create<wizard_t>("alice", 50u, 30u);
+            auto arch = director.create<wizard_t>(std::string("alice"), 50u, 30u);
             CHECK(arch.has<name_t>());
             CHECK(arch.has<health_t>());
             CHECK(arch.has<mana_t>());
             arch.destroy();
         }
         {
-            auto arch = director.create_with<name_t, health_t, mana_t>("alice", 50u, 30u);
+            auto arch = director.create_with<name_t, health_t, mana_t>(std::string("alice"), 50u, 30u);
             CHECK(arch.has<name_t>());
             CHECK(arch.has<health_t>());
             CHECK(arch.has<mana_t>());
@@ -123,7 +123,7 @@ TEST_CASE("Ecs system")
         });
 
         director.create(15, [](entity_t& ent) {
-            ent.add<name_t>("bobby");
+            ent.add<name_t>(std::string("bobby"));
             ent.add<health_t>(50u);
             ent.add<mana_t>(20u);
         });

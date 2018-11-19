@@ -135,7 +135,7 @@ template<typename Lambda>
 void director_t::fetch_every(Lambda lambda)
 {
     using function = internal::function_traits<Lambda>;
-    using entity_interface_t = typedef typename function::template arg_remove_ref<0>;
+    using entity_interface_t = typename function::template arg_remove_ref<0>;
     static_assert(function::arg_count == 1, "Lambda or function must only have one argument");
 
     for (entity_interface_t interface : fetch_every<entity_interface_t>())
