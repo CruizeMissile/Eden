@@ -12,9 +12,46 @@ namespace eden::ecs
 {
 namespace internal
 {
-    // template<size_t N, typename Lambda, typename... Args>
-    // struct with_t<N, Lambda, Args...>
-    //     : with_t<N - 1, Lambda, typename std::>
+    template<size_t N, typename Lambda, typename... Args>
+    struct with_t<N, Lambda, Args...> :
+        with_t<N - 1, Lambda,
+            typename internal::function_traits<Lambda>::template arg_remove_ref<N - 1>, Args...>
+    {
+    };
+
+
+    template<typename Lambda, typename... Args>
+    struct with_t<0, Lambda, Args...>
+    {
+        static void for_each(director_t& director, Lambda lambda)
+        {
+            using function = typename internal::function_traits<Lambda>;
+            static_assert(function::arg_count > 0, "Lambda or function must have at least 1 argument.");
+
+            auto view = director.with<Args...>();
+            auto it = view.begin();
+            auto end = view.end();
+            for (; it != end; ++it)
+                lambda(get_arg<Args>(director, it.index())...);
+        }
+
+        template<typename Type>
+        static auto get_arg(director_t& director, index_t index) ->
+            typename std::enable_if<!std::is_same<Type, entity_t>::value, Type &>::type
+        {
+            return director.get_component_fast<Type>(index);
+        }
+
+        template<typename Type>
+        static auto get_arg(director_t& director, index_t index) ->
+            typename std::enable_if<std::is_same<Type, entity_t>::value, entity_t>::type
+        {
+            return director.get_entity(index);
+        }
+    };
+
+    template<typename Lambda>
+    using with_ = with_t<internal::function_traits<Lambda>::arg_count, Lambda>;
 }
 
 template<typename Lambda>
@@ -85,19 +122,24 @@ view<archetype<Components...>> director_t::with()
 template<typename Lambda>
 void director_t::with(Lambda lambda)
 {
-
+    internal::with_<Lambda>::for_each(*this, lambda);
 }
 
 template<typename Archetype>
 view<Archetype> director_t::fetch_every()
 {
-
+    return view<Archetype>(this, Archetype::static_mask());
 }
 
 template<typename Lambda>
 void director_t::fetch_every(Lambda lambda)
 {
+    using function = internal::function_traits<Lambda>;
+    using entity_interface_t = typedef typename function::template arg_remove_ref<0>;
+    static_assert(function::arg_count == 1, "Lambda or function must only have one argument");
 
+    for (entity_interface_t interface : fetch_every<entity_interface_t>())
+        lambda(interface);
 }
 
 template<typename Component, typename... Args>

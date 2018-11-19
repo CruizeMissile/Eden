@@ -36,32 +36,6 @@ bool entity_t::has() const
     return director_->has_component<Component...>(*this);
 }
 
-// template<typename Archetype>
-// Archetype& entity_t::as()
-// {
-//     assert(has(Archetype::static_mask()));
-//     return reinterpret_cast<Archetype&>(*this);
-// }
-
-// template<typename Archetype>
-// Archetype& entity_t::as()
-// {
-//     assert(has(Archetype::static_mask()), "Entity does not have required components for specified Archetype");
-//     return reinterpret_cast<const Archetype&>(*this);
-// }
-
-// template<typename ...Components>
-// archetype<Components...>& entity_t::assume()
-// {
-//   return as<archetype<Components...>>();
-// }
-
-// template<typename ...Components>
-// const archetype<Components...>& entity_t::assume() const
-// {
-//   return as<archetype<Components...>>();
-// }
-
 template<typename Archetype>
 Archetype& entity_t::as()
 {

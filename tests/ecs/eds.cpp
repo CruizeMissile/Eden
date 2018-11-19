@@ -115,7 +115,7 @@ TEST_CASE("Ecs system")
         }
     }
 
-    SECTION("with")
+    SECTION("With")
     {
         director.create(25, [](entity_t& ent) {
             ent.add<health_t>(20u);
@@ -129,21 +129,30 @@ TEST_CASE("Ecs system")
         });
 
         uint32_t count = 0u;
-        for (entity_t ent : director.with<name_t, health_t>())
+        for (entity_t ent : director.with<health_t, mana_t>())
         {
-            CHECK(ent.get<health_t>() == 50u);
+            if (ent.has<name_t>())
+            {
+                CHECK(ent.get<health_t>() == 50u);
+                CHECK(ent.get<mana_t>() == 20u);
+            }
+            else
+            {
+                CHECK(ent.get<health_t>() == 20u);
+                CHECK(ent.get<mana_t>() == 100u);
+            }
             ++count;
         }
-        CHECK(count == 15);
+        CHECK(count == 25u);
 
         count = 0u;
         // Note: make sure that you dont forget the reference
-        director.with([&count](health_t& health, mana_t& mana) {
-            CHECK(health == 20u);
-            CHECK(mana == 100u);
+        director.with([&count](name_t& name, health_t& health) {
+
+            CHECK(name.value == "bobby");
+            CHECK(health == 50u);
             ++count;
         });
-        CHECK(count == 25u);
-
+        CHECK(count == 15);
     }
 }

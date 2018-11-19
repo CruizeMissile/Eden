@@ -10,7 +10,7 @@ entity_t::entity_t(director_t* director, id_t id)
 
 bool entity_t::has(mask_t mask) const
 {
-    return director_->mask(*this) == mask;
+    return director_->has_component(*this, mask);
 }
 
 void entity_t::remove_all()

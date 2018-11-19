@@ -165,6 +165,8 @@ private:
     index_t block_count_ = 0;
     index_t count_ = 0;
 
+    template<size_t, typename...>
+    friend struct internal::with_t;
     template<typename... Components>
     friend class archetype;
     template<typename>
