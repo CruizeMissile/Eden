@@ -1,12 +1,33 @@
 
 #include "entity.hpp"
+#include "iterator.hpp"
 #include "store.hpp"
+#include "view.hpp"
+#include "utils.hpp"
 #include <cassert>
 #include <type_traits>
 #include <utility>
 
 namespace eden::ecs
 {
+namespace internal
+{
+    // template<size_t N, typename Lambda, typename... Args>
+    // struct with_t<N, Lambda, Args...>
+    //     : with_t<N - 1, Lambda, typename std::>
+}
+
+template<typename Lambda>
+void director_t::create(const size_t n, Lambda lambda)
+{
+    using arch_type = typename internal::function_traits<Lambda>::template arg_remove_ref<0>;
+    for (entity_t& ent : create(n))
+    {
+        lambda(*reinterpret_cast<arch_type*>(&ent));
+    }
+}
+
+
 template<typename Archetype, typename... Args>
 auto director_t::create(Args&&... args) ->
     typename std::enable_if_t<std::is_base_of_v<internal::base_archetype_t, Archetype> ||
@@ -52,6 +73,31 @@ archetype<Components...> director_t::create_with()
     return_type* arch = new(&e) return_type();
     arch->init();
     return *arch;
+}
+
+template<typename... Components>
+view<archetype<Components...>> director_t::with()
+{
+    mask_t mask = internal::component_mask<Components...>();
+    return view<archetype<Components...>>(this, mask);
+}
+
+template<typename Lambda>
+void director_t::with(Lambda lambda)
+{
+
+}
+
+template<typename Archetype>
+view<Archetype> director_t::fetch_every()
+{
+
+}
+
+template<typename Lambda>
+void director_t::fetch_every(Lambda lambda)
+{
+
 }
 
 template<typename Component, typename... Args>

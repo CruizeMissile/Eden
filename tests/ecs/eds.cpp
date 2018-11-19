@@ -114,4 +114,14 @@ TEST_CASE("Ecs system")
             arch.destroy();
         }
     }
+
+    SECTION("with")
+    {
+        CHECK(director.count() == 0);
+        auto e1 = director.create(50);
+        for (auto i = 0; i < e1.size(); ++i)
+            CHECK(director[i].id().index == i);
+        director.create(50);
+        CHECK(director.count() == 100);
+    }
 }

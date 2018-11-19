@@ -14,13 +14,18 @@ namespace internal
     struct base_store_t;
     struct base_archetype_t;
     struct base_property_t;
+
+    template<size_t, typename...>
+    struct with_t;
 } // namespace internal
 
-struct entity_t;
-template<typename T>
-class store;
-template<typename... Components>
+template<typename...>
 class archetype;
+template<typename>
+class store;
+template<typename>
+class view;
+struct entity_t;
 
 class director_t
 {
@@ -30,6 +35,9 @@ public:
 
     entity_t create();
     std::vector<entity_t> create(const size_t num_of_entities);
+
+    template<typename Lambda>
+    void create(const size_t n, Lambda lambda);
 
     // Create an archetype
     template<typename Archetype, typename... Args>
@@ -45,6 +53,22 @@ public:
     // Create an entiyt with components assigned, using default values
     template<typename... Components>
     archetype<Components...> create_with();
+
+    // Access a view of all entities with the components given in the template
+    template<typename... Components>
+    view<archetype<Components...>> with();
+
+    // Iterate through all entities with all component that are specified in teh lambda parameters
+    template<typename Lambda>
+    void with(Lambda lambda);
+
+    // Access a view of all entites that has all components in the archetype
+    template<typename Archetype>
+    view<Archetype> fetch_every();
+
+    // Access a view of all entities that have all components in the archetype specified as a lambda param
+    template<typename Lambda>
+    void fetch_every(Lambda lambda);
 
     entity_t operator[](index_t index);
     entity_t operator[](id_t id);
