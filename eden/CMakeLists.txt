@@ -44,6 +44,8 @@ list(APPEND eden_files
 sf_create_library(eden
   SOURCE_LIST ${eden_files}
   CXX_VERSION 17
-  INCLUDE_DIR ${PROJECT_SOURCE_DIR} ${GLFW_INCLUDE_DIR}
-  DEPENDS ${GLFW_LIBRARY} ${PRIDE_LIB}
+  INCLUDE_DIR ${GLFW_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}
+  DEPENDS ${GLFW_LIBRARY} ${PRIDE_LIB} LLGL
 )
+sf_target_set_folder(eden eden)
+

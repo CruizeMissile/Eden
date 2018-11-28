@@ -15,4 +15,9 @@ sf_target_set_folder("glfw" external)
 # Pride
 #
 add_subdirectory(pride)
-sf_target_set_folder(pride external)
+sf_target_set_folder(pride eden/external)
+
+add_subdirectory(llgl)
+sf_target_set_folder(LLGL            eden/external/llgl)
+sf_target_set_folder(LLGL_Direct3D11 eden/external/llgl)
+sf_target_set_folder(LLGL_OpenGL     eden/external/llgl)
