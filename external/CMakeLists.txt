@@ -17,7 +17,20 @@ sf_target_set_folder("glfw" external)
 add_subdirectory(pride)
 sf_target_set_folder(pride eden/external)
 
+#
+# LLGL
+
 add_subdirectory(llgl)
-sf_target_set_folder(LLGL            eden/external/llgl)
-sf_target_set_folder(LLGL_Direct3D11 eden/external/llgl)
-sf_target_set_folder(LLGL_OpenGL     eden/external/llgl)
+sf_target_set_folder(LLGL eden/external/llgl)
+
+macro(llgl_external_folder target)
+  if ($target)
+    sf_target_set_folder($target eden/external/llgl)
+  endif()
+endmacro()
+
+llgl_external_folder(LLGL)
+llgl_external_folder(LLGL_Direct3D11)
+llgl_external_folder(LLGL_Direct3D12)
+llgl_external_folder(LLGL_Vulkan)
+
